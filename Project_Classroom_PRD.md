@@ -1,36 +1,51 @@
 # Project Classroom
-## Decision-Grade Product Requirements Document and Phase-1 Presentation Brief
+## Decision-Grade Product Requirements Document
 
-**Problem Statement:** Drishti AI Hackathon 2026 — Problem Statement 2  
-**Working title:** Project Classroom  
-**Document status:** Proposed solution for Phase 1  
-**Version:** 2.1  
-**Date:** 26 July 2026  
-**Team:** DataDynamo  
+**Problem Statement:** Drishti AI Hackathon 2026 — Problem Statement 2
+**Working title:** Project Classroom
+**Document status:** Build specification
+**Version:** 3.0
+**Date:** 18 August 2026
+**Team:** DataDynamo
 
 > **One-line pitch:** Project Classroom converts hours of recorded examination-hall footage into a short, searchable timeline of motion-grounded, seat-linked events with visual evidence and confidence—without making automated accusations.
 
 ---
 
+## Changelog: v2.1 → v3.0
+
+This revision is driven by measurements taken from the actual source footage and by a platform decision. Nothing here is aspirational; every number in §5 was measured.
+
+| Change | Reason |
+|---|---|
+| DeepStream and `gst-nvof` removed from the architecture | Linux/WSL2-only, and the whole-video motion pass measures 12 minutes for 5 hours of footage on CPU. The dependency buys nothing this pipeline needs. |
+| Codec motion vectors are now the primary motion layer | Verified present in all six source files including MPEG-4; ~3,600 vectors/frame at 16×16 blocks, extracted at decode speed. |
+| Deployment scene model added (§4) | The footage is a computer-based test centre, not a paper exam hall. Live monitors, typing baselines and burned-in overlays are dominant motion sources the v2.1 model did not anticipate. |
+| Measured footage appendix added (§5) | 720p not 1080p; VFR confirmed on half the files; phone footprint measured at ~30×20 px. |
+| All fallback ladders removed | Single canonical path per layer. One detector, one pose model, one tracker, one verifier profile. |
+| Three of four mandatory A/B benchmarks cut | NvDCF, Deep OC-SORT, Multi-HMR2 and SAT-HMR removed. Seat anchoring makes the tracking comparison moot. |
+| Hardware profile collapsed to a single target | 32 GB RTX-class GPU. No constrained-GPU scheduling, no sequential-residency logic, no VRAM safety-margin machinery. |
+| Full-frame slicing replaced by seat-crop supersampling | At 1280×720 into a 640 input, slicing gains little; native-resolution crops upscaled into the detector are where small-object recall comes from. |
+| Scoring weights hand-set, not learned | Insufficient event count to fit weights without overfitting. |
+
+---
+
 ## 0. Executive Decision
 
-Project Classroom is an **offline, post-examination video investigation system**. It does not attempt to continuously “detect cheating” from individual frames. It first finds meaningful motion, localizes it to calibrated seat and desk regions, gathers multiple independent evidence streams, and then prioritizes event clips for a human reviewer.
+Project Classroom is an **offline, post-examination video investigation system**. It does not attempt to continuously "detect cheating" from individual frames. It first finds meaningful motion, localizes it to calibrated seat and desk regions, gathers multiple independent evidence streams, and then prioritizes event clips for a human reviewer.
 
-The proposed stack is deliberately precision-first:
+The stack is deliberately precision-first and has exactly one path through each layer:
 
-- **NVIDIA DeepStream + NVDEC + NVOF** for efficient video decoding and hardware optical flow.
-- **Seat/desk-anchored regions** as the stable identity and localization layer.
-- **D-FINE-L**, fine-tuned from pretrained Objects365 weights, as the primary small-object detector.
-- **RT-DETRv2-S** as the detector challenger and fallback.
-- **RTMO** as the reproducible crowded-person pose baseline.
-- **Multi-HMR2** as an experimental low-frequency 3D pose/tracking challenger, not an MVP dependency.
-- **DeepStream NvDCF** as the deployment tracker, compared against **Deep OC-SORT**.
-- **Gemma 4 E4B instruction QAT Q4** as the default visual verifier, with scheduled model residency on constrained GPUs.
-- **Gemma 4 E2B QAT Q4** as the low-memory fallback when E4B cannot preserve the required VRAM safety margin.
-- **Gemma 4 12B** as an optional quality mode on suitable hardware or through sequential model residency.
-- **FastAPI + React + SQLite/PostgreSQL + Roboflow Supervision** for the investigator experience, event storage, evaluation, and visual overlays.
+- **PyAV/FFmpeg** for streaming decode and presentation-timestamp-accurate seeking.
+- **Codec motion vectors** as the whole-video motion layer; **DIS optical flow** for sub-pixel refinement on candidate windows only.
+- **Seat/desk-anchored regions** with explicit screen, desk and torso zones as the stable identity and localization layer.
+- **D-FINE-L**, fine-tuned from Objects365 weights, on native-resolution seat crops.
+- **RTMO** via `rtmlib` for crowded-person pose.
+- **ByteTrack** with mandatory seat reconciliation.
+- **Gemma 4 E4B instruction-tuned** as the visual verifier with grammar-constrained JSON output.
+- **FastAPI + React + SQLite + Roboflow Supervision** for the investigator experience, event storage, evaluation, and visual overlays.
 
-No foundation model will be trained from scratch. We reuse pretrained models, fine-tune only the task-specific detector or temporal head where required, and validate every claimed capability on staged classroom footage.
+No foundation model is trained from scratch. Exactly one component is fine-tuned: the object detector. Everything else runs at inference with calibration and threshold design.
 
 ---
 
@@ -38,43 +53,23 @@ No foundation model will be trained from scratch. We reuse pretrained models, fi
 
 Examination authorities must manually inspect several hours of recorded surveillance footage to investigate incidents. Linear review is slow, tiring, inconsistent, and susceptible to missed events. Existing generic surveillance pipelines over-trigger on lighting changes and harmless motion, fail to separate overlapping activity in crowded halls, and provide little support for evidence-based review.
 
-The problem statement requires an offline system that:
-
-- detects temporal motion;
-- identifies meaningful Regions of Interest (ROIs);
-- segments long recordings into activity-based events;
-- produces ROI overlays, motion heatmaps, timelines, and searchable logs;
-- optionally identifies phones, paper/chits, or other prohibited objects;
-- scales to long videos and multiple cameras;
-- mitigates false motion, missed ROIs, segmentation errors, environmental variation, hardware/storage limitations, and data-security risks;
-- retains human oversight.
+The problem statement requires an offline system that detects temporal motion; identifies meaningful Regions of Interest; segments long recordings into activity-based events; produces ROI overlays, motion heatmaps, timelines, and searchable logs; optionally identifies phones, paper/chits, or other prohibited objects; scales to long videos and multiple cameras; mitigates false motion, missed ROIs, segmentation errors, environmental variation, hardware limits, and data-security risks; and retains human oversight.
 
 ### 1.1 Core product problem
 
-The product is not “Who is cheating?” The product problem is:
+The product is not "Who is cheating?" The product problem is:
 
 > **Which short portions of this recording deserve human attention, where did the relevant activity occur, and what evidence caused the system to prioritize them?**
 
-This distinction is essential. A suspicious action is contextual and temporal. Looking sideways, moving a hand below a desk, or holding paper can each be normal. Project Classroom therefore reports **observations and evidence**, not guilt or intent.
+A suspicious action is contextual and temporal. Looking sideways, moving a hand below a desk, or holding paper can each be normal. Project Classroom reports **observations and evidence**, not guilt or intent.
 
 ---
 
 ## 2. Proposed Solution
 
-Project Classroom performs a calibrated first pass over recorded footage using hardware optical flow and seat-aware motion statistics. It converts continuous motion into candidate events. Only those candidates enter the more expensive detector, pose, tracking, temporal reasoning, and visual-verification stages.
+Project Classroom performs a calibrated first pass over recorded footage using codec-derived motion vectors and seat-aware motion statistics. It converts continuous motion into candidate events. Only those candidates enter the more expensive detector, pose, tracking, temporal reasoning, and visual-verification stages.
 
-Each final event contains:
-
-- source video and camera identifier;
-- exact start and end timestamp;
-- seat/desk ROI and motion mask;
-- an evidence clip with pre-roll and post-roll;
-- detected object evidence, if any;
-- pose and interaction evidence, if reliable;
-- confidence and uncertainty indicators;
-- an explanation using observational language;
-- a complete audit trail to the source frames;
-- human-review status and notes.
+Each final event contains source video and camera identifier; exact start and end timestamp; seat/desk ROI and motion mask; an evidence clip with pre-roll and post-roll; detected object evidence, if any; pose and interaction evidence, if reliable; confidence and uncertainty indicators; an explanation using observational language; a complete audit trail to the source frames; and human-review status and notes.
 
 ### 2.1 What the solution explicitly does not do
 
@@ -83,7 +78,7 @@ Each final event contains:
 - It does not treat a VLM statement as ground truth.
 - It does not declare that cheating occurred.
 - It does not promise reliable finger-level gestures when the source pixels are insufficient.
-- It does not require real-time processing for Problem Statement 2.
+- It does not require real-time processing.
 - It does not assume all cameras have audio or synchronized timestamps.
 - It does not train a foundation model from scratch.
 
@@ -91,53 +86,53 @@ Each final event contains:
 
 ## 3. Why the Idea Is Different
 
-### 3.1 Evidence fusion instead of a single “cheating detector”
+### 3.1 Evidence fusion instead of a single "cheating detector"
 
-Generic systems frequently map one model confidence directly to an alert. Project Classroom requires agreement across evidence types:
+Generic systems map one model confidence directly to an alert. Project Classroom requires agreement across evidence types:
 
-1. **Motion evidence:** Did meaningful non-global motion occur?
-2. **Spatial evidence:** Which seat/desk region produced it?
-3. **Object evidence:** Is a phone-like or secondary-paper-like object visible?
+1. **Motion evidence:** Did meaningful non-global motion occur, relative to this seat's own activity baseline?
+2. **Spatial evidence:** Which seat/desk region produced it, and in which zone?
+3. **Object evidence:** Is a phone-like or paper-like object visible?
 4. **Pose evidence:** Are head, wrist, torso, or person-to-person relationships temporally unusual?
 5. **Temporal evidence:** Was the pattern sustained or repeated?
-6. **Visual verification:** Does a VLM support the observational explanation, or is it uncertain?
+6. **Visual verification:** Does a VLM support the observational description, or is it uncertain?
 
 No evidence stream is sufficient alone.
 
 ### 3.2 Seat anchoring instead of biometric identity
 
-In a seated examination, the desk location is more stable than a generic tracking ID. Tracks are continuously reconciled with calibrated seat polygons. This:
+In a seated examination, the desk location is more stable than a generic tracking ID. Tracks are continuously reconciled with calibrated seat polygons. This reduces identity switches, prevents one candidate's motion from being assigned to a neighbour, allows track recovery after short occlusion, improves explainability, and avoids face embeddings.
 
-- reduces identity switches;
-- prevents one student’s motion from being assigned to a neighbour;
-- allows track recovery after short occlusion;
-- improves explainability;
-- avoids face embeddings.
+In this deployment the advantage is unusually strong: **seats carry physical numbered placards visible in frame**, so seat attribution is auditable by eye against the source video.
 
-### 3.3 Hardware optical flow instead of MOG2 over-triggering
+### 3.3 Tiered motion estimation instead of MOG2 or blanket dense flow
 
-MOG2 is vulnerable to illumination changes, shadows, slowly adapting foregrounds, and compression noise. Blanket CLAHE can amplify noise and alter contrast differently across frames.
+MOG2 is vulnerable to illumination changes, shadows, slowly adapting foregrounds, and compression noise; on the CDnet 2014 change-detection benchmark it is consistently outperformed by SuBSENSE, PAWCS and FgSegNet-v2. Blanket CLAHE amplifies noise and alters contrast differently across frames. Neither is used.
 
-Project Classroom instead uses:
+Running dense optical flow over every frame is the opposite error: it spends the pipeline's largest per-frame cost on the stage that needs the least precision. The motion pass only has to **gate**; precision is needed downstream.
 
-- NVOF block motion vectors;
-- global camera-motion estimation;
-- exposure-change detection;
-- temporal median/MAD normalization per seat;
-- persistent environmental-motion suppression;
-- adaptive thresholds learned during calibration;
-- temporal hysteresis to prevent fragmented events.
+Project Classroom therefore uses three tiers:
+
+| Tier | Coverage | Method | Granularity |
+|---|---|---|---|
+| 1 — Gate | 100% of frames | Codec motion vectors from the bitstream | 16×16 blocks |
+| 2 — Refine | Candidate windows | `cv2.DISOpticalFlow` | Per-pixel |
+| 3 — Adjudicate | Disputed events only | Dense flow on extracted crops | Per-pixel, high quality |
+
+Tier 1 is effectively free — the encoder already computed the field. On top of this: global camera-motion estimation, exposure-change detection, temporal median/MAD normalization per seat, persistent environmental-motion suppression, calibration-learned adaptive thresholds, and temporal hysteresis to prevent fragmented events.
 
 ### 3.4 Selective high-resolution inference
 
-A phone may occupy only a few pixels in the full frame. Running a detector at 640×640 over the entire classroom destroys the detail needed to distinguish it from paper.
+A phone occupies roughly 30×20 pixels at a near seat in this footage. Running a detector at 640×640 over the full 1280×720 frame destroys the detail needed to distinguish it from a wallet or a dark notebook.
 
-Project Classroom:
+Slicing the full frame — the standard SAHI approach — gains little here, because the frame is only a 2× downscale from the network input to begin with. Published SAHI gains of +6.8 to +14.5 AP come from aerial imagery where the frame vastly exceeds the input.
+
+Project Classroom instead:
 
 - detects motion at full-frame scale;
 - maps it to seats;
-- extracts high-resolution seat/hand/desk crops;
-- uses overlapping tiled inference only on candidate regions;
+- extracts seat/hand/desk crops **at native resolution**;
+- **upscales the crop into the detector input**, giving genuine supersampling (a 200×200 crop into a 640 input is 3.2×);
 - accumulates evidence across adjacent frames;
 - abstains when the source resolution is fundamentally insufficient.
 
@@ -147,73 +142,150 @@ The product is successful only if it reduces review time while preserving event 
 
 ---
 
-## 4. End-to-End Architecture
+## 4. Deployment Scene Model
 
-```mermaid
-flowchart LR
-    A["Recorded CCTV files"] --> B["Ingest validation<br/>codec, timestamps, checksums"]
-    B --> C["DeepStream NVDEC<br/>streaming decode"]
-    C --> D["NVOF hardware optical flow"]
-    D --> E["Global motion and exposure compensation"]
-    E --> F["Seat/desk calibrated motion statistics"]
-    F --> G{"Candidate event?"}
+**This is a computer-based test (CBT) centre, not a paper examination hall.** Every seat has a live monitor, keyboard and mouse. This changes the motion model fundamentally and is the single most important correction in v3.0.
 
-    G -- "No" --> H["Store compact motion metadata"]
-    G -- "Yes" --> I["Ring-buffer clip extraction"]
+### 4.1 Consequences
 
-    I --> J["D-FINE detector<br/>seat and desk crops"]
-    I --> K["RTMO pose baseline"]
-    I --> L["NvDCF / Deep OC-SORT tracking"]
+| Property | Consequence for the pipeline |
+|---|---|
+| Live monitors displaying exam content | Every screen is a continuous, **aperiodic** motion source. The periodicity score used for fans and curtains will not suppress it. Requires an explicit per-seat screen mask. |
+| Typing and mouse use | Every occupied seat has a high, constant hand-motion baseline. "Deviation from still" is the wrong null hypothesis; the baseline must model the *typing regime*. |
+| Burned-in timestamp overlay | Updates once per second in a fixed region in every file. A guaranteed periodic motion blob. Requires a global overlay mask. |
+| Burned-in camera label | Static; harmless; masked with the same mechanism. |
+| Plastic-wrapped chairs | Specular highlights that shift with viewing angle and ambient light. |
+| Glass partitions, wall mirror, interior window | Reflect people and monitors from adjacent rooms. Reflected persons may be detected as persons. Requires a reflection mask. |
+| Standing invigilators and reception traffic | Cross frame frequently; must be suppressible via staff zones and manual marking. |
+| Booth dividers | Heavy, structured occlusion of torso and arms. |
 
-    J --> M["Temporal evidence fusion"]
-    K --> M
-    L --> M
-    F --> M
+### 4.2 Zone model
 
-    M --> N{"Ambiguous or high-impact?"}
-    N -- "No" --> O["Ranked event record"]
-    N -- "Yes" --> P["Gemma visual verifier<br/>multi-frame contact sheet"]
-    P --> O
+The v2.1 desk-versus-upper-body split is insufficient. Each seat is calibrated into three zones:
 
-    O --> Q["SQLite/PostgreSQL event store"]
-    Q --> R["FastAPI"]
-    R --> S["React investigator console"]
-    S --> T["Human decision and feedback"]
-```
+| Zone | Contents | Role in scoring |
+|---|---|---|
+| `screen` | The monitor face | **Excluded from motion scoring entirely** |
+| `desk` | Keyboard, mouse, desk surface, lap-adjacent region | Typing baseline established here; below-desk excursions are the signal of interest |
+| `torso` | Upper body, shoulders, head | Head pitch/yaw and body rotation evidence |
 
-### 4.1 Processing principles
+### 4.3 Dominant behavioural pattern
 
-- Frames are streamed; the pipeline does not extract an entire video to temporary images.
-- Queues are bounded; backpressure is applied instead of allowing RAM growth.
-- Only compact metadata is retained for static intervals.
-- Evidence clips are generated from a ring buffer or by seeking the source video.
-- Models use fixed input shapes where practical to avoid TensorRT rebuilds or `torch.compile` recompilation.
-- Heavy models run on candidate clips, not on every frame.
+The pattern visible in the source footage is **sustained downward head pitch with hand dwell in the lap region** — a phone held below the desk line. This is measurable from pose and motion at 720p. The object frequently is not. The system is designed to score the behaviour and treat the object as corroboration.
 
 ---
 
-## 5. Event-Generation Methodology
+## 5. Measured Source Footage
 
-### 5.1 Calibration pass
+All figures measured 18 August 2026 with PyAV 18.1.0 against the source files. These supersede every hardware and resolution assumption in v2.1.
 
-For each camera, an operator performs a short setup:
+### 5.1 File inventory
 
-1. Mark four or more floor/desk reference points.
-2. Generate or correct seat and desk polygons.
-3. Mark permanent exclusion regions, if required.
-4. Analyse 2–5 minutes of representative footage for:
-   - baseline motion per seat;
-   - codec noise;
-   - fan/curtain periodicity;
-   - exposure behaviour;
-   - typical invigilator paths.
-5. Save a versioned camera calibration profile.
+| File | Container | Codec | Resolution | FPS | Duration | Mbps | VFR | MV/frame |
+|---|---|---|---:|---:|---:|---:|---|---:|
+| 01 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 131 s | 1.95 | no | 3649 |
+| 02 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 212 s | 1.95 | no | 3621 |
+| 03 · mobile usage | matroska | mpeg4 | 1280×720 | 12.1 | 282 s | 1.87 | **yes** | 3594 |
+| 04 · candidate talking | matroska | h264 | 640×480 | 8.0 | 143 s | 0.24 | no | 1290 |
+| 05 · reception crowd | mp4 | mpeg4 | 1280×720 | 25.0 | 241 s | 10.53 | **yes** | 3584 |
+| Seat 12 · paper | matroska | mpeg4 | 1280×720 | 25.0 | 88 s | 1.75 | **yes** | 3575 |
 
-Calibration can be edited and audited. Automatic calibration suggestions must never silently overwrite a validated profile.
+### 5.2 Derived facts
 
-### 5.2 Motion features
+- **Maximum resolution is 720p.** No 1080p source exists. One file is 640×480 at 8 fps, which is below the sampling rate needed to characterize hand gestures and is excluded from gesture evaluation.
+- **Compression is ~0.08 bits/pixel** at 1.9 Mbps for 720p25. Block artifacts are guaranteed and will register as motion.
+- **Variable frame rate is confirmed on three of six files.** Presentation timestamps are mandatory; frame-index arithmetic is prohibited.
+- **Codec motion vectors are present in all six files**, MPEG-4 included, at 16×16 block granularity. I and P frames only; no B-frames.
+- **Phone footprint measured at approximately 30×20 px** on a near-camera seat, motion-blurred, with no screen glow and no resolvable rectangle geometry. Far seats are smaller.
+- **Four distinct camera views across four dates** (30-05-2025, 12-04-2025, 02-06-2026, 15-07-2026), enabling a genuine leave-one-room-out validation split.
 
-Per seat and temporal window, the system derives:
+### 5.3 Measured pass-1 throughput
+
+Codec-MV extraction with per-block magnitude aggregation, single process, CPU only, on a 12-thread i5-12450H:
+
+| Codec | Scan rate |
+|---|---:|
+| H.264 (worst case) | 627 fps |
+| MPEG-4 Part 2 | 2,640–3,110 fps |
+| Mean across files | 2,279 fps |
+
+**5 hours at 25 fps = 450,000 frames → ~12 minutes worst case single-process.** This measurement is the basis for removing DeepStream: there is no decode bottleneck to accelerate.
+
+### 5.4 Corpus status
+
+Approximately 5 hours of recording is available. The 18.3 minutes profiled above are pre-cut incident clips. Continuous recording is required for event-recall and false-events-per-hour measurement, because clipped footage contains no negative time.
+
+---
+
+## 6. End-to-End Architecture
+
+```mermaid
+flowchart LR
+    A["Recorded CCTV files"] --> B["PyAV ingest validation<br/>codec, PTS, VFR, checksum"]
+    B --> C["Streaming decode"]
+    C --> D["Codec motion vectors<br/>16x16 blocks, whole video"]
+    D --> E["Global motion and exposure compensation"]
+    E --> F["Mask application<br/>screen, overlay, reflection, environment"]
+    F --> G["Seat-zone motion statistics<br/>vs typing baseline"]
+    G --> H{"Candidate event?"}
+
+    H -- "No" --> I["Store compact motion metadata"]
+    H -- "Yes" --> J["Clip extraction by PTS seek"]
+
+    J --> K["DIS optical flow refine"]
+    J --> L["D-FINE on native-res seat crops"]
+    J --> M["RTMO pose"]
+    J --> N["ByteTrack + seat reconciliation"]
+
+    K --> O["Temporal evidence fusion"]
+    L --> O
+    M --> O
+    N --> O
+    G --> O
+
+    O --> P{"Ambiguous or high-impact?"}
+    P -- "No" --> Q["Ranked event record"]
+    P -- "Yes" --> R["Gemma verifier<br/>contact sheet, GBNF JSON"]
+    R --> Q
+
+    Q --> S["SQLite event store"]
+    S --> T["FastAPI"]
+    T --> U["React investigator console"]
+    U --> V["Human decision and feedback"]
+```
+
+### 6.1 Processing principles
+
+- Frames are streamed; the pipeline never extracts a whole video to temporary images.
+- Timing is derived from presentation timestamps, never frame indices.
+- Queues are bounded; backpressure is applied instead of allowing RAM growth.
+- Only compact metadata is retained for static intervals.
+- Evidence clips are generated by seeking the source video.
+- Heavy models run on candidate clips, not on every frame.
+- Every stage checkpoints to SQLite and is idempotent on resume.
+
+---
+
+## 7. Event-Generation Methodology
+
+### 7.1 Calibration pass
+
+For each camera, an operator performs a one-time setup:
+
+1. Mark four or more floor/desk reference points for homography.
+2. Draw seat polygons and split each into `screen`, `desk` and `torso` zones.
+3. Assign seat IDs, anchored to the physical numbered placards visible in frame.
+4. Draw the **overlay mask** over the burned-in timestamp region.
+5. Draw the **reflection mask** over glass partitions, mirrors and interior windows.
+6. Mark staff zones and permanent exclusion regions.
+7. Analyse 2–5 minutes of representative footage to learn, per seat: the typing-activity baseline, codec noise floor, periodic environmental motion, and exposure behaviour.
+8. Save a versioned camera calibration profile.
+
+Calibration can be edited and audited. Automatic suggestions never silently overwrite a validated profile.
+
+### 7.2 Motion features
+
+Per seat, per zone, per temporal window:
 
 - median optical-flow magnitude;
 - 90th/95th percentile magnitude;
@@ -222,10 +294,22 @@ Per seat and temporal window, the system derives:
 - residual motion after global compensation;
 - periodicity score;
 - duration and repetition count;
-- desk-zone versus upper-body-zone motion;
+- **deviation from the seat's typing-activity baseline** (see §7.2.1);
+- desk-zone versus torso-zone motion ratio;
+- below-desk-line excursion count;
 - neighbouring-seat correlation.
 
-### 5.3 Robust event boundaries
+Per-seat temporal median/MAD normalization is the robust statistic; raw magnitudes are never thresholded directly.
+
+#### 7.2.1 Typing-activity baseline
+
+Every occupied seat in a CBT hall produces continuous hand motion. The baseline models two regimes per seat — `typing` and `idle` — learned during calibration from the desk-zone motion distribution. Scoring measures deviation from the *current* regime, not from stillness. Without this, actively working candidates generate constant events and idle candidates appear quiet.
+
+**A regime is only established when the seat spends a substantial fraction of the learning span in it** (default 25%). This guard is load-bearing, not a tuning detail. Typing is near-continuous, so a genuinely working candidate sits in the active regime most of the time; brief excursions do not. Without the fraction test, a seat with several real events has those events absorbed into its own "typing" baseline and then measured as normal — the baseline learns to ignore precisely what the system exists to find.
+
+This failure was caught by the integration harness (§15.1): a seat with three planted events had two of them silently suppressed, while a seat with one event was detected correctly. Recall went from 1/3 to 3/3 once the fraction guard was added. The learning span must also be drawn from footage believed normal, never from the recording under analysis.
+
+### 7.3 Robust event boundaries
 
 ```mermaid
 stateDiagram-v2
@@ -237,133 +321,112 @@ stateDiagram-v2
     Active --> Cooling: score falls below stop threshold
     Cooling --> Active: activity resumes within merge gap
     Cooling --> Closed: inactivity exceeds merge gap
+    Active --> Closed: maximum duration reached
     Closed --> [*]
 ```
 
-The start and stop thresholds are deliberately different. This hysteresis prevents one action from being split into dozens of clips. A short pen drop can be retained as low-priority motion evidence without becoming a high-priority incident.
+Start and stop thresholds are deliberately different. This hysteresis prevents one action from being split into dozens of clips. A maximum duration forces a split so a long noisy stretch cannot become a single unusable event. Each seat runs an independent state machine, so simultaneous events in different seats never merge.
 
-### 5.4 Event scoring
+### 7.4 Event scoring
 
 The score is a calibrated ranking signal, not a probability of cheating.
 
 ```text
 Priority score =
-  motion significance
+  motion significance (vs typing baseline)
   + temporal persistence/repetition
+  + below-desk excursion evidence
+  + head-pitch evidence
   + object evidence
-  + pose/interaction evidence
   + cross-camera corroboration
   - global-motion likelihood
   - environmental-motion likelihood
   - uncertainty penalty
 ```
 
-Weights are learned or tuned only on a held-out validation set. The UI exposes the factors contributing to each score. A VLM cannot independently create a high-priority event.
+**Weights are hand-set and documented, not learned.** The available event count is far too small to fit weights without overfitting. The UI exposes every contributing factor for each score. Validation measures **rank ordering** via Precision@K, not absolute calibration. A VLM cannot independently create a high-priority event.
+
+Learned scoring — weakly supervised anomaly ranking under multiple-instance learning, as the Cheatomaly formulation and UCF-Crime methods use — becomes available only with hours of weakly labelled footage. It is roadmap, not Phase 1.
 
 ---
 
-## 6. Model and Algorithm Decisions
+## 8. Model and Algorithm Decisions
 
-### 6.1 Object detector: D-FINE with RT-DETRv2 challenger
+### 8.1 Object detector: D-FINE-L
 
-| Candidate | Proposed role | Strength | Risk | Decision |
-|---|---|---|---|---|
-| D-FINE-L | Default detector | Greater localization capacity, 31M parameters, TensorRT/ONNX path, Objects365 pretrained weights | Published COCO speed does not establish exam-hall phone recall | Primary MVP and quality candidate |
-| D-FINE-M | Resource-constrained detector profile | Lower compute than D-FINE-L while retaining the same detector family | May lose recall on very small or heavily occluded objects | Fallback only if end-to-end profiling requires it |
-| RT-DETRv2-S | Challenger/fallback | Mature Apache-2.0 implementation, sliced inference support, broad deployment paths | May localize tiny/occluded objects less accurately than a tuned D-FINE profile | Mandatory A/B benchmark |
-| Generic COCO detector | Person/initialization baseline only | Easy to reproduce | COCO “cell phone” performance does not transfer to distant CCTV | Not the final object solution |
+| Property | Decision |
+|---|---|
+| Model | D-FINE-L, fine-tuned from Objects365-pretrained weights |
+| Published baseline | 54.0 AP COCO val2017; 57.1 AP with Objects365 pretraining |
+| Input strategy | Native-resolution seat crops upscaled into a 640 input |
+| Runtime | PyTorch → ONNX; TensorRT export is a secondary optimization |
+| Person class | Handled by the same model; no separate COCO detector |
+
+There is no detector fallback and no mandatory RT-DETRv2 A/B. D-FINE-M outperforms RT-DETRv2-M on COCO, the ranking in the literature is clear, and running the comparison consumes compute without changing the decision.
 
 #### Detection strategy
 
-- Start with Objects365-pretrained weights.
-- Fine-tune, do not train from scratch.
-- Use seat/desk crops at a resolution preserving the object’s pixels.
-- Use overlapping slices with border-aware box merging.
+- Start from Objects365-pretrained weights; fine-tune, never train from scratch.
+- Extract seat/desk/hand crops at native resolution and upscale into the detector.
 - Preserve multiple adjacent frames for temporal confirmation.
-- Train explicit hard negatives:
-  - white erasers;
-  - calculators, if permitted;
-  - ID cards;
-  - watches;
-  - pens and pen caps;
-  - folded answer sheets;
-  - hands and dark shadows;
-  - rulers;
-  - transparent stationery.
+- Train explicit hard negatives drawn from this dataset: white erasers, calculators, ID cards, watches, pens and pen caps, folded answer sheets, hands and dark shadows, rulers, transparent stationery, computer mice, and dark keyboard regions.
 
-#### Phone versus chit/paper
+#### Phone versus paper
 
-The system must not classify all paper as suspicious because answer sheets are normal. It uses:
+The system must not classify all paper as suspicious, because rough sheets are normal in a CBT hall. It uses object appearance; approximate aspect ratio and reflectance; location relative to hand, desk, pocket and screen; whether the object appears from below the desk line; whether it moves between seats; whether it persists across frames; and a separate `paper_like` / `uncertain` class instead of forcing `phone`.
 
-- object appearance;
-- approximate aspect ratio and reflectance;
-- location relative to hand, desk, pocket, and answer sheet;
-- whether the object appears from below desk/bag/pocket;
-- whether it moves between seats;
-- whether the object persists across frames;
-- whether screen-like reflections or phone geometry are visible;
-- a separate “paper-like/uncertain” class instead of forcing “phone.”
+**If an object is below the validated minimum pixel footprint, the output is `insufficient visual evidence`, never a confident label.** At the measured ~30×20 px this will be a frequent and correct outcome. Published classroom-cheating CCTV results top out near 51% accuracy; the abstention path is what keeps this system honest above that ceiling.
 
-If an object contains fewer than the minimum validated pixel footprint, the output must be **insufficient visual evidence**, not a confident label.
+### 8.2 Pose: RTMO
 
-### 6.2 Pose
+| Property | Decision |
+|---|---|
+| Model | RTMO-l |
+| Runtime | `rtmlib` (ONNXRuntime only — avoids compiling `mmcv`) |
+| Published baseline | 73.2 AP CrowdPose, state of the art among one-stage methods |
+| Scope | Candidate clips only |
 
-| Candidate | Proposed role | Why | Limitation |
-|---|---|---|---|
-| RTMO | Default crowded-person baseline | One-stage multi-person pose; avoids running a separate crop model per student | 2D keypoints remain unreliable under severe occlusion |
-| RTMPose whole-body | Selective high-resolution crop analysis | Mature MMPose ecosystem; useful when a clear person crop exists | Top-down cost scales with number of people; hand pixels may be absent |
-| Multi-HMR2 | Experimental challenger on candidate clips | Joint multi-person 3D human reconstruction and cross-frame tracking | New repository, limited production evidence, video path/rendering overhead, high compute |
-| SAT-HMR | Research challenger for distant people | Explicit focus on scale-adaptive reconstruction | Integration and deployment maturity must be demonstrated |
+RTMO is specifically strong on the medium and hard occlusion splits, which is what booth partitions and chair backs produce here. Foreground candidates are 150–350 px tall, comfortably in range; back rows degrade and are marked accordingly.
 
-The MVP does not depend on Multi-HMR2. It is evaluated on short candidate clips for:
+Two constraints are mandatory:
 
-- recovery through occlusion;
-- torso and head orientation stability;
-- track continuity;
-- GPU memory;
-- inference latency;
-- failure on small/distant people.
+- **Wrist keypoints are masked when hands drop below the desk line.** That is precisely the interesting case, and the absence of the keypoint is itself recorded as evidence rather than imputed.
+- **Head pitch is derived from the nose-to-shoulder vertical offset** in COCO-17. No separate head-pose model is required, and this is the primary signal for the dominant behavioural pattern in §4.3.
 
-If Multi-HMR2 does not outperform RTMO plus seat anchoring on the staged classroom set, it is excluded from the prototype.
+Multi-HMR2 and SAT-HMR are removed. Neither has been reproduced at this crowd size and both are research risk without a Phase-1 payoff.
 
-### 6.3 Tracking
+### 8.3 Tracking: ByteTrack with seat reconciliation
 
-| Tracker | Role | Reason |
-|---|---|---|
-| DeepStream NvDCF | Deployment default | Native DeepStream integration, appearance and motion cues, GPU-friendly pipeline |
-| Deep OC-SORT | A/B challenger | Strong recovery under nonlinear motion and occlusion |
-| Seat reconciliation | Mandatory layer | Prevents generic tracker IDs from becoming the system’s identity truth |
+| Property | Decision |
+|---|---|
+| Tracker | ByteTrack via Roboflow Supervision |
+| Identity source | **Seat polygons, not track IDs** |
+| Scope | Candidate clips only |
 
-Tracking IDs are session-local and non-biometric. Track-to-seat association is versioned and can be corrected by a reviewer.
+Seats are fixed and candidates are seated for the duration, so the tracking problem in this footage is close to trivial. The NvDCF and Deep OC-SORT comparison is removed: NvDCF required DeepStream, and seat reconciliation — not the tracker — carries identity. Track IDs are session-local and non-biometric, and track-to-seat association is versioned and reviewer-correctable.
 
-### 6.4 Optional temporal action model
+### 8.4 Temporal action model
 
-MMAction2/PoseC3D or RGBPoseConv3D may be tested after sufficient staged examples exist. It is not required for the first prototype.
-
-Pure skeleton classification cannot distinguish phone from paper. If a temporal classifier is introduced, RGBPoseConv3D is preferred for evaluation because it can combine appearance and pose. It must be compared against simpler calibrated rules; it is retained only if it materially improves hall-level validation.
+Not in scope. Pure skeleton classification cannot distinguish phone from paper, and there is insufficient labelled data to train a temporal classifier that beats calibrated rules. Revisit only after the corpus supports it.
 
 ---
 
-## 7. Gemma Visual Verifier and GPU-Memory Decision
+## 9. Visual Verifier
 
-### 7.1 Role of the VLM
+### 9.1 Role
 
-Gemma receives only a small number of candidate events. Input is a contact sheet or short frame sequence containing:
+Gemma receives only a small number of candidate events. Input is a contact sheet containing the pre-event frame, event onset, peak motion, event end, the seat crop, detector boxes, and structured metadata such as duration and detector confidence.
 
-- pre-event frame;
-- event onset;
-- peak motion;
-- event end;
-- seat/desk crop;
-- detector boxes and optional clean frames;
-- structured metadata such as duration and detector confidence.
+**Expectation reset:** at ~30 px the verifier will not reliably identify a phone either. Its value here is describing *posture and interaction* — head down, hand below the desk line, sustained over N seconds — and flagging uncertainty. It is prompted for that, not for object identification.
 
-The output schema is constrained:
+### 9.2 Output contract
+
+Output is constrained by a **GBNF grammar in llama.cpp**, not by prompt instruction alone. This makes schema validity structural rather than probabilistic.
 
 ```json
 {
   "supported_observations": [
-    "student's right hand moves below the desk"
+    "candidate's right hand moves below the desk line"
   ],
   "object_assessment": "phone_like | paper_like | other | not_visible | uncertain",
   "interaction_assessment": "none | self_action | neighbouring_seat | uncertain",
@@ -373,523 +436,343 @@ The output schema is constrained:
 }
 ```
 
-Gemma may re-rank an event or mark it uncertain. It may not delete source evidence, declare misconduct, or override deterministic safety rules.
+Gemma may re-rank an event or mark it uncertain. It may not delete source evidence, declare misconduct, or override deterministic safety rules. If the verifier fails, deterministic events remain complete and reviewable.
 
-### 7.2 Recommended model profiles
+### 9.3 Model profile
 
-| Profile | Model | Intended hardware | Expected residency strategy | Decision |
-|---|---|---|---|---|
-| Primary/default | Gemma 4 E4B instruction QAT Q4/GGUF | 12–24 GB Ada/Blackwell or CPU+GPU hybrid | Sequential on 12 GB; measured co-residency on 16–24 GB | Default |
-| Constrained fallback | `google/gemma-4-E2B-it-qat-q4_0-gguf` | 12–16 GB Ada/Blackwell or CPU+GPU hybrid | Co-resident if measured; otherwise scheduled after CV batch | Activate when E4B cannot maintain the VRAM safety margin |
-| Quality mode | Gemma 4 12B Q4-compatible build | 24 GB Ada or larger | Sequential model residency preferred | Optional |
-| Blackwell quality mode | `AxionML/Gemma-4-12B-NVFP4` | Blackwell with native FP4 | SGLang/ModelOpt profile after reproducibility test | Conditional |
-| NVIDIA challenger | `nvidia/Phi-4-multimodal-instruct-NVFP4` | Blackwell | Optional comparison only | Not default |
+| Property | Decision |
+|---|---|
+| Model | Gemma 4 E4B instruction-tuned |
+| Runtime | llama.cpp with CUDA |
+| Residency | Co-resident with CV models on the 32 GB target |
+| Context | Capped to the evidence packet; long context is not used |
+| Input | 4–8 selected frames |
+| Concurrency | One verifier request at a time |
 
-### 7.3 Why AxionML Gemma-4-12B-NVFP4 is not the universal default
-
-The checkpoint is useful, but:
-
-- it is a third-party quantization;
-- its model card targets Blackwell-class FP4 hardware;
-- attention remains BF16 and the multimodal components are not fully FP4;
-- the checkpoint is approximately 11 GB before runtime headroom;
-- the stated SGLang deployment currently depends on specialised versions/branches;
-- RTX 4070/4080/4090 are Ada GPUs and do not have native FP4 GEMM acceleration;
-- 11 GB of weights does not leave safe space on a 12 GB card for KV cache, vision inputs, CUDA context, detector, pose model, TensorRT workspaces, and transient activations.
-
-Therefore:
-
-- **RTX 4070 12 GB:** run Gemma 4 E4B QAT Q4 sequentially after releasing detector/pose workspaces; fall back to E2B if the measured safety margin is inadequate.
-- **RTX 4080 16 GB:** use E4B QAT Q4 with short context and single-request concurrency; sequential residency remains the guaranteed-safe mode until co-residency is profiled.
-- **RTX 4090 24 GB:** E4B QAT Q4 is the standard profile and is a credible co-residency candidate after profiling; 12B remains an optional sequential quality mode.
-- **Blackwell 24/32 GB or datacenter Blackwell:** AxionML 12B NVFP4 becomes a credible performance candidate after validation.
-
-### 7.4 Model-residency scheduler
-
-```mermaid
-sequenceDiagram
-    participant V as "Video pipeline"
-    participant C as "CV GPU pool"
-    participant Q as "Candidate queue"
-    participant G as "Gemma verifier"
-    participant D as "Event database"
-
-    V->>C: Decode, NVOF, detect, pose
-    C->>Q: Candidate evidence packets
-    C->>D: Persist deterministic evidence
-    alt Sufficient free VRAM
-        Q->>G: Verify small batch concurrently
-    else Constrained 12–16 GB GPU
-        C->>C: Finish CV micro-batch and release workspace
-        Q->>G: Load/run verifier sequentially
-        G->>G: Release weights/cache after queue drains
-    end
-    G->>D: Add bounded verifier assessment
-```
-
-### 7.5 Memory rules
-
-- Context is capped to the evidence packet; 128K/256K context is not used.
-- Concurrency defaults to one verifier request per GPU.
-- Input uses 4–8 selected frames, not full three-hour video.
-- Generation is capped to a small structured response.
-- KV cache is bounded and released between batches.
-- GPU memory is measured with peak allocated and peak reserved values.
-- A 15–20% VRAM safety margin is required to avoid out-of-memory crashes.
-- If the VLM fails, deterministic events remain available for review.
+There is no E2B fallback, no 12B quality mode, no NVFP4 profile and no sequential-residency scheduler. The 32 GB target makes all of that machinery unnecessary, and each removed branch is a path that would otherwise need testing.
 
 ---
 
-## 8. Prototype for the Hackathon
+## 10. Build Phases
 
-### 8.1 Demonstrable prototype
+Each phase is completed and validated before the next begins. No phase is skipped or run in parallel.
 
-The first prototype processes one recorded 1080p classroom video and demonstrates:
+| Phase | Deliverable | Validation gate |
+|---|---|---|
+| **1 · Ingest** | PyAV ingest, codec/PTS/VFR validation, checksum, camera registration | All six known files import with correct duration and VFR flags |
+| **2 · Calibration** | Seat polygons with three zones, overlay/reflection/environment masks, versioned profiles | Profile saves, reloads and renders correctly on two cameras |
+| **3 · Motion scan** | Codec-MV whole-video scan, global-motion and exposure compensation, per-seat statistics with typing baseline | Full 5-hour scan completes; masked regions produce zero motion |
+| **4 · Segmentation** | Per-seat hysteresis state machine, PTS-accurate event boundaries | One sustained action is not fragmented; shake and exposure tests produce no high-priority events |
+| **5 · Console** | Heatmap, timeline, event log, FastAPI, React review UI | **PS2-complete without any neural network** |
+| **6 · Detection + pose** | D-FINE on seat crops, RTMO, ByteTrack with seat reconciliation | Object output includes the `uncertain` state; low-pixel objects abstain |
+| **7 · Scoring + verifier** | Hand-set priority score, Gemma verifier with GBNF | 100% schema-valid output; verifier failure leaves events intact |
 
-1. Video import and validation.
-2. Manual or assisted seat/desk calibration.
-3. NVOF motion visualization.
-4. Seat-level motion heatmap and activity timeline.
-5. Event boundary generation with pre/post-roll.
-6. D-FINE or RT-DETRv2 detection on candidate crops.
-7. RTMO pose overlays on selected events.
-8. Seat-linked event cards.
-9. Gemma E4B QAT Q4 visual verification for ambiguous events, with E2B available as the constrained fallback.
-10. Search and filtering by time, seat, evidence type, score, and review status.
-11. Exported annotated clip and incident-review report.
-12. Human feedback: relevant, irrelevant, or inconclusive.
-
-### 8.2 Future production prototype
-
-- Multi-camera timestamp alignment.
-- Cross-camera seat mapping and corroboration.
-- NvDCF/Deep OC-SORT A/B tracking.
-- TensorRT engines for detector and pose.
-- Queue-based multi-video scheduling.
-- Role-based access and retention controls.
-- Active-learning export of hard negatives.
-
-### 8.3 Primary investigator flow
-
-```mermaid
-flowchart TD
-    A["Upload/select recorded session"] --> B["Validate video and calibration"]
-    B --> C["Run offline analysis"]
-    C --> D["Open ranked event timeline"]
-    D --> E["Inspect clip, clean frame, overlays and evidence"]
-    E --> F{"Reviewer decision"}
-    F -- "Relevant" --> G["Add notes and export"]
-    F -- "Irrelevant" --> H["Record hard-negative feedback"]
-    F -- "Inconclusive" --> I["Retain uncertainty and request second review"]
-    G --> J["Auditable report"]
-    H --> D
-    I --> D
-```
+Phases 1–5 require no GPU. This is deliberate: the PS2 deliverable is complete and demonstrable before any model is loaded.
 
 ---
 
-## 9. Functional Requirements
+## 11. Functional Requirements
 
 | ID | Requirement | Priority | Verification |
 |---|---|---:|---|
 | FR-01 | Import recorded MP4/MKV footage without loading the full video into RAM | Must | Peak RAM test |
-| FR-02 | Validate codec, duration, timestamps, frame rate, and file integrity | Must | Corrupt/malformed input tests |
-| FR-03 | Create and version seat/desk ROI calibration | Must | Calibration save/reload test |
-| FR-04 | Compute frame-to-frame motion using NVOF when supported | Must | Motion-vector overlay and metadata |
-| FR-05 | Provide a software optical-flow fallback when NVOF is unavailable | Should | CPU/GPU fallback test |
+| FR-02 | Validate codec, duration, presentation timestamps, frame rate and file integrity | Must | Corrupt/malformed input tests |
+| FR-03 | Create and version seat/desk ROI calibration with screen, desk and torso zones | Must | Calibration save/reload test |
+| FR-04 | Compute frame-to-frame motion from codec motion vectors across the whole recording | Must | Motion-vector overlay and metadata |
+| FR-05 | Refine motion with dense optical flow on candidate windows | Must | Refinement quality test on candidates |
 | FR-06 | Compensate camera-wide motion before event generation | Must | Synthetic shake test |
 | FR-07 | Suppress persistent and periodic environmental motion | Must | Fan/curtain test |
-| FR-08 | Segment candidate activity into stable temporal events | Must | Event t-IoU and fragmentation |
-| FR-09 | Associate events with one or more calibrated seats | Must | Seat-attribution accuracy |
-| FR-10 | Detect phone-like, paper-like, and other configured objects on candidate crops | Should | AP-small and per-hour FP |
-| FR-11 | Extract multi-person pose on candidate clips | Should | Person recall/keypoint stability |
-| FR-12 | Preserve uncertainty when pose or object evidence is inadequate | Must | Low-resolution and occlusion tests |
-| FR-13 | Generate activity heatmaps and timelines | Must | UI/export test |
-| FR-14 | Produce searchable event logs | Must | Query/filter tests |
-| FR-15 | Display source clip, timestamp, ROI, evidence factors, and confidence | Must | Event-card acceptance test |
-| FR-16 | Run a local VLM verifier only on selected events | Should | Offline and failure-isolation tests |
-| FR-17 | Never emit an automated misconduct verdict | Must | Text-policy and schema tests |
-| FR-18 | Allow human relevant/irrelevant/inconclusive feedback | Must | State transition and audit test |
-| FR-19 | Export an evidence report referencing immutable source timestamps | Must | Provenance test |
-| FR-20 | Resume interrupted processing without duplicating events | Should | Crash/restart test |
+| FR-08 | Mask screen regions, burned-in overlays and reflective surfaces | Must | Zero-motion test inside masked regions |
+| FR-09 | Model a per-seat typing-activity baseline | Must | Occupied-seat false-event rate |
+| FR-10 | Segment candidate activity into stable temporal events | Must | Event t-IoU and fragmentation |
+| FR-11 | Associate events with one or more calibrated seats | Must | Seat-attribution accuracy |
+| FR-12 | Detect phone-like, paper-like and configured objects on native-resolution seat crops | Should | AP-small and per-hour FP |
+| FR-13 | Extract multi-person pose on candidate clips | Should | Person recall / keypoint stability |
+| FR-14 | Preserve uncertainty when pose or object evidence is inadequate | Must | Low-resolution and occlusion tests |
+| FR-15 | Generate activity heatmaps and timelines | Must | UI/export test |
+| FR-16 | Produce searchable event logs | Must | Query/filter tests |
+| FR-17 | Display source clip, timestamp, ROI, evidence factors and confidence | Must | Event-card acceptance test |
+| FR-18 | Run the VLM verifier only on selected events | Should | Offline and failure-isolation tests |
+| FR-19 | Never emit an automated misconduct verdict | Must | Text-policy and schema tests |
+| FR-20 | Allow human relevant/irrelevant/inconclusive feedback | Must | State transition and audit test |
+| FR-21 | Export an evidence report referencing immutable source timestamps | Must | Provenance test |
+| FR-22 | Resume interrupted processing without duplicating events | Should | Crash/restart test |
 
 ---
 
-## 10. Non-Functional Requirements
+## 12. Non-Functional Requirements
 
-### 10.1 Accuracy and review quality
+### 12.1 Accuracy and review quality
 
 - Every high-priority event must contain visual evidence.
 - High-priority events require either multiple evidence streams or strong sustained motion with adequate visual quality.
 - The system must expose uncertainty and missing evidence.
-- Threshold selection must use validation data, not demonstration footage.
+- Threshold selection must use held-out data, not demonstration footage. The four camera views across four dates make a leave-one-room-out split possible.
 - Human feedback must not silently alter previously generated results.
 
-### 10.2 Performance
+### 12.2 Performance
 
-- Processing is allowed to be offline and non-real-time.
-- The MVP target is **at least 1× real-time equivalent** for one 1080p stream on the target workstation after optimization; aspirational performance is faster than real time.
-- A performance claim is not presentation-safe until measured end to end, including decode, inference, clip encoding, and database writes.
-- Static footage must not invoke detector, pose, and VLM inference at full frame rate.
+- Processing is offline and non-real-time.
+- The whole-video motion pass is measured at **12 minutes for 5 hours of 720p footage, worst case, single-process on CPU** (§5.3).
+- Static footage must not invoke detector, pose or VLM inference.
+- Optimization — TensorRT export, parallel workers, GPU decode — is explicitly secondary. If a stage performs adequately, it is left alone.
+- A performance claim is not presentation-safe until measured end to end.
 
-### 10.3 Reliability
+### 12.3 Reliability
 
 - All jobs are idempotent.
-- Processing checkpoints are written periodically.
-- A VLM failure cannot invalidate motion/detection outputs.
+- Processing checkpoints are written per stage.
+- A VLM failure cannot invalidate motion or detection outputs.
 - Source footage is read-only.
 - Partial outputs are marked incomplete until job finalization.
 
-### 10.4 Privacy and security
+### 12.4 Privacy and security
 
 - Fully local/offline inference is the default.
 - No face recognition or biometric matching.
 - Encryption at rest and in transit on the local network.
 - Role-based access before production deployment.
-- Audit log for view, export, annotation, and deletion.
-- Configurable retention for raw footage, clips, metadata, and model feedback.
+- Audit log for view, export, annotation and deletion.
+- Configurable retention for raw footage, clips, metadata and model feedback.
 - Export must contain purpose and human-review disclaimers.
 
 ---
 
-## 11. Complete Technology Stack
+## 13. Technology Stack
 
-| Layer | Technology | Language/runtime | Use |
+| Layer | Technology | Runtime | Use |
 |---|---|---|---|
-| Video pipeline | NVIDIA DeepStream 8.x, GStreamer, NVDEC | C/C++ plugins with Python orchestration | Zero-copy decode, batching, metadata, hardware pipeline |
-| Motion | DeepStream `gst-nvof`, OpenCV fallback | C++/Python | Hardware flow, compensation, ROI statistics |
-| Detection | D-FINE-L; D-FINE-M fallback; RT-DETRv2-S challenger | PyTorch → ONNX → TensorRT FP16/INT8 | Person and prohibited-object evidence |
-| Pose | RTMO/RTMPose; Multi-HMR2 experiment | PyTorch/TensorRT where supported | Head, wrist, torso and interaction evidence |
-| Tracking | NvDCF; Deep OC-SORT benchmark | DeepStream/C++ and Python | Short/long track continuity |
-| Visual verifier | Gemma 4 E4B instruction QAT Q4 default; E2B QAT Q4 fallback | llama.cpp CUDA or validated local runtime | Event verification and explanation |
-| Quality verifier | Gemma 4 12B quantized | SGLang/vLLM/llama.cpp depending checkpoint | Optional higher-quality mode |
-| Temporal model | MMAction2 optional | Python/PyTorch | Pose/RGB temporal benchmark |
-| CV utilities | Roboflow Supervision | Python | Detections, slicing, zones, annotations, metrics |
+| Ingest and decode | PyAV / FFmpeg | Python 3.11+ | Streaming decode, PTS-accurate seeking, validation |
+| Motion — tier 1 | Codec motion vectors (`flags2=+export_mvs`) | Python | Whole-video gate at 16×16 blocks |
+| Motion — tier 2 | `cv2.DISOpticalFlow` | Python/C++ | Sub-pixel refinement on candidates |
+| Detection | D-FINE-L | PyTorch → ONNX | Person and prohibited-object evidence |
+| Pose | RTMO-l via `rtmlib` | ONNXRuntime CUDA | Head, wrist, torso and interaction evidence |
+| Tracking | ByteTrack via Supervision | Python | Short-track continuity, reconciled to seats |
+| Visual verifier | Gemma 4 E4B instruction-tuned | llama.cpp CUDA + GBNF | Event verification and explanation |
+| CV utilities | Roboflow Supervision | Python | Detections, zones, annotations, metrics |
 | API | FastAPI + Pydantic | Python 3.11+ | Job, event, media, calibration, feedback APIs |
-| Worker | Python multiprocessing initially; Celery/RQ later | Python | Offline job orchestration |
-| UI | React + TypeScript + Vite/Next.js | TypeScript | Investigator dashboard |
-| Charts | Recharts/ECharts | TypeScript | Timeline, heatmap, score and benchmark visuals |
-| Database | SQLite for prototype; PostgreSQL for deployment | SQL | Sessions, cameras, events, review and audit data |
-| Media storage | Local NVMe + NAS/object-compatible storage | Filesystem/S3-compatible API | Raw video, clips, thumbnails, reports |
-| Packaging | Docker Compose; NVIDIA Container Toolkit | Docker | Reproducible deployment |
-| Evaluation | COCO metrics, TrackEval, custom event metrics | Python | Detector, tracker and end-to-end evaluation |
-| Documentation visuals | Mermaid.js | Markdown | Architecture, flows, deployment and risk visuals |
+| Worker | Python multiprocessing | Python | Offline job orchestration |
+| UI | React + TypeScript + Vite | TypeScript | Investigator dashboard |
+| Charts | Recharts | TypeScript | Timeline, heatmap, score visuals |
+| Database | SQLite | SQL | Sessions, cameras, events, review and audit data |
+| Media storage | Local NVMe | Filesystem | Raw video, clips, thumbnails, reports |
+| Evaluation | COCO metrics, custom event metrics | Python | Detector and end-to-end evaluation |
+| Documentation visuals | Mermaid.js | Markdown | Architecture, flows, risk visuals |
+
+Removed from v2.1: DeepStream, GStreamer, NVDEC, `gst-nvof`, NvDCF, Deep OC-SORT, RT-DETRv2, D-FINE-M, RTMPose, Multi-HMR2, SAT-HMR, MMAction2, MMPose, TensorRT (deferred to optimization), PostgreSQL (deferred to deployment), Celery/RQ, Docker Compose.
 
 ---
 
-## 12. Hardware and Computation Feasibility
+## 14. Hardware and Compute
 
-### 12.1 Deployment profiles
+### 14.1 Target profile
 
-| Profile | GPU | System RAM | Concurrent processing assumption | VLM profile | Feasibility |
-|---|---|---:|---|---|---|
-| Demo/minimum | RTX 4070 12 GB | 32–64 GB | One 1080p stream/job | Gemma 4 E4B QAT Q4 sequential; E2B fallback | Feasible with bounded queues and selective inference |
-| Recommended small hall | RTX 4080 16 GB | 64 GB | 1–2 streams/jobs, benchmark dependent | E4B QAT Q4 with sequential residency as safe default | Feasible |
-| Recommended quality | RTX 4090 24 GB | 64–128 GB | Multiple decode streams, controlled inference concurrency | E4B QAT Q4 co-residency candidate or 12B sequential | Feasible after profiling |
-| Blackwell optimized | RTX 50-series/Blackwell 24–32 GB+ | 64–128 GB | Higher throughput | NVFP4 candidates | Best fit for native FP4 |
-| Medium/large center | Multi-GPU server | 128 GB+ | Queue-sharded by video/camera | Dedicated verifier GPU or scheduled pool | Feasible by horizontal workers |
+| Component | Specification |
+|---|---|
+| GPU | 32 GB NVIDIA RTX-class (RTX 4090 / 5090 class) |
+| System RAM | 64 GB+ |
+| Storage | NVMe, ≥100 GB free for working set |
+| OS | Windows or Linux — no platform-specific dependency remains |
 
-The problem statement’s 64–128 GB RAM and RTX 4070–4090 range is sufficient for offline analytics, provided the implementation streams frames and controls concurrency. It is not sufficient for naively retaining decoded video or loading every model simultaneously.
+There is exactly one hardware profile. The v2.1 tier table, VRAM safety margins, sequential model residency and constrained-GPU fallbacks are all removed: at 32 GB the detector, pose model and verifier are comfortably co-resident, and the scheduling machinery those constraints required is dead code that would need testing.
 
-### 12.2 RAM controls
+> **Verification note:** the RTX 4090 ships with 24 GB; 32 GB corresponds to the RTX 5090 (Blackwell). Confirm the exact card before finalizing the deployment section. It does not change any decision in this document — every profile above fits in 24 GB as well — but the spec sheet should be accurate.
 
-- Decode surfaces remain in GPU/NVMM memory where possible.
+### 14.2 Memory controls
+
+Retained because they are correct engineering regardless of headroom:
+
 - Host queues contain references and compact tensors, not unbounded frame lists.
 - Per-stream ring buffer is time-bounded.
-- Clip encoding reads from the source file or ring buffer.
+- Clip encoding reads from the source file.
 - Candidate crops are released after persistence.
 - Model outputs are converted to compact numeric records.
-- DataLoader worker counts and prefetch factors are capped.
 - Video frame extraction to disk is prohibited in the main pipeline.
-- Memory-watermark monitoring pauses upstream decoding before exhaustion.
 
-### 12.3 Storage calculation
-
-Storage is driven by encoded bitrate, camera count, duration, and retention—not decoded frame size.
+### 14.3 Storage
 
 ```text
 Storage GB ≈ bitrate in Mbps × duration in seconds ÷ 8 ÷ 1000
 ```
 
-Illustrative 3-hour recording:
+At the measured bitrates, 5 hours of footage is 4.5–24 GB. Storage is not a constraint for this project. Operational controls: keep original encoded footage, store only short evidence clips and thumbnails, deduplicate by checksum, and detect low-disk conditions before starting a job.
 
-| Bitrate | Per camera | 4 cameras | 8 cameras |
-|---:|---:|---:|---:|
-| 4 Mbps | ~5.4 GB | ~21.6 GB | ~43.2 GB |
-| 8 Mbps | ~10.8 GB | ~43.2 GB | ~86.4 GB |
-
-Operational controls:
-
-- Keep original encoded footage; do not store decoded frames.
-- Store only short evidence clips and thumbnails.
-- Use lifecycle policies and deduplication by checksum.
-- Separate hot NVMe processing storage from retention NAS.
-- Reserve at least 20% free processing-disk capacity.
-- Detect low-disk conditions before starting a job.
-
-### 12.4 Compute cascade
+### 14.4 Compute cascade
 
 ```mermaid
 flowchart TD
-    A["All decoded frames"] --> B["NVOF + calibration features<br/>lowest incremental cost"]
-    B --> C["Candidate frames/windows<br/>target: small fraction of video"]
-    C --> D["Seat crops + D-FINE/RT-DETR<br/>medium cost"]
-    D --> E["Pose/tracking on selected clips<br/>medium/high cost"]
-    E --> F["Gemma on ambiguous/high-impact events only<br/>highest cost per event"]
+    A["All decoded frames"] --> B["Codec motion vectors<br/>~zero incremental cost"]
+    B --> C["Candidate windows<br/>measured fraction of video"]
+    C --> D["Seat crops + D-FINE<br/>medium cost"]
+    D --> E["Pose and tracking on selected clips"]
+    E --> F["Gemma on ambiguous events only"]
 ```
 
-The “small fraction” is a measured output, not an assumed 5–10%. The gate is optimized for event recall first; excessive filtering that misses events is unacceptable.
+The candidate fraction is a measured output, not an assumed percentage. The gate is optimized for event recall first; excessive filtering that misses events is unacceptable.
 
 ---
 
-## 13. Evaluation and Benchmark Plan
+## 15. Evaluation Plan
 
-### 13.1 Evaluation dataset
+### 15.1 Annotation strategy
 
-Create a staged internal validation corpus containing:
+Recall is expensive to measure; precision is cheap. The corpus is annotated accordingly:
 
-- 2–4 camera viewpoints;
-- 15–30 seated participants if available, plus digitally or spatially varied layouts;
-- normal writing, thinking, stretching, looking at a board/invigilator;
-- pen drops and stationery handling;
-- invigilator movement;
-- phone retrieval, viewing, concealment, and passing;
-- folded paper/chit retrieval and exchange;
-- occlusion, entrance/exit, empty seats, and seat changes;
-- low light, glare, compression, blur, camera shake, and exposure change;
-- multiple simultaneous normal and staged suspicious actions.
+| Purpose | Coverage | Effort |
+|---|---|---|
+| Event recall, temporal IoU, fragmentation | Exhaustive labels over a contiguous ~90-minute subset spanning all cameras | High |
+| False events per hour | Adjudicate only what the system flags, over the remaining ~3.5 hours | Low |
+| Hard-negative mining | The unlabelled remainder | Incidental |
 
-Every event receives:
+Every annotated event receives temporal start/end, seat IDs, event type, visibility/quality label, object boxes where visible, and reviewer confidence. Splits are made by recording session and room — never by random frames.
 
-- temporal start/end;
-- seat IDs;
-- event type;
-- visibility/quality label;
-- object boxes where visible;
-- reviewer confidence;
-- normal/suspicious-context annotation strictly for evaluation, not automated verdict output.
+**Temporal annotation is completed before box annotation.** Event labels validate the segmentation layer, which is what PS2 scores; box labels validate a detector whose published ceiling is already known to be low.
 
-Splits are made by recording session, room, or participant—not by random frames—to prevent leakage.
-
-### 13.2 Metrics
+### 15.2 Metrics
 
 | Layer | Metrics | Gate |
 |---|---|---|
 | Motion/event proposal | Event recall, event precision, temporal IoU, false events/hour, fragmentation and merge rate | Must preserve critical-event recall |
 | ROI | ROI IoU, seat-attribution accuracy, multi-seat overlap correctness | No misleading single-seat attribution |
-| Object detector | mAP50-95, AP-small, phone recall, paper/phone confusion, FP/hour | Threshold chosen on held-out hall |
-| Pose | Person recall, PCK where labelled, missing-keypoint rate, wrist/head jitter | Unreliable keypoints must be masked |
-| Tracking | HOTA, IDF1, ID switches/hour, seat switches/hour, recovery time | Seat attribution prioritized |
-| VLM | Evidence-support precision, hallucination rate, abstention rate, precision lift over CV-only | Cannot reduce critical-event recall silently |
-| End to end | Review-time reduction, top-K precision, missed critical events, events/hour, reviewer agreement | Human utility is final metric |
-| Compute | Wall-clock throughput, peak VRAM, peak RAM, disk I/O, GPU utilization, energy/job | Profile per hardware tier |
+| Object detector | mAP50-95, AP-small, phone recall, paper/phone confusion, FP/hour, abstention rate | Threshold chosen on held-out room |
+| Pose | Person recall, missing-keypoint rate, wrist/head stability | Unreliable keypoints must be masked |
+| VLM | Evidence-support precision, hallucination rate, abstention rate, schema validity | Cannot reduce critical-event recall |
+| End to end | Review-time reduction, Precision@K, missed critical events, events/hour | Human utility is the final metric |
 
-### 13.3 Required model benchmarks
+Compute profiling is recorded but is not a gate. The target hardware is not a constraint.
 
-1. **D-FINE-L vs D-FINE-M vs RT-DETRv2-S**
-   - full-frame inference;
-   - seat-crop inference;
-   - overlapping sliced inference;
-   - TensorRT FP16 and INT8 where calibration quality holds.
+### 15.3 Benchmark context
 
-2. **RTMO vs RTMPose vs Multi-HMR2**
-   - 10, 30, and 50–60 visible people;
-   - wrist/head stability;
-   - occlusion recovery;
-   - VRAM and wall-clock time.
+Published results on comparable problems, for calibrating what is claimable:
 
-3. **NvDCF vs Deep OC-SORT**
-   - ID switches;
-   - seat assignment;
-   - disappearance/reappearance;
-   - invigilator crossings.
+| Result | Benchmark | Number |
+|---|---|---|
+| D-FINE-L | COCO val2017 | 54.0 AP (57.1 with Objects365) |
+| RTMO-l | CrowdPose | 73.2 AP, one-stage SOTA |
+| SAHI slicing | VisDrone / xView | +6.8 to +14.5 AP, on frames far larger than input |
+| YOLOv5 / v6 / v7 | Classroom cheating, CCTV | **43% / 37% / 51% accuracy** |
+| MOG2 | CDnet 2014 | Below SuBSENSE, PAWCS, FgSegNet-v2 |
+| Weakly supervised VAD | UCF-Crime | ~91 AP, coarser task, hours of data |
 
-4. **Gemma E4B vs E2B fallback vs 12B quality mode**
-   - phone/paper/uncertain classification on the same event packets;
-   - hallucination;
-   - structured-output validity;
-   - VRAM and latency;
-   - CV-only versus CV+VLM precision.
+The 51% row is the realistic ceiling for appearance-only cheating detection on CCTV. Positioning this system as evidence prioritization rather than detection is the only framing the numbers support.
 
-### 13.4 Presentation-safe claims
+### 15.4 Presentation-safe claims
 
-The following claims require measured evidence before appearing as achieved:
-
-- “Processes faster than real time.”
-- “Reduces review time by X%.”
-- “Detects phones at Y% accuracy.”
-- “Supports 60 people.”
-- “Runs all models simultaneously in 12 GB.”
-- “Eliminates false positives.”
-
-Until measured, they are labelled targets or hypotheses.
+These require measured evidence before appearing as achieved: "processes faster than real time", "reduces review time by X%", "detects phones at Y% accuracy", "supports N people", "eliminates false positives". Until measured, they are labelled targets.
 
 ---
 
-## 14. Edge-Case Analysis
+## 16. Edge-Case Analysis
 
 | Edge case | Likely failure | System response |
 |---|---|---|
-| Student looks sideways briefly | False suspicious interpretation | Duration/repetition/context gate; low score |
-| Student looks at board or invigilator | Head-pose false positive | Board/staff zone context; observational label only |
-| Pen falls below desk | Strong brief motion | Retain low-priority motion; require corroboration for escalation |
-| Student stretches | Large upper-body motion | Pose pattern plus duration; normal-action hard negatives |
-| Invigilator walks through frame | Many ROIs trigger | Staff path/zone suppression plus manual “mark staff” |
-| Multiple invigilators | Single-staff heuristic fails | Multi-track staff marking and dashboard override |
-| Two students overlap | Pose/track identity switch | Seat anchoring, uncertainty, multi-seat event |
-| Student changes seat | Seat association becomes wrong | Explicit seat-transition event and manual reconciliation |
-| Empty seat with moving curtain | False seat activity | Periodicity and environmental mask |
-| Sudden exposure change | Full-frame false flow | Exposure/global-change detector pauses event triggers |
-| Camera bumped | Full-frame motion | Global-motion compensation; calibration invalidation warning |
-| Camera permanently repositioned | Old seat map is wrong | Detect persistent homography shift; stop and require recalibration |
+| **Monitor displays changing exam content** | Continuous false motion at every seat | Screen zone excluded from motion scoring |
+| **Burned-in timestamp updates each second** | Periodic false motion blob | Global overlay mask |
+| **Candidate typing continuously** | Constant motion reads as event | Typing-activity baseline; deviation measured from current regime |
+| **Reflection in glass partition or mirror** | Phantom person and motion | Reflection mask; reflected detections discarded |
+| **Plastic-wrapped chair highlight** | Specular flicker | Persistent-motion mask; coherence filter |
+| Candidate looks sideways briefly | False suspicious interpretation | Duration/repetition gate; low score |
+| Candidate looks at invigilator | Head-pose false positive | Staff zone context; observational label only |
+| Pen or object falls | Strong brief motion | Retain low-priority; require corroboration |
+| Candidate stretches | Large upper-body motion | Pose pattern plus duration; hard negatives |
+| Invigilator walks through frame | Many ROIs trigger | Staff path suppression plus manual marking |
+| Two candidates overlap | Pose/track identity switch | Seat anchoring, uncertainty, multi-seat event |
+| Candidate changes seat | Seat association wrong | Explicit seat-transition event, manual reconciliation |
+| Sudden exposure change | Full-frame false flow | Exposure detector pauses event triggers |
+| Camera bumped | Full-frame motion | Global-motion compensation; calibration warning |
+| Camera repositioned | Old seat map wrong | Persistent homography shift detection; require recalibration |
 | Low-bitrate block artifacts | False subtle motion | Temporal median/MAD, minimum spatial coherence |
-| Phone is 3–5 pixels | Confused with pen/paper | “Insufficient visual evidence”; never super-resolve into proof |
-| Phone partially hidden | Missed detection | Temporal multi-frame aggregation and hand/desk crop |
-| Answer sheet appears as chit | False object alert | Paper context, size/location/trajectory, hard negatives |
-| Smartwatch | Tiny object not visible | Optional class only where pixel footprint supports it |
-| Reflective calculator | Phone confusion | Institution configuration and hard-negative dataset |
-| Simultaneous events | Merged segment | Seat-specific event state machines; allow overlapping events |
+| **Phone at ~30×20 px** | Confused with wallet, mouse, dark notebook | `insufficient visual evidence`; behaviour scored instead |
+| Phone partially hidden | Missed detection | Temporal aggregation and hand/desk crop |
+| Rough sheet appears as chit | False object alert | Paper context, size/location/trajectory, hard negatives |
+| Simultaneous events | Merged segment | Per-seat state machines; overlapping events allowed |
 | One action pauses briefly | Over-segmentation | Cooling/merge-gap state |
-| Separate actions close in time | Under-segmentation | Evidence change-point and maximum gap rules |
-| Missing/corrupt frames | Timestamp drift | Decode warning, gap record, no fabricated continuity |
-| Variable frame rate | Incorrect timing | Use presentation timestamps, not frame index alone |
+| Separate actions close in time | Under-segmentation | Change-point and maximum-gap rules |
+| **Variable frame rate** | Timestamp drift | Presentation timestamps only; frame-index arithmetic prohibited |
+| Missing/corrupt frames | Timing gap | Decode warning, gap record, no fabricated continuity |
+| **8 fps source** | Gestures undersampled | Excluded from gesture evaluation; motion evidence only |
 | Unsynchronized cameras | False cross-camera inference | Per-camera results until sync confidence is sufficient |
-| VLM hallucinates an object | Misleading summary | Detector/evidence constraint, uncertainty schema, human review |
-| VLM server crashes | Pipeline failure | Verifier optional; deterministic record remains valid |
-| GPU out of memory | Job crash | Memory watermark, sequential residency, retry at smaller profile |
+| VLM hallucinates an object | Misleading summary | Detector constraint, GBNF schema, human review |
+| VLM fails | Pipeline failure | Verifier optional; deterministic record remains valid |
 | Disk fills | Lost output | Preflight quota and safe job pause |
-| Power/server failure | Partial result | Checkpointed stages, idempotent resume, immutable source |
+| Power failure | Partial result | Checkpointed stages, idempotent resume |
 
 ---
 
-## 15. Risk Register and Mitigation
+## 17. Risk Register
 
-### 15.1 Problem-statement risks
+### 17.1 Primary risks
 
-| Risk | Probability | Impact | Detection/metric | Mitigation | Residual risk |
+| Risk | Probability | Impact | Detection | Mitigation | Residual |
 |---|---:|---:|---|---|---|
-| False motion from noise/shadows | High | Medium | False events/hour | NVOF, temporal robust statistics, exposure/global-motion suppression | Complex reflections remain difficult |
-| Missed subtle ROI | Medium | High | Critical-event recall | Seat-specific thresholds, multi-frame accumulation, motion+pose evidence | Source pixels may be insufficient |
+| **Insufficient continuous footage** | High | Critical | Corpus audit | Request raw recordings; synthesize long-form test video from clips plus quiet footage with known insertion timestamps | Event-recall confidence limited until real continuous footage arrives |
+| **Screen motion swamps the gate** | High | High | False events/hour on occupied seats | Screen zone masking, typing baseline | Partial screen visibility at oblique angles |
+| False motion from noise/shadows | High | Medium | False events/hour | Robust temporal statistics, exposure and global-motion suppression | Complex reflections remain difficult |
+| Missed subtle ROI | Medium | High | Critical-event recall | Seat-specific thresholds, multi-frame accumulation | Source pixels may be insufficient |
 | Over-segmentation | High | Medium | Fragments per ground-truth event | Hysteresis, cooling state, merge gap | Long interrupted actions may still split |
-| Under-segmentation | Medium | Medium | Merged-event rate | Seat-specific states, change-point rules | Interacting students may form one event |
-| Camera vibration | Medium | High | Global-flow ratio | Homography/affine compensation and recalibration detection | Severe blur cannot be reversed |
-| Storage constraints | High | Medium | GB/session and free disk | Preserve encoded video, evidence-only clips, retention policy | Institutional retention may still be costly |
-| Processing delays | Medium | Medium | Wall-clock/video-hour | Hardware decode/flow, selective inference, TensorRT | Poor-quality video may create more candidates |
-| ROI localization error | Medium | High | ROI IoU and seat attribution | Seat calibration, detector/pose fusion, multi-seat uncertainty | Dense occlusion remains |
-| Environmental variability | High | High | Leave-one-hall-out performance | Per-camera calibration, domain augmentations, configurable thresholds | Revalidation needed per institution |
-| Unauthorized data access | Medium | Critical | Audit/security tests | Offline default, RBAC, encryption, retention, access logs | Insider misuse requires governance |
-| Hardware failure | Medium | High | Job recovery test | Checkpoint/resume, checksums, NAS backup, health monitoring | Camera-side footage loss may be unrecoverable |
-| Scalability bottleneck | Medium | High | Throughput/camera | Stateless workers, queues, per-video sharding | GPU capacity planning remains site-specific |
+| Detector domain shift | High | Medium | AP-small on held-out room | Fine-tune from Objects365, hard negatives from this dataset | 51% published ceiling is real |
+| Scarce positive object examples | High | Medium | Instance count per class | Behaviour-first scoring; object as corroboration only | Detector remains the weakest layer |
+| Camera vibration | Medium | High | Global-flow ratio | Homography compensation and recalibration detection | Severe blur cannot be reversed |
+| ROI localization error | Medium | High | ROI IoU | Seat calibration, detector/pose fusion, multi-seat uncertainty | Dense occlusion remains |
+| Environmental variability | High | High | Leave-one-room-out performance | Per-camera calibration, configurable thresholds | Revalidation needed per institution |
+| VLM hallucination | Medium | Medium | Hallucination rate | GBNF schema, evidence references, abstention | Fluent text still persuades |
+| Automation bias | Medium | High | Reviewer audit | Prominent uncertainty, randomized audit samples | Requires training and policy |
+| Unauthorized data access | Medium | Critical | Audit tests | Offline default, RBAC, encryption, retention | Insider misuse requires governance |
 
-### 15.2 Additional model and product risks
+### 17.2 Fail-safe behaviour
 
-| Risk | Why it matters | Mitigation |
-|---|---|---|
-| Detector domain shift | COCO/Objects365 phones are larger and clearer than CCTV phones | Fine-tune pretrained weights; hall/session split; hard negatives; AP-small |
-| Synthetic-data gap | Composited objects may not match real occlusion/lighting | Use synthetic data only as support; validate on real staged footage |
-| VLM hallucination | Fluent explanations can be mistaken for evidence | Structured schema, evidence references, abstention, human decision |
-| Quantization degradation | Q4/NVFP4 may alter fine visual judgments | Compare against BF16/FP16 on a fixed validation set |
-| Unsupported hardware precision | NVFP4 on Ada gives no native FP4 benefit | Hardware-aware profile; QAT Q4/INT4 fallback |
-| New-model reproducibility | Gemma 4 and Multi-HMR2 stacks are recent | Pin versions, containerize, maintain stable baseline |
-| Identity misattribution | Wrong seat association has serious consequences | Seat-first identity, multi-seat label, manual correction, no names |
-| Alert fatigue | Too many “possible events” recreates manual review | Optimize false events/hour and Precision@K, not only frame accuracy |
-| Automation bias | Reviewer may trust ranked events too much | Prominent uncertainty, randomized audit samples, training and policy |
-| Missed-event tunnel vision | Reviewer may inspect only system events | Sample unflagged intervals for quality control |
-| Feedback poisoning | Incorrect reviewer labels degrade future tuning | Dual review for training labels, immutable original feedback |
-| Privacy overreach | Tool could be repurposed for continuous surveillance | Offline post-hoc scope, access controls, purpose limitation |
-| Dataset consent/licensing | Classroom data involves students and may be restricted | Staged consenting adults for prototype; provenance register |
-| Model/license change | Community checkpoints may have unclear or changing terms | Prefer official Apache-2.0 models; pin and archive licence text |
-
-### 15.3 Fail-safe behaviour
-
-When confidence is inadequate, Project Classroom must:
-
-- retain the clip if motion is meaningful;
-- label the evidence as limited or insufficient;
-- avoid object or intent claims;
-- allow a reviewer to inspect the clean source;
-- log the reason for uncertainty.
+When confidence is inadequate, Project Classroom must retain the clip if motion is meaningful; label the evidence as limited or insufficient; avoid object or intent claims; allow a reviewer to inspect the clean source; and log the reason for uncertainty.
 
 ---
 
-## 16. Traceability: Challenge to Design Response
+## 18. Traceability: Challenge to Design Response
 
 | Problem-statement challenge | Design response | Proof required |
 |---|---|---|
-| Crowded examination halls | Seat polygons, RTMO, NvDCF/Deep OC-SORT, overlapping seat events | 50–60-person staged or representative benchmark |
-| Subtle motion | NVOF residual flow, seat-specific robust baseline, pose deltas | Recall on head/hand/object exchanges |
-| Camera noise | Temporal robust statistics and coherence filters | Compression/noise stress test |
+| Crowded examination halls | Seat polygons, RTMO, ByteTrack, overlapping seat events | Multi-person staged benchmark |
+| Subtle motion | Codec-MV gate, DIS refinement, seat-specific robust baseline, pose deltas | Recall on head/hand/object events |
+| Camera noise | Temporal robust statistics and coherence filters | Compression stress test |
 | Lighting variations | Exposure-change detection; no blanket CLAHE | Glare/brightness test |
-| Camera vibration | Global motion compensation and recalibration warning | Synthetic/real shake test |
-| Long video duration | Streaming decode, bounded queues, selective cascade | 3-hour soak test |
+| Camera vibration | Global motion compensation and recalibration warning | Synthetic shake test |
+| Long video duration | Streaming decode, bounded queues, selective cascade | 5-hour soak test |
 | ROI boundary accuracy | Seat calibration plus detector/pose/flow fusion | ROI IoU and seat attribution |
-| Background motion | Persistent/periodic motion model and masks | Fan/curtain test |
+| Background motion | Persistent/periodic motion model, screen and overlay masks | Screen and overlay zero-motion test |
 | Event segmentation quality | Per-seat hysteresis state machines | Temporal IoU, split/merge rate |
-| Multi-camera synchronization | Timestamp confidence, manual offset, visual event correlation | Known-offset test |
-| Scalability | Stateless jobs, GPU-aware scheduling, metadata-first storage | Multi-job load test |
-| False event generation | Multi-evidence fusion, calibrated score, VLM only as verifier | False events/hour |
-| Object identification | High-resolution crops, D-FINE/RT-DETR, temporal confirmation | AP-small and confusion matrix |
+| Multi-camera synchronization | Timestamp confidence, manual offset | Known-offset test |
+| Scalability | Stateless jobs, per-video sharding | Multi-job load test |
+| False event generation | Multi-evidence fusion, calibrated score, VLM as verifier only | False events/hour |
+| Object identification | Native-resolution seat crops, D-FINE, temporal confirmation, abstention | AP-small and confusion matrix |
 | Heatmaps/timelines/logs | Supervision overlays, React charts, event database | UI acceptance test |
 | Human oversight | No verdict; evidence and reviewer workflow | Language/schema audit |
 
 ---
 
-## 17. Feasibility Analysis
+## 19. Feasibility
 
-### 17.1 Technical feasibility
+### 19.1 Technical
 
-**Feasible for a hackathon prototype** because:
+**Feasible** because the system processes recorded files with no real-time deadline; codec motion vectors are confirmed present in every source file; the whole-video pass is measured at 12 minutes for 5 hours; D-FINE and RTMO provide pretrained, exportable models; and the UI and evidence workflow are independent of model tuning.
 
-- the system processes recorded files and has no hard real-time deadline;
-- DeepStream supplies production-oriented decode, metadata, tracking, and optical-flow primitives;
-- D-FINE and RT-DETR provide pretrained and exportable detectors;
-- RTMO provides a reproducible pose baseline;
-- Gemma offers local multimodal models at multiple sizes;
-- the UI and evidence workflow can be built independently of final model tuning.
+**Not yet proven** because tiny phone visibility depends on camera placement and source resolution; no public dataset represents this deployment; false-positive costs are high; and privacy, retention and institutional procedures require governance.
 
-**Not yet proven for production** because:
-
-- tiny phone/paper visibility depends on camera placement and source resolution;
-- no public dataset fully represents this deployment;
-- 50–60-person pose/tracking and multi-camera performance require measured validation;
-- false-positive costs are high;
-- privacy, retention, and institutional procedures require governance.
-
-### 17.2 Operational feasibility
-
-The workflow matches how investigation teams operate: ingest footage, review ranked events, record a decision, and export an audit artifact. One-time camera calibration is an operational cost but materially improves reliability.
-
-### 17.3 Economic feasibility
-
-The architecture uses the target RTX 4070–4090 range rather than assuming datacenter GPUs. Hardware optical flow and selective inference reduce GPU-hours. Storage remains the larger long-term cost and is controlled through encoded-video retention and evidence-only derivatives.
-
-### 17.4 Data feasibility
-
-No foundation-model training is needed. The main data requirement is a small, high-quality validation and fine-tuning corpus for:
-
-- phone/paper-like object detection;
-- event thresholds;
-- hard-negative mining;
-- optional temporal classification.
-
-This is feasible using consenting staged recordings, but production generalization remains a deployment gate.
-
-### 17.5 Feasibility verdict
+### 19.2 Confidence by capability
 
 | Capability | Phase-1 confidence | Production confidence | Decision |
 |---|---:|---:|---|
 | Offline ingest and motion timeline | High | High | Build |
 | Seat/desk ROI heatmap | High | High after calibration | Build |
 | Event clip segmentation | High | Medium-high | Build and benchmark |
-| Crowded pose overlay | Medium-high | Medium | RTMO baseline |
-| Reliable phone/paper distinction | Medium | Low-medium until data | Prototype with explicit abstention |
-| Multi-HMR2 across 50–60 people | Low-medium | Unknown | Research experiment |
-| VLM evidence verification | Medium-high | Medium | Gemma E4B QAT Q4 default; E2B fallback |
+| Screen and overlay suppression | High | High | Build |
+| Typing-baseline deviation scoring | Medium-high | Medium | Build and validate |
+| Crowded pose overlay | Medium-high | Medium | Build |
+| Head-pitch / below-desk behaviour evidence | Medium-high | Medium | Build — primary behavioural signal |
+| Reliable phone/paper distinction | Low-medium | Low | Prototype with explicit abstention |
+| VLM evidence verification | Medium-high | Medium | Build |
 | Fully automated misconduct decision | Unacceptable | Unacceptable | Explicitly excluded |
 
 ---
 
-## 18. APIs and Data Surfaces
+## 20. APIs and Data Model
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -897,7 +780,7 @@ This is feasible using consenting staged recordings, but production generalizati
 | POST | `/api/sessions/{id}/videos` | Register source video and metadata |
 | POST | `/api/cameras/{id}/calibrations` | Save a versioned seat/desk calibration |
 | POST | `/api/jobs` | Start an offline analysis job |
-| GET | `/api/jobs/{id}` | Read stage progress, resource use, and errors |
+| GET | `/api/jobs/{id}` | Read stage progress and errors |
 | POST | `/api/jobs/{id}/cancel` | Safely stop after the current checkpoint |
 | GET | `/api/events` | Filter events by session, time, seat, evidence, score, review |
 | GET | `/api/events/{id}` | Fetch event evidence and provenance |
@@ -905,206 +788,118 @@ This is feasible using consenting staged recordings, but production generalizati
 | POST | `/api/events/{id}/reviews` | Record relevant/irrelevant/inconclusive review |
 | GET | `/api/sessions/{id}/heatmap` | Return calibrated motion/activity heatmap data |
 | POST | `/api/sessions/{id}/reports` | Generate an investigator report |
-| GET | `/api/benchmarks/{id}` | Read evaluation and compute results |
 
-Core entities:
-
-- Session
-- Camera
-- SourceVideo
-- CalibrationProfile
-- SeatRegion
-- AnalysisJob
-- MotionWindow
-- Track
-- Detection
-- PoseObservation
-- Event
-- EvidenceArtifact
-- VLMVerification
-- HumanReview
-- AuditEntry
-- BenchmarkRun
+Core entities: Session, Camera, SourceVideo, CalibrationProfile, SeatRegion, SeatZone, MaskRegion, AnalysisJob, MotionWindow, Track, Detection, PoseObservation, Event, EvidenceArtifact, VLMVerification, HumanReview, AuditEntry.
 
 ---
 
-## 19. Investigator Experience
+## 21. Investigator Experience
 
-### 19.1 Screens
+### 21.1 Screens
 
-1. **Sessions:** source videos, duration, cameras, analysis status.
-2. **Calibration:** camera view, seat polygons, exclusions, homography.
-3. **Processing:** stage progress, throughput, RAM/VRAM, warnings.
-4. **Timeline:** motion intensity and event markers per seat/camera.
-5. **Event review:** clean clip, annotated clip, evidence factors, uncertainty.
-6. **Heatmap:** spatial distribution with time and evidence filters.
-7. **Search/log:** timestamp, seat, evidence type, score, status.
-8. **Benchmarks:** precision/recall, false events/hour, compute usage.
-9. **Report/export:** selected events and reviewer conclusions.
+1. **Sessions** — source videos, duration, cameras, analysis status.
+2. **Calibration** — camera view, seat polygons and zones, masks, homography.
+3. **Processing** — stage progress, throughput, warnings.
+4. **Timeline** — motion intensity and event markers per seat/camera.
+5. **Event review** — clean clip, annotated clip, evidence factors, uncertainty.
+6. **Heatmap** — spatial distribution with time and evidence filters.
+7. **Search/log** — timestamp, seat, evidence type, score, status.
+8. **Report/export** — selected events and reviewer conclusions.
 
-### 19.2 UI language rules
+### 21.2 UI language rules
 
 Allowed:
 
-- “Phone-like object visible near right hand; evidence limited.”
-- “Repeated head turn toward neighbouring desk over 14 seconds.”
-- “Motion detected below Desk A-12; object not visible.”
+- "Phone-like object visible near right hand; evidence limited."
+- "Repeated head turn toward neighbouring desk over 14 seconds."
+- "Motion detected below Desk 12; object not visible."
+- "Hand below desk line for 22 seconds with sustained downward head pitch."
 
 Disallowed:
 
-- “Student cheated.”
-- “Confirmed malpractice.”
-- “Guilty.”
-- “This person is suspicious.”
+- "Student cheated."
+- "Confirmed malpractice."
+- "Guilty."
+- "This person is suspicious."
 
 ---
 
-## 20. Implementation Process
+## 22. Acceptance Criteria
 
-### Phase A — Three-hour presentation preparation
-
-1. Finalize this PRD and architecture visuals.
-2. Convert Sections 1–7 and 12–17 into a 10–12-slide deck.
-3. Show the solution as a calibrated investigation assistant, not a cheating oracle.
-4. Include the model decision matrix and hardware-aware Gemma decision.
-5. Mark prototype versus production capabilities explicitly.
-
-### Phase B — Prototype
-
-1. Assemble one representative video and annotations.
-2. Build DeepStream ingest and NVOF overlay.
-3. Implement seat calibration and per-seat event state machine.
-4. Integrate D-FINE-L and RT-DETRv2-S on seat crops.
-5. Add RTMO pose evidence.
-6. Build event store, API, and React timeline.
-7. Add Gemma E4B QAT Q4 verifier with strict JSON output and an E2B fallback profile.
-8. Run the first end-to-end benchmark.
-
-### Phase C — Accuracy iteration
-
-1. Mine false positives.
-2. Fine-tune detector from pretrained weights.
-3. Compare NvDCF and Deep OC-SORT.
-4. Test Multi-HMR2 only on candidate clips.
-5. Calibrate event scoring.
-6. Evaluate VLM precision lift and hallucination.
-
-### Phase D — Deployment hardening
-
-1. TensorRT export and profiling.
-2. Checkpoint/retry and multi-job scheduling.
-3. RBAC, encryption, audit, retention.
-4. Multi-camera sync and cross-camera event correlation.
-5. Independent privacy, fairness, and security review.
-
----
-
-## 21. Phase-1 Presentation Structure
-
-| Slide | Title | Content/visual |
-|---:|---|---|
-| 1 | Project Classroom | One-line pitch and offline investigation positioning |
-| 2 | The review problem | Hours of footage → missed events, fatigue, no searchable evidence |
-| 3 | Our idea | Motion-grounded, seat-linked, multi-evidence event prioritization |
-| 4 | How it works | Mermaid end-to-end architecture |
-| 5 | Why existing approaches fail | MOG2/scene cuts/full-frame detector/single-model weaknesses |
-| 6 | Precision innovations | Seat anchoring, NVOF, tiled detection, temporal fusion, abstention |
-| 7 | Model stack | D-FINE vs RT-DETR; RTMO/Multi-HMR2; NvDCF/Deep OC-SORT |
-| 8 | Gemma verifier | E4B QAT Q4 default, E2B fallback, 12B quality mode, hardware-aware memory scheduler |
-| 9 | Prototype experience | Calibration → timeline → evidence card → human decision |
-| 10 | Feasibility and compute | Hardware tiers, streaming memory design, storage calculation |
-| 11 | Risks and mitigation | Top risks with measurable controls; human oversight |
-| 12 | Validation and roadmap | Metrics, benchmarks, MVP, production gates |
-
-### 21.1 Recommended hero statement
-
-> **We do not automate accusations. We automate the search for evidence.**
-
-### 21.2 Recommended innovation statement
-
-> Project Classroom is not another detector running on every frame. It is a hardware-aware evidence cascade that understands where each student is seated, spends computation only where activity occurs, and explicitly abstains when the footage cannot support a conclusion.
-
----
-
-## 22. Acceptance Criteria for the First Prototype
-
-- [ ] A recorded video can be imported and validated without loading it fully into memory.
-- [ ] An operator can create and save seat/desk polygons.
-- [ ] The system displays NVOF or fallback motion vectors and a seat-level heatmap.
+- [ ] A recorded video is imported and validated without loading it fully into memory.
+- [ ] Variable-frame-rate files report correct durations and timestamps.
+- [ ] An operator can create and save seat polygons with screen, desk and torso zones.
+- [ ] Overlay, reflection and environment masks are saved and applied.
+- [ ] Masked regions produce zero motion in the scan output.
+- [ ] The system displays motion vectors and a seat-level heatmap.
 - [ ] The system creates event clips with correct source timestamps.
 - [ ] One sustained action is not fragmented beyond the configured tolerance.
-- [ ] Camera shake and exposure-change tests do not create high-priority incidents.
-- [ ] D-FINE-L and RT-DETRv2-S can be evaluated on the same crop dataset.
-- [ ] Object output includes phone-like, paper-like, other, and uncertain states.
+- [ ] Camera shake and exposure-change tests do not create high-priority events.
+- [ ] An occupied, actively typing seat does not generate continuous events.
+- [ ] Object output includes phone-like, paper-like, other and uncertain states.
 - [ ] Low-pixel objects are marked insufficient rather than confidently classified.
 - [ ] RTMO pose output is tied to calibrated seats.
-- [ ] Tracker identity is corrected/reconciled by seat.
-- [ ] Gemma E4B QAT Q4 produces valid structured output on at least 95% of verifier calls.
+- [ ] Wrist keypoints are masked when hands fall below the desk line.
+- [ ] Tracker identity is reconciled by seat.
+- [ ] Gemma produces schema-valid output on 100% of verifier calls via GBNF.
 - [ ] A Gemma failure does not remove the deterministic event record.
-- [ ] The dashboard searches by time, seat, evidence, and review status.
-- [ ] A reviewer can label an event relevant, irrelevant, or inconclusive.
+- [ ] The dashboard searches by time, seat, evidence and review status.
+- [ ] A reviewer can label an event relevant, irrelevant or inconclusive.
 - [ ] Exported evidence links back to the immutable source timestamp.
-- [ ] Peak RAM and VRAM are recorded for every benchmark.
 - [ ] No screen or report states that cheating is confirmed.
 
 ---
 
 ## 23. Known Gaps
 
-- Reliable phone/chit detection cannot be guaranteed until camera-resolution and pixel-footprint requirements are validated.
-- Multi-HMR2 has not yet been reproduced on the target 50–60-person exam footage.
-- Multi-camera synchronization remains dependent on source timestamp quality and per-site calibration.
-- No public dataset found so far fully covers this problem with clean provenance and adequate seated micro-actions.
-- Gemma 4 quantized runtime support is evolving; versions must be pinned and tested.
-- The proposed throughput and memory profiles are engineering targets until measured on the target workstation.
-- Legal consent, retention, and review policy are institution-specific and require formal approval before deployment.
+- Continuous recording is required for honest event-recall and false-events-per-hour measurement. The profiled corpus is pre-cut clips.
+- Reliable phone/chit detection cannot be guaranteed at the measured ~30×20 px footprint. Abstention is the designed outcome, not a failure.
+- Positive object examples will remain scarce regardless of corpus length, because genuine incidents are rare.
+- Multi-camera synchronization depends on source timestamp quality and per-site calibration.
+- No public dataset covers this problem with clean provenance and adequate seated micro-actions.
+- Gemma 4 quantized runtime support is evolving; versions must be pinned.
+- Legal consent, retention and review policy are institution-specific and require formal approval before deployment.
 
 ---
 
-## 24. Research and Reference Register
+## 24. Reference Register
 
 | Reference | What it establishes | How Project Classroom uses it |
 |---|---|---|
-| [Official Drishti AI Hackathon problem statement](</Users/atharvadeo/Desktop/drishti/Problem Statement DrishtiAI Hackathon.pdf>) | Requirements, risks, hardware range, and human-oversight mandate | Primary scope and traceability baseline |
-| [NVIDIA DeepStream 8.0 documentation](https://docs.nvidia.com/metropolis/deepstream/8.0/index.html) | GPU-accelerated streaming, inference, metadata, tracking, and plugins | Core offline video pipeline |
-| [DeepStream `gst-nvof`](https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_plugin_gst-nvof.html) | Hardware optical flow from Turing/Jetson Orin onward; 4×4 block vectors | Primary motion-estimation layer |
-| [NVIDIA TensorRT support matrix](https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/support-matrix.html) | Hardware and precision compatibility | Prevents invalid FP4/engine portability claims |
-| [TensorRT-RTX precision guidance](https://docs.nvidia.com/deeplearning/tensorrt-rtx/latest/performance/best-practices.html) | FP4 is natively supported on Blackwell, not Ada | Basis for Gemma NVFP4 hardware decision |
-| [D-FINE official repository](https://github.com/Peterande/D-FINE) | ICLR 2025 detector, pretrained models, TensorRT/ONNX deployment | Primary detector candidate |
-| [RT-DETR/RT-DETRv2 official repository](https://github.com/lyuwenyu/RT-DETR) | Real-time DETR baseline, custom training, sliced inference, TensorRT | Detector challenger/fallback |
-| [MMPose](https://github.com/open-mmlab/mmpose) | Pose framework including RTMPose and RTMO | Reproducible pose baseline |
-| [Multi-HMR2](https://github.com/naver/multi-hmr2) | Multi-person 3D reconstruction and video tracking | Experimental candidate on selected clips |
-| [SAT-HMR](https://github.com/ChiSu001/SAT-HMR) | Scale-adaptive multi-person reconstruction | Distant-person research challenger |
-| [OC-SORT](https://github.com/noahcao/OC_SORT) | Observation-centric tracking under occlusion/nonlinear motion | Tracker benchmark lineage |
-| [Deep OC-SORT](https://github.com/GerardMaggiolino/Deep-OC-SORT) | Appearance-assisted OC-SORT | A/B challenger to NvDCF |
-| [MMAction2](https://github.com/open-mmlab/mmaction2) | Pose/RGB temporal action-recognition framework | Optional temporal classifier evaluation |
-| [Roboflow Supervision](https://github.com/roboflow/supervision) | Detection structures, slicing, zones, annotations, evaluation utilities | UI overlays, crops, zones, metrics—not core intelligence |
-| [Google Gemma 4 12B model card](https://huggingface.co/google/gemma-4-12B-it) | Native image/video understanding and model capabilities | Quality-mode visual verifier |
-| [Google Gemma 4 E4B](https://huggingface.co/google/gemma-4-E4B) | Mid-sized multimodal Gemma option with native image/video understanding | Default verifier family; use an instruction-tuned QAT Q4/GGUF build after runtime validation |
-| [Google Gemma 4 E2B QAT Q4 GGUF](https://huggingface.co/google/gemma-4-E2B-it-qat-q4_0-gguf) | Official lower-memory quantization-aware checkpoint | Constrained-GPU fallback verifier |
-| [AxionML Gemma-4-12B-NVFP4](https://huggingface.co/AxionML/Gemma-4-12B-NVFP4) | Approximately 11 GB MLP-only NVFP4 checkpoint targeting Blackwell | Conditional Blackwell quality profile |
-| [NVIDIA Phi-4 multimodal NVFP4](https://huggingface.co/nvidia/Phi-4-multimodal-instruct-NVFP4) | NVIDIA-quantized 5.6B multimodal alternative | Optional NVIDIA runtime comparison |
-| [DVR-Scan](https://github.com/Breakthrough/DVR-Scan) | Classical motion-event detection for surveillance videos | External baseline for event segmentation |
-| [Cheatomaly](https://doi.org/10.3389/fdata.2026.1817120) | Temporal weakly supervised exam anomaly research | Supports temporal, not single-frame, evaluation direction |
-| [PySceneDetect](https://www.scenedetect.com/) | Shot/cut/fade detection | Explicitly rejected as the main activity segmenter |
+| [Drishti AI Hackathon Problem Statement 2](docs/Problem_Statement.pdf) | Requirements, risks, hardware range, human-oversight mandate | Primary scope and traceability baseline |
+| [PyAV](https://github.com/PyAV-Org/PyAV) | Python bindings to FFmpeg, including motion-vector side data | Ingest, decode, PTS handling, tier-1 motion |
+| [FFmpeg `export_mvs`](https://ffmpeg.org/ffmpeg-codecs.html) | Codec motion-vector export | Tier-1 whole-video motion gate |
+| [OpenCV DISOpticalFlow](https://docs.opencv.org/4.x/de/d4f/classcv_1_1DISOpticalFlow.html) | Fast dense inverse-search optical flow | Tier-2 candidate refinement |
+| [D-FINE](https://github.com/Peterande/D-FINE) | ICLR 2025 detector, pretrained models, ONNX deployment | Primary object detector |
+| [RTMO](https://arxiv.org/abs/2312.07526) | CVPR 2024 one-stage multi-person pose, 73.2 AP CrowdPose | Pose evidence on candidate clips |
+| [rtmlib](https://github.com/Tau-J/rtmlib) | ONNXRuntime-only RTMO/RTMPose inference without `mmcv` | Pose runtime |
+| [Roboflow Supervision](https://github.com/roboflow/supervision) | Detection structures, zones, ByteTrack, annotations, metrics | Tracking, overlays, zones, metrics |
+| [Gemma 4 E4B](https://huggingface.co/google/gemma-4-E4B-it) | Multimodal instruction-tuned model with native image understanding | Visual verifier |
+| [llama.cpp GBNF grammars](https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md) | Grammar-constrained decoding | Structural guarantee of verifier schema validity |
+| [SAHI](https://arxiv.org/abs/2202.06934) | Sliced inference for small objects, +6.8–14.5 AP | Establishes why full-frame slicing is inappropriate at 720p |
+| [CDnet 2014](http://changedetection.net/) | Change-detection benchmark | Basis for rejecting MOG2 |
+| [Cheatomaly](https://doi.org/10.3389/fdata.2026.1817120) | Weakly supervised exam anomaly ranking | Roadmap formulation for learned scoring |
+| [DVR-Scan](https://github.com/Breakthrough/DVR-Scan) | Classical motion-event detection for surveillance | External baseline for event segmentation |
+| [PySceneDetect](https://www.scenedetect.com/) | Shot/cut/fade detection | Explicitly rejected as the activity segmenter |
+| [Stack audit v3.0](docs/stack_evaluation.html) | Measured evaluation of this architecture against the source footage | Source of every change in this revision |
 
 ---
 
 ## 25. Final Recommendation
 
-Build the Phase-1 story around a credible, bounded proposition:
+> **Project Classroom is an offline evidence-prioritization system for examination footage. Codec-derived motion finds where and when activity occurs; seat-aware detection, pose and tracking explain it; a compact Gemma verifier handles ambiguity; and a human makes every final decision.**
 
-> **Project Classroom is an offline evidence-prioritization system for examination footage. Hardware optical flow finds where and when activity occurs; seat-aware detection, pose, and tracking explain it; a compact Gemma verifier handles ambiguity; and a human makes every final decision.**
+For the build:
 
-For the initial stack:
+1. Use **PyAV with codec motion vectors** for ingest and the whole-video motion gate.
+2. Use **DIS optical flow** for refinement on candidates only.
+3. Model the **CBT scene explicitly** — screen masks, overlay masks, reflection masks, typing baselines. This is where the false-positive battle is won.
+4. Use **D-FINE-L on native-resolution seat crops**, fine-tuned from Objects365 with hard negatives from this dataset.
+5. Use **RTMO via rtmlib**, with wrist masking below the desk line and head pitch from nose-to-shoulder offset.
+6. Use **ByteTrack with seat reconciliation**; seats, not track IDs, carry identity.
+7. Use **Gemma 4 E4B with GBNF-constrained output**, prompted for posture and interaction rather than object identification.
+8. **Score behaviour, corroborate with objects.** The dominant measurable pattern is sustained downward head pitch with below-desk hand dwell.
+9. Optimize **only after** a stage is proven insufficient. If it works, leave it.
+10. Optimize and present **review-time reduction, event recall, false events/hour and uncertainty quality** — not generic model accuracy.
 
-1. Use **DeepStream + NVOF** for ingest and motion.
-2. Use **D-FINE-L** as the primary detector, **D-FINE-M** as a measured resource fallback, and **RT-DETRv2-S** as the mandatory challenger.
-3. Use **RTMO** as the MVP pose model.
-4. Use **NvDCF with seat reconciliation**, benchmarked against **Deep OC-SORT**.
-5. Use **Gemma 4 E4B instruction QAT Q4** as the default verifier, scheduled sequentially on 12 GB and profiled for co-residency on 16–24 GB GPUs.
-6. Retain **Gemma 4 E2B QAT Q4** as the constrained fallback and reserve **Gemma 4 12B** for a measured quality profile or Blackwell deployment.
-7. Keep **Multi-HMR2** as a clearly labelled experiment until its 50–60-person feasibility is demonstrated.
-8. Optimize and present **review-time reduction, event recall, false events/hour, and uncertainty quality**—not generic model accuracy.
-
-This proposal addresses every objective and named risk in the problem statement while remaining honest about the unsolved parts: source-resolution limits, domain data, crowded tracking, and the difference between prioritizing evidence and proving misconduct.
+This proposal addresses every objective and named risk in the problem statement while remaining honest about the unsolved parts: source-resolution limits, scarce positive examples, crowded occlusion, and the difference between prioritizing evidence and proving misconduct.
