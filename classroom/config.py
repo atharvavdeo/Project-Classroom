@@ -74,6 +74,18 @@ class SegmentConfig:
     # A candidate must persist this long to become Active.
     min_duration_s: float = 1.2
 
+    # How long a forming candidate may sit below stop_z before it is discarded.
+    # Real hand motion is intermittent -- a reach pauses, the hand rests, the
+    # motion resumes -- so the raw signal dips to baseline several times inside
+    # one action. Without this the machine leaves CANDIDATE on the first dip and
+    # a genuine action never reaches ACTIVE.
+    #
+    # This deliberately bridges *gaps between activity* rather than smoothing
+    # the signal: smoothing would manufacture duration from a single spike and
+    # defeat impulse rejection, which is what keeps a dropped pen from becoming
+    # an incident.
+    candidate_bridge_s: float = 1.5
+
     # Cooling: activity resuming inside this gap re-enters Active.
     merge_gap_s: float = 2.5
 

@@ -96,28 +96,62 @@ def _seat_signal(window: ScoredWindow, seat_label: str) -> tuple[float, str, flo
 def segment_seat(
     scored: list[ScoredWindow], seat_label: str, cfg: SegmentConfig
 ) -> list[Event]:
-    """Run the state machine over one seat's timeline."""
+    """Run the state machine over one seat's timeline.
+
+    Operates on the raw signal throughout. Pauses are bridged by *time since the
+    last active window*, never by smoothing, so a single spike can never acquire
+    enough apparent duration to be promoted.
+    """
     events: list[Event] = []
     state = State.QUIET
     builder: _Builder | None = None
     cooling_since = 0.0
+    last_active_end = 0.0
+    # Backdating may never reach behind an event that has already closed,
+    # otherwise a max-duration split immediately re-absorbs the piece it cut.
+    floor_index = 0
 
-    for window in scored:
-        z, zone, below = _seat_signal(window, seat_label)
+    signals = [_seat_signal(w, seat_label) for w in scored]
+
+    for index, window in enumerate(scored):
+        z, zone, below = signals[index]
         t0, t1 = window.window.t_start, window.window.t_end
 
         if state is State.QUIET:
             if z >= cfg.start_z:
-                builder = _Builder(t0, t1, t0, z, zone, below, 1)
-                state = State.CANDIDATE
+                # Backdate to the beginning of the contiguous run that is
+                # already above stop_z, so the event boundary covers the ramp
+                # into the action rather than only its peak.
+                first = index
+                while first > floor_index and signals[first - 1][0] >= cfg.stop_z:
+                    first -= 1
+                builder = _Builder(
+                    scored[first].window.t_start, t1, t0, z, zone, below, 1
+                )
+                for j in range(first, index):
+                    zj, zonej, belowj = signals[j]
+                    builder.observe(scored[j], zj, zonej, belowj)
+                builder.t_end = t1
+                last_active_end = t1
+                # Backdating can already satisfy the persistence requirement.
+                # Promoting here matters: an event left in CANDIDATE is policed
+                # by the short impulse bridge, whereas an ACTIVE one gets the
+                # full cooling window, which is what carries a real action
+                # across a pause.
+                state = (
+                    State.ACTIVE
+                    if builder.t_end - builder.t_start >= cfg.min_duration_s
+                    else State.CANDIDATE
+                )
 
         elif state is State.CANDIDATE:
             assert builder is not None
             if z >= cfg.stop_z:
                 builder.observe(window, z, zone, below)
+                last_active_end = t1
                 if builder.t_end - builder.t_start >= cfg.min_duration_s:
                     state = State.ACTIVE
-            else:
+            elif t1 - last_active_end >= cfg.candidate_bridge_s:
                 # Short impulse: a dropped pen, a compression artefact. Discarded
                 # rather than promoted, but the motion window itself is retained
                 # in the store for the reviewer.
@@ -128,10 +162,12 @@ def segment_seat(
             assert builder is not None
             if z >= cfg.stop_z:
                 builder.observe(window, z, zone, below)
+                last_active_end = t1
                 if builder.t_end - builder.t_start >= cfg.max_duration_s:
                     events.append(builder.finish(seat_label))
                     builder = None
                     state = State.QUIET
+                    floor_index = index + 1
             else:
                 cooling_since = t0
                 state = State.COOLING
@@ -140,6 +176,7 @@ def segment_seat(
             assert builder is not None
             if z >= cfg.stop_z:
                 builder.observe(window, z, zone, below)
+                last_active_end = t1
                 state = State.ACTIVE
             elif t1 - cooling_since >= cfg.merge_gap_s:
                 # End the event where activity actually stopped, not where the
@@ -147,6 +184,7 @@ def segment_seat(
                 events.append(builder.finish(seat_label, t_end=cooling_since))
                 builder = None
                 state = State.QUIET
+                floor_index = index + 1
 
     if builder is not None and state in (State.ACTIVE, State.COOLING):
         end = cooling_since if state is State.COOLING else None
