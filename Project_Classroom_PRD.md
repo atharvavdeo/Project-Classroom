@@ -496,6 +496,39 @@ Output is constrained by a **GBNF grammar in llama.cpp**, not by prompt instruct
 
 Gemma may re-rank an event or mark it uncertain. It may not delete source evidence, declare misconduct, or override deterministic safety rules. If the verifier fails, deterministic events remain complete and reviewable.
 
+#### 9.2.1 Grammar defects found by running it
+
+The grammar was validated against a live `llama-server` (build b10472). Writing it correctly required three constraints that are not obvious from the spec, and **the original hand-written grammar was rejected outright** — it would have failed at runtime on first use.
+
+1. **One rule per line, no continuations.** The pretty-printed form, with `root` wrapped across eight indented lines, is refused with `failed to parse grammar`. Keep each rule on a single line however long it gets.
+
+2. **A backslash inside a character class does not parse.** The conventional JSON string rule — `[^"\\] | "\\" ["\\/bfnrt]` — is rejected. The rule now excludes the quote and the control characters illegal inside a JSON string instead of admitting escape sequences. That is also stronger for this use: the verifier writes short observational sentences with no need for embedded quotes, so removing the escape machinery removes a class of malformed-JSON failure rather than parsing around it.
+
+3. **Every repetition must be bounded, including whitespace.** A grammar guarantees a valid *prefix*, not that generation completes. Three separate unbounded rules each caused truncated, unparseable output: an unbounded observation list let the model repeat one entry until the token budget ran out; an unbounded string ran to the limit inside a single field; and `ws ::= [ \t\n]*` proved to be a pure token sink, letting the model pad with blank lines and exhaust its budget without producing content. All three are now bounded, and the token budget is sized to the grammar's worst case rather than guessed.
+
+A response that still hits the limit raises `TruncatedVerification` rather than being half-parsed.
+
+### 9.2.2 Verified end to end on real footage
+
+The production path — contact sheet from real frames, production grammar, production schema — was run against the official `google/gemma-4-E4B-it-qat-q4_0-gguf` weights (4.8 GB model, 0.92 GB vision projector) on CPU:
+
+```
+completed in 25 s
+object:      not_visible
+interaction: none
+quality:     insufficient
+confidence:  0.0
+note:        "The provided image is a still contact sheet, not a sequence of
+              frames... The resolution is insufficient to identify specific
+              objects or detailed actions."
+```
+
+This is the designed behaviour, not a failure. Presented with a genuinely ambiguous 720p scene, the verifier abstained rather than manufacturing an object claim — which is precisely what §9.1 asks of it and what the measured 30×20 px footprint demands.
+
+One defect this surfaced: at a 200-character bound the review note was cut mid-sentence. **A truncated explanation reads as a complete one**, which is worse than no note at all, so the note now has its own 400-character rule.
+
+The verifier runs out of process against `llama-server` rather than through in-process bindings. That removes a C++ toolchain dependency, and more importantly satisfies §12.3 structurally: a dead HTTP endpoint is an error response, whereas a crash in a native extension would take the pipeline with it.
+
 ### 9.3 Model profile
 
 | Property | Decision |

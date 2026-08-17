@@ -138,10 +138,16 @@ class DetectConfig:
 class VerifyConfig:
     """Phase 7. Gemma verifier, GBNF-constrained."""
 
-    model_path: str = "models/gemma-4-E4B-it-Q4_K_M.gguf"
+    model_path: str = "models/gemma/gemma-4-E4B_q4_0-it.gguf"
+    mmproj_path: str = "models/gemma/gemma-4-E4B-it-mmproj.gguf"
     n_ctx: int = 4096
     n_gpu_layers: int = -1          # all layers; 32 GB target has ample room
-    max_tokens: int = 384
+    # Sized to the grammar's worst case, not guessed: 5 observations and a
+    # review note, each capped at 200 characters, plus structure, is about
+    # 1,200 characters or ~350 tokens. 768 leaves comfortable headroom, and
+    # anything that still hits the limit is reported as a truncated
+    # verification rather than parsed.
+    max_tokens: int = 768
     temperature: float = 0.1
     contact_sheet_frames: int = 6
 

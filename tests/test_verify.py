@@ -170,13 +170,15 @@ def main() -> int:
                     not verify.contains_verdict(row["review_note"]))
         conn.close()
 
-    print("\nmissing weights fail loudly, not silently")
-    gv = verify.GemmaVerifier(VerifyConfig(model_path="models/no-such-model.gguf"))
+    print("\nan absent verifier endpoint fails loudly, not silently")
+    gv = verify.GemmaVerifier(VerifyConfig(), base_url="http://127.0.0.1:59999")
+    ok &= check("health check reports down", gv.health(timeout=1.0) is False)
     try:
         gv.load()
-        ok &= check("missing verifier weights raise", False)
-    except (FileNotFoundError, ImportError) as exc:
-        ok &= check("missing verifier weights raise", True, type(exc).__name__)
+        ok &= check("unreachable server raises", False)
+    except ConnectionError as exc:
+        ok &= check("unreachable server raises", True, type(exc).__name__)
+        ok &= check("error names the start command", "llama-server -m" in str(exc))
 
     print(f"\n{'ALL PASS' if ok else 'FAILURES PRESENT'}")
     return 0 if ok else 1

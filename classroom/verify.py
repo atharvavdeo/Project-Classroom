@@ -34,23 +34,60 @@ QUALITY_VALUES = ("sufficient", "limited", "insufficient")
 
 # Grammar-constrained decoding. Every field is enumerated, so a malformed or
 # creative response is not representable rather than merely discouraged.
-GRAMMAR = r'''
-root        ::= "{" ws
-                "\"supported_observations\":" ws obslist ws "," ws
-                "\"object_assessment\":" ws object ws "," ws
-                "\"interaction_assessment\":" ws interaction ws "," ws
-                "\"evidence_quality\":" ws quality ws "," ws
-                "\"confidence\":" ws confidence ws "," ws
-                "\"review_note\":" ws string ws
-                "}"
-obslist     ::= "[" ws (string (ws "," ws string)*)? ws "]"
-object      ::= "\"phone_like\"" | "\"paper_like\"" | "\"other\"" | "\"not_visible\"" | "\"uncertain\""
-interaction ::= "\"none\"" | "\"self_action\"" | "\"neighbouring_seat\"" | "\"uncertain\""
-quality     ::= "\"sufficient\"" | "\"limited\"" | "\"insufficient\""
-confidence  ::= "0" "." [0-9] [0-9]? | "1" "." "0" | "0" | "1"
-string      ::= "\"" ([^"\\] | "\\" ["\\/bfnrt])* "\""
-ws          ::= [ \t\n]*
-'''
+#
+# Three constraints of llama.cpp's GBNF parser, all found by probing it directly
+# (llama-server b10472) rather than by reading the spec:
+#
+#   * One rule per line, no continuations. The pretty-printed form of this same
+#     grammar -- `root` wrapped across eight indented lines -- is rejected
+#     outright with "failed to parse grammar". Keep each rule on one line
+#     however long it gets.
+#
+#   * The conventional JSON string rule (`[^"\\] | "\\" ["\\/bfnrt]`) does not
+#     parse: a backslash inside a character class is refused. The rule below
+#     excludes the quote and the control characters that are illegal inside a
+#     JSON string instead of admitting escape sequences. That is also stronger
+#     for this use -- the verifier emits short observational sentences with no
+#     need for embedded quotes, so removing the escape machinery removes a whole
+#     class of malformed-JSON failure rather than parsing around it.
+#
+#   * Repetition bounds are required on anything a model could loop on. See the
+#     note on `obslist` and `string` below.
+GRAMMAR = (
+    'root ::= "{" ws '
+    '"\\"supported_observations\\":" ws obslist ws "," ws '
+    '"\\"object_assessment\\":" ws object ws "," ws '
+    '"\\"interaction_assessment\\":" ws interaction ws "," ws '
+    '"\\"evidence_quality\\":" ws quality ws "," ws '
+    '"\\"confidence\\":" ws confidence ws "," ws '
+    '"\\"review_note\\":" ws note ws "}"\n'
+    # Bounded, deliberately. An unbounded list lets the model loop until it
+    # exhausts the token budget, and a response truncated mid-string is
+    # unparseable no matter how correct the grammar is. Observed in testing: a
+    # model repeated one observation until n_predict cut it off. Five
+    # observations is more than any real event needs.
+    'obslist ::= "[" ws (string (ws "," ws string){0,4})? ws "]"\n'
+    'object ::= "\\"phone_like\\"" | "\\"paper_like\\"" | "\\"other\\"" '
+    '| "\\"not_visible\\"" | "\\"uncertain\\""\n'
+    'interaction ::= "\\"none\\"" | "\\"self_action\\"" '
+    '| "\\"neighbouring_seat\\"" | "\\"uncertain\\""\n'
+    'quality ::= "\\"sufficient\\"" | "\\"limited\\"" | "\\"insufficient\\""\n'
+    'confidence ::= "0" "." [0-9] [0-9]? | "1" "." "0" | "0" | "1"\n'
+    # Bounded for the same reason as obslist: an unbounded string lets the model
+    # run to the token limit inside one field, and the result is truncated
+    # mid-quote and unparseable.
+    'string ::= "\\"" [^"\\n\\r\\t]{0,200} "\\""\n'
+    # The review note gets its own, larger bound. At 200 characters the model's
+    # note was being cut mid-sentence, which is worse than useless to a reviewer
+    # -- a truncated explanation reads as a complete one. Observations are short
+    # by nature; a note is a sentence or two.
+    'note ::= "\\"" [^"\\n\\r\\t]{0,400} "\\""\n'
+    # Whitespace is bounded too, and this one is easy to miss. `[ \t\n]*` is a
+    # token sink: the model can emit unlimited blank lines between fields and
+    # exhaust its budget without ever producing content. Observed directly --
+    # samples truncated mid-key after padding the list with newlines.
+    'ws ::= [ \\t\\n]{0,4}\n'
+)
 
 PROMPT = """You are reviewing a still contact sheet from examination-hall CCTV.
 
@@ -73,6 +110,10 @@ Describe ONLY what is visible. Follow these rules exactly:
 Metadata for this event:
 {metadata}
 """
+
+
+class TruncatedVerification(RuntimeError):
+    """Generation stopped at the token limit, leaving the response incomplete."""
 
 
 @dataclass
@@ -182,51 +223,87 @@ def select_frames(t_start: float, t_end: float, peak_t: float, count: int) -> li
 
 
 class GemmaVerifier:
-    """llama.cpp-backed verifier, loaded lazily."""
+    """Verifier backed by a local `llama-server` over HTTP.
 
-    def __init__(self, cfg: VerifyConfig):
+    Deliberately not the `llama-cpp-python` bindings. Two reasons, and the
+    second is the important one:
+
+      * The bindings ship no prebuilt wheel for every platform and fall back to
+        compiling llama.cpp, which needs a C++ toolchain the analysis machine
+        may not have. The prebuilt `llama-server` binary needs none.
+
+      * An out-of-process verifier cannot take the pipeline down with it. PRD
+        12.3 requires that a VLM failure leave motion and detection outputs
+        intact; a crash in an in-process native extension would violate that,
+        while a dead HTTP endpoint is just an error response.
+    """
+
+    def __init__(self, cfg: VerifyConfig, base_url: str = "http://127.0.0.1:8080"):
         self.cfg = cfg
-        self._llm = None
+        self.base_url = base_url.rstrip("/")
+
+    def health(self, timeout: float = 5.0) -> bool:
+        """True when a server is up and has a model loaded."""
+        import urllib.error
+        import urllib.request
+
+        try:
+            with urllib.request.urlopen(f"{self.base_url}/health", timeout=timeout) as r:
+                return r.status == 200
+        except (urllib.error.URLError, OSError, TimeoutError):
+            return False
 
     def load(self) -> None:
-        if self._llm is not None:
-            return
-        from llama_cpp import Llama
-
-        path = Path(self.cfg.model_path)
-        if not path.is_file():
-            raise FileNotFoundError(
-                f"verifier weights not found: {path}. "
-                f"Download a Gemma 4 E4B instruction-tuned GGUF and place it there."
+        """Confirm the verifier endpoint is reachable."""
+        if not self.health():
+            raise ConnectionError(
+                f"no llama-server at {self.base_url}. Start it with:\n"
+                f"  llama-server -m {self.cfg.model_path} "
+                f"--mmproj {self.cfg.mmproj_path} -c {self.cfg.n_ctx} "
+                f"-ngl {self.cfg.n_gpu_layers} --port 8080"
             )
-        self._llm = Llama(
-            model_path=str(path),
-            n_ctx=self.cfg.n_ctx,
-            n_gpu_layers=self.cfg.n_gpu_layers,
-            logits_all=False,
-            verbose=False,
-        )
 
-    def verify(self, sheet_path: str | Path, metadata: dict) -> Verification:
-        from llama_cpp import LlamaGrammar
+    def verify(
+        self, sheet_path: str | Path, metadata: dict, timeout: float = 600.0
+    ) -> Verification:
+        import base64
+        import urllib.request
 
         self.load()
-        grammar = LlamaGrammar.from_string(GRAMMAR)
-        prompt = PROMPT.format(metadata=json.dumps(metadata, indent=2))
-        result = self._llm.create_chat_completion(
-            messages=[{
+        image = base64.b64encode(Path(sheet_path).read_bytes()).decode("ascii")
+        payload = {
+            "messages": [{
                 "role": "user",
                 "content": [
                     {"type": "image_url",
-                     "image_url": {"url": f"file://{Path(sheet_path).resolve()}"}},
-                    {"type": "text", "text": prompt},
+                     "image_url": {"url": f"data:image/jpeg;base64,{image}"}},
+                    {"type": "text",
+                     "text": PROMPT.format(metadata=json.dumps(metadata, indent=2))},
                 ],
             }],
-            grammar=grammar,
-            max_tokens=self.cfg.max_tokens,
-            temperature=self.cfg.temperature,
+            "grammar": GRAMMAR,
+            "n_predict": self.cfg.max_tokens,
+            "temperature": self.cfg.temperature,
+            "cache_prompt": False,
+        }
+        request = urllib.request.Request(
+            f"{self.base_url}/v1/chat/completions",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
         )
-        return Verification.parse(result["choices"][0]["message"]["content"])
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            body = json.loads(response.read())
+
+        choice = body["choices"][0]
+        # Grammar guarantees a valid *prefix* of the schema, not that generation
+        # finished. A response cut off at the token limit is unparseable, so it
+        # is reported as a failure rather than half-read.
+        if choice.get("finish_reason") == "length":
+            raise TruncatedVerification(
+                f"verifier hit the {self.cfg.max_tokens}-token limit before "
+                f"completing its response"
+            )
+        return Verification.parse(choice["message"]["content"])
 
 
 def persist(
