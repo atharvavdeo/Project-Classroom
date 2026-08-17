@@ -97,6 +97,7 @@ def score_video(
         exposed = (
             sum(f["exposure_step"] for f in frames) / len(frames) if frames else 0.0
         )
+        object_evidence, pitch, abstained = model_evidence(conn, event["id"])
 
         total, factors = score_event(
             peak_deviation=event["peak_deviation"],
@@ -106,9 +107,19 @@ def score_video(
             camera_moved_fraction=moved,
             exposure_step_fraction=exposed,
             cfg=cfg,
+            object_evidence=object_evidence,
+            head_pitch_evidence=pitch,
         )
         missing = [f for f in MODEL_FACTORS if f not in factors]
-        quality = "limited" if missing else "sufficient"
+        if missing:
+            quality = "limited"
+        elif abstained:
+            # The detector ran and could not resolve the object. That is a
+            # different statement from "no detector ran", and the reviewer needs
+            # to be able to tell them apart.
+            quality = "limited"
+        else:
+            quality = "sufficient"
 
         conn.execute(
             "UPDATE event SET score = ?, score_factors = ?, evidence_quality = ?, "
@@ -117,6 +128,43 @@ def score_video(
         )
         updated += 1
     return updated
+
+
+def model_evidence(
+    conn: sqlite3.Connection, event_id: int
+) -> tuple[float | None, float | None, bool]:
+    """Read phase-6 evidence for one event.
+
+    Returns (object_evidence, pitch_evidence, any_abstained). A stream that did
+    not run yields None rather than 0.0, so a missing model is never scored as
+    positive evidence of absence.
+    """
+    detections = db.all_rows(
+        conn, "SELECT cls, confidence, abstained FROM detection WHERE event_id = ?",
+        (event_id,),
+    )
+    poses = db.all_rows(
+        conn, "SELECT head_pitch FROM pose_observation WHERE event_id = ?", (event_id,)
+    )
+
+    object_evidence = None
+    abstained = False
+    if detections:
+        abstained = any(d["abstained"] for d in detections)
+        weights = {"phone_like": 1.0, "paper_like": 0.4}
+        usable = [
+            weights.get(d["cls"], 0.0) * d["confidence"]
+            for d in detections
+            if not d["abstained"] and d["cls"] in weights
+        ]
+        object_evidence = max(usable) if usable else 0.0
+
+    pitch = None
+    resolved = [p["head_pitch"] for p in poses if p["head_pitch"] is not None]
+    if resolved:
+        pitch = float(sum(p > 0.35 for p in resolved) / len(resolved))
+
+    return object_evidence, pitch, abstained
 
 
 def describe(event: sqlite3.Row, below_desk_peak: float) -> str:

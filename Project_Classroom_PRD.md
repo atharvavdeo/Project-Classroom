@@ -393,6 +393,18 @@ Two constraints are mandatory:
 - **Wrist keypoints are masked when hands drop below the desk line.** That is precisely the interesting case, and the absence of the keypoint is itself recorded as evidence rather than imputed.
 - **Head pitch is derived from the nose-to-shoulder vertical offset** in COCO-17. No separate head-pose model is required, and this is the primary signal for the dominant behavioural pattern in §4.3.
 
+#### 8.2.1 Measured pose behaviour on this footage
+
+RTMO was run against real frames from the corpus. On one CBT-room frame it detected **14 people**, of whom **9 had resolvable head pitch** — the remainder were too occluded by booth dividers and chair backs for the nose and both shoulders to be visible simultaneously.
+
+Two findings follow, both of which change how the pitch signal must be used:
+
+1. **Roughly a third of detected people have no resolvable pitch at any given moment.** Those frames are excluded from the denominator when aggregating. Scoring them as "head up" would understate exactly the posture the system exists to find.
+
+2. **The pitch threshold is camera-specific and cannot be a constant.** Every upright candidate on this footage scored between −0.35 and −2.3: the camera is mounted high and looking down, so the nose sits *above* the shoulder line in image space for almost everyone, and shoulder width foreshortens with viewing angle. A fixed threshold calibrated on one mounting geometry will be meaningless on another. The baseline is therefore learned per camera from footage believed normal, exactly as the motion baseline is in §7.2.1.
+
+This is the same class of error as the typing-baseline defect: an absolute threshold standing in for a per-camera, per-seat distribution.
+
 Multi-HMR2 and SAT-HMR are removed. Neither has been reproduced at this crowd size and both are research risk without a Phase-1 payoff.
 
 ### 8.3 Tracking: ByteTrack with seat reconciliation
