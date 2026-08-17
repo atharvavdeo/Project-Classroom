@@ -432,6 +432,20 @@ Multi-HMR2 and SAT-HMR are removed. Neither has been reproduced at this crowd si
 
 Seats are fixed and candidates are seated for the duration, so the tracking problem in this footage is close to trivial. The NvDCF and Deep OC-SORT comparison is removed: NvDCF required DeepStream, and seat reconciliation — not the tracker — carries identity. Track IDs are session-local and non-biometric, and track-to-seat association is versioned and reviewer-correctable.
 
+Each track is reconciled by **majority vote over the frames it appears in**, anchored at the mid-point of the box bottom edge, which for a seated person falls at the chair rather than in the air above them. A track that does not reach a **60% majority in one seat is recorded as ambiguous rather than assigned**. Misattributing one candidate's evidence to their neighbour is the most damaging error this system can make, so an undecidable association is carried forward as uncertainty instead of being resolved arbitrarily.
+
+#### 8.3.1 Measured on real footage
+
+Run across three real frames from the corpus with seat polygons traced over the actual desk layout:
+
+| Frame | People | Boxes | Tracked | Inside a seat |
+|---|---:|---:|---:|---:|
+| paper_t0020 | 13 | 13 | 12 | 9 |
+| paper_t0045 | 15 | 14 | 11 | 9 |
+| paper_t0070 | 13 | 13 | 8 | 8 |
+
+Twelve tracks formed. **Nine reconciled to a seat with unanimous votes across all three frames**; three were ambiguous, correctly, because they sit outside the four polygons defined for the test. No track claimed two seats, and the reconciled tracks spread across all four seats. Track identity held across frames without a switch.
+
 ### 8.4 Temporal action model
 
 Not in scope. Pure skeleton classification cannot distinguish phone from paper, and there is insufficient labelled data to train a temporal classifier that beats calibrated rules. Revisit only after the corpus supports it.

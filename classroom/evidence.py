@@ -20,11 +20,12 @@ from pathlib import Path
 import av
 import numpy as np
 
-from . import crops, db, detect, pose
+from . import crops, db, detect, pose, track
 from .calibration import Calibration
 from .config import DetectConfig
 from .detect import Detection, ONNXDetector
 from .pose import PoseEstimator, PoseObservation
+from .track import SeatTracker, TrackObservation
 
 SAMPLES_PER_EVENT = 6
 
@@ -77,6 +78,7 @@ def analyse_event(
     video_path: str | Path,
     event_id: int,
     seat_label: str,
+    cal: Calibration,
     polygon: list[tuple[float, float]],
     desk_line_y: float | None,
     t_start: float,
@@ -85,6 +87,7 @@ def analyse_event(
     detector: ONNXDetector | None = None,
     pose_model: PoseEstimator | None = None,
     samples: int = SAMPLES_PER_EVENT,
+    tracker: SeatTracker | None = None,
 ) -> EventEvidence:
     """Gather object and pose evidence for one event."""
     frames = read_frames(video_path, sample_times(t_start, t_end, samples))
@@ -103,9 +106,25 @@ def analyse_event(
             )
 
         if pose_model is not None:
-            for keypoints in pose_model(frame):
+            people = pose_model(frame)
+
+            # Reconcile every person in frame to a seat, then keep only the
+            # ones belonging to this event's seat. Pose evidence from a
+            # neighbour must never be attributed to this candidate.
+            track_by_index: dict[int, int | None] = {}
+            if tracker is not None:
+                boxes, scores = track.boxes_from_poses(people)
+                tracked = tracker.update(boxes, scores, t)
+                for i, obs in enumerate(tracked):
+                    track_by_index[i] = obs.track_id
+
+            for i, keypoints in enumerate(people):
+                box = track.boxes_from_poses([keypoints])[0]
+                if len(box) and track.seat_for_box(tuple(box[0]), cal) != seat_label:
+                    continue
                 observation = pose.observe(keypoints, desk_line_y)
                 observation.seat_label = seat_label
+                observation.track_id = track_by_index.get(i)
                 observations.append(observation)
 
     confirmed: list[Detection] = []
@@ -164,6 +183,7 @@ def run(
     cfg: DetectConfig,
     detector: ONNXDetector | None = None,
     pose_model: PoseEstimator | None = None,
+    tracker: SeatTracker | None = None,
     limit: int | None = None,
     verbose: bool = True,
 ) -> list[EventEvidence]:
@@ -197,9 +217,9 @@ def run(
         if seat is None:
             continue
         result = analyse_event(
-            video["path"], row["id"], row["seat_label"], seat.polygon,
+            video["path"], row["id"], row["seat_label"], cal, seat.polygon,
             seat.desk_line_y, row["t_start"], row["t_end"], cfg,
-            detector, pose_model,
+            detector, pose_model, tracker=tracker,
         )
         persist(conn, result)
         results.append(result)

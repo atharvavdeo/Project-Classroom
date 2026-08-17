@@ -185,6 +185,20 @@ CREATE INDEX IF NOT EXISTS idx_event_score   ON event (score DESC);
 
 -- ------------------------------------------------------- model evidence  --
 
+-- Track-to-seat association. Tracker ids are session-local and non-biometric;
+-- the seat is the identity, and a track that cannot be attributed to one is
+-- recorded as ambiguous rather than guessed at.
+CREATE TABLE IF NOT EXISTS track (
+    id              INTEGER PRIMARY KEY,
+    source_video_id INTEGER NOT NULL REFERENCES source_video(id) ON DELETE CASCADE,
+    tracker_id      INTEGER NOT NULL,
+    seat_id         INTEGER REFERENCES seat(id),
+    seat_confidence REAL NOT NULL,      -- share of frames in the winning seat
+    frames          INTEGER NOT NULL,
+    ambiguous       INTEGER NOT NULL DEFAULT 0,
+    UNIQUE (source_video_id, tracker_id)
+);
+
 CREATE TABLE IF NOT EXISTS detection (
     id          INTEGER PRIMARY KEY,
     event_id    INTEGER NOT NULL REFERENCES event(id) ON DELETE CASCADE,
