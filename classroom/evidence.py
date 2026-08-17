@@ -24,7 +24,7 @@ from . import crops, db, detect, pose
 from .calibration import Calibration
 from .config import DetectConfig
 from .detect import Detection, ONNXDetector
-from .pose import PoseObservation, RTMOPose
+from .pose import PoseEstimator, PoseObservation
 
 SAMPLES_PER_EVENT = 6
 
@@ -83,7 +83,7 @@ def analyse_event(
     t_end: float,
     cfg: DetectConfig,
     detector: ONNXDetector | None = None,
-    pose_model: RTMOPose | None = None,
+    pose_model: PoseEstimator | None = None,
     samples: int = SAMPLES_PER_EVENT,
 ) -> EventEvidence:
     """Gather object and pose evidence for one event."""
@@ -163,7 +163,7 @@ def run(
     cal: Calibration,
     cfg: DetectConfig,
     detector: ONNXDetector | None = None,
-    pose_model: RTMOPose | None = None,
+    pose_model: PoseEstimator | None = None,
     limit: int | None = None,
     verbose: bool = True,
 ) -> list[EventEvidence]:

@@ -160,45 +160,70 @@ def below_desk_evidence(observations: list[PoseObservation]) -> float:
     return float(np.mean([o.wrists_below > 0 for o in observations]))
 
 
-# One-stage RTMO. Chosen over a top-down pipeline because it does not run a
-# separate person detector and then a pose model per crop, which is what makes
-# top-down cost scale with the number of candidates in a crowded hall.
 RTMO_MODEL = (
     "https://download.openmmlab.com/mmpose/v1/projects/rtmo/onnx_sdk/"
     "rtmo-m_16xb16-600e_body7-640x640-39e78cc4_20231211.zip"
 )
 
+# Measured on real corpus frames, CPU, ONNXRuntime (see PRD 8.2.1):
+#
+#   frame              top-down (YOLOX+RTMPose)   one-stage RTMO-m
+#   paper_t0045        15 people, 10 pitch 0.65s   6 people,  4 pitch 0.65s
+#   phone1_t0060        3 people,  3 pitch 0.78s   1 person,  0 pitch 0.75s
+#   crowd_t0060        13 people, 12 pitch 1.21s   6 people,  5 pitch 0.50s
+#   phone3_t0120        1 person,  1 pitch 0.56s   1 person,  1 pitch 0.85s
+#
+# Top-down recalls 2.3x more people and 2.6x more resolvable head pitch at
+# comparable cost, and skeleton overlays confirm the extra detections are real
+# people rather than duplicates. RTMO's advantage is that its cost does not
+# scale with crowd size -- but this pipeline runs pose on candidate clips only,
+# so throughput was never the binding constraint, and paying for it with more
+# than half the person recall is the wrong trade here.
+#
+# Top-down is therefore the default. RTMO stays selectable so the comparison
+# can be reproduced, not as a runtime fallback.
+TOPDOWN = "topdown"
+ONESTAGE = "rtmo"
 
-class RTMOPose:
-    """Thin wrapper over rtmlib's RTMO, loaded lazily.
 
-    Kept behind a class so the geometry and masking rules above can be tested
-    without downloading weights, and so a missing model surfaces as one clear
-    error at load rather than a cascade at inference.
+class PoseEstimator:
+    """Multi-person 2D pose over a full frame.
+
+    Loaded lazily so the geometry and masking rules above stay testable without
+    downloading weights, and so a missing model surfaces as one clear error at
+    load rather than a cascade at inference.
     """
 
     def __init__(
         self,
+        model: str = TOPDOWN,
         backend: str = "onnxruntime",
         device: str = "cpu",
-        model: str = RTMO_MODEL,
         confidence: float = 0.3,
     ):
+        if model not in (TOPDOWN, ONESTAGE):
+            raise ValueError(f"unknown pose model {model!r}")
+        self.model = model
         self.backend, self.device = backend, device
-        self.model, self.confidence = model, confidence
+        self.confidence = confidence
         self._model = None
 
     def load(self) -> None:
         if self._model is not None:
             return
-        from rtmlib import RTMO  # imported here so the module works without it
+        if self.model == TOPDOWN:
+            from rtmlib import Body
 
-        self._model = RTMO(
-            self.model,
-            model_input_size=(640, 640),
-            backend=self.backend,
-            device=self.device,
-        )
+            self._model = Body(
+                mode="balanced", backend=self.backend, device=self.device
+            )
+        else:
+            from rtmlib import RTMO
+
+            self._model = RTMO(
+                RTMO_MODEL, model_input_size=(640, 640),
+                backend=self.backend, device=self.device,
+            )
 
     def __call__(self, frame: np.ndarray) -> list[np.ndarray]:
         """Return one (17, 3) array per detected person."""
@@ -212,3 +237,7 @@ class RTMOPose:
             if float(arr[:, 2].max()) >= self.confidence:
                 out.append(arr)
         return out
+
+
+# Retained so existing imports keep working; the default model is now top-down.
+RTMOPose = PoseEstimator

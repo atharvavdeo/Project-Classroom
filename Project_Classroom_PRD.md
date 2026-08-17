@@ -393,17 +393,32 @@ Two constraints are mandatory:
 - **Wrist keypoints are masked when hands drop below the desk line.** That is precisely the interesting case, and the absence of the keypoint is itself recorded as evidence rather than imputed.
 - **Head pitch is derived from the nose-to-shoulder vertical offset** in COCO-17. No separate head-pose model is required, and this is the primary signal for the dominant behavioural pattern in §4.3.
 
-#### 8.2.1 Measured pose behaviour on this footage
+#### 8.2.1 Measured pose behaviour on this footage — RTMO is not the right choice here
 
-RTMO was run against real frames from the corpus. On one CBT-room frame it detected **14 people**, of whom **9 had resolvable head pitch** — the remainder were too occluded by booth dividers and chair backs for the nose and both shoulders to be visible simultaneously.
+Both pose approaches were run against real corpus frames on CPU via ONNXRuntime:
 
-Two findings follow, both of which change how the pitch signal must be used:
+| Frame | Top-down (YOLOX + RTMPose) | One-stage RTMO-m |
+|---|---|---|
+| paper_t0045 | **15 people**, 10 with pitch, 0.65 s | 6 people, 4 with pitch, 0.65 s |
+| phone1_t0060 | **3 people**, 3 with pitch, 0.78 s | 1 person, 0 with pitch, 0.75 s |
+| crowd_t0060 | **13 people**, 12 with pitch, 1.21 s | 6 people, 5 with pitch, 0.50 s |
+| phone3_t0120 | 1 person, 1 with pitch, 0.56 s | 1 person, 1 with pitch, 0.85 s |
+
+**Top-down recalls 2.3× more people and 2.6× more resolvable head pitch at comparable cost.** Skeleton overlays were rendered and inspected to confirm the additional detections are real seated candidates, not duplicates or artefacts.
+
+This reverses the v3.0 decision. RTMO was chosen because its cost does not scale with crowd size, and that property is real — but **this pipeline runs pose on candidate clips only**, so throughput was never the binding constraint, and §14 already establishes that compute is not a concern on the target hardware. Paying for a speed advantage that does not bind with more than half the person recall is the wrong trade.
+
+**Top-down (YOLOX + RTMPose via `rtmlib`) is therefore the default.** RTMO remains selectable so the comparison can be reproduced; it is not a runtime fallback. RTMO-l has not been evaluated and may narrow the gap — that is the one pose benchmark still worth running.
+
+Two further findings, both of which change how the pitch signal must be used:
 
 1. **Roughly a third of detected people have no resolvable pitch at any given moment.** Those frames are excluded from the denominator when aggregating. Scoring them as "head up" would understate exactly the posture the system exists to find.
 
 2. **The pitch threshold is camera-specific and cannot be a constant.** Every upright candidate on this footage scored between −0.35 and −2.3: the camera is mounted high and looking down, so the nose sits *above* the shoulder line in image space for almost everyone, and shoulder width foreshortens with viewing angle. A fixed threshold calibrated on one mounting geometry will be meaningless on another. The baseline is therefore learned per camera from footage believed normal, exactly as the motion baseline is in §7.2.1.
 
 This is the same class of error as the typing-baseline defect: an absolute threshold standing in for a per-camera, per-seat distribution.
+
+3. **The reflection mask is empirically necessary, not precautionary.** In the rendered overlay the pose model confidently detected a person *inside the glass partition reflection* at the top-left of the frame — a real person, in an adjacent room, attributed to this one. §7.1's reflection mask is what removes them, and this frame is the evidence that it must exist before pose evidence can be trusted.
 
 Multi-HMR2 and SAT-HMR are removed. Neither has been reproduced at this crowd size and both are research risk without a Phase-1 payoff.
 
