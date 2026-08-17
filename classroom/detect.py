@@ -116,27 +116,83 @@ def object_evidence(detections: list[Detection]) -> float:
     return float(max(weights.get(d.cls, 0.0) * d.confidence for d in usable))
 
 
-def decode_boxes(
-    raw_boxes: np.ndarray,
-    raw_scores: np.ndarray,
-    raw_labels: np.ndarray,
+COCO80 = [
+    "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck",
+    "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench",
+    "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra",
+    "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee",
+    "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove",
+    "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
+    "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange",
+    "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch",
+    "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse",
+    "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink",
+    "refrigerator", "book", "clock", "vase", "scissors", "teddy bear",
+    "hair drier", "toothbrush",
+]
+
+# Mapping from the stock COCO vocabulary onto this system's classes. Used only
+# before fine-tuning: a COCO "cell phone" is a large, clear handheld phone, not
+# a 30x20 px object on distant CCTV, so anything routed through here is still
+# subject to the abstention floor.
+COCO_TO_CLASS = {
+    "person": "person",
+    "cell phone": "phone_like",
+    "book": "paper_like",
+    "laptop": "other",
+    "remote": "other",
+    "mouse": "other",
+    "keyboard": "other",
+}
+
+
+def _sigmoid(x: np.ndarray) -> np.ndarray:
+    return 1.0 / (1.0 + np.exp(-x))
+
+
+def decode_detr(
+    logits: np.ndarray,
+    pred_boxes: np.ndarray,
     transform: CropTransform,
     class_names: list[str],
     confidence: float,
     t: float = 0.0,
+    class_map: dict[str, str] | None = None,
 ) -> list[Detection]:
-    """Map detector output from input coordinates back to the source frame."""
+    """Decode D-FINE / DETR-style output into frame-coordinate detections.
+
+    `logits` is (queries, classes) pre-sigmoid -- these heads are trained with
+    focal loss, so each class is an independent sigmoid rather than a softmax
+    over classes, and there is no background class to discard.
+
+    `pred_boxes` is (queries, 4) as normalised centre-x, centre-y, width,
+    height relative to the network input.
+    """
+    logits = np.asarray(logits).reshape(-1, np.asarray(logits).shape[-1])
+    boxes = np.asarray(pred_boxes).reshape(-1, 4)
+
+    scores = _sigmoid(logits)
+    best = scores.argmax(axis=1)
+    best_score = scores[np.arange(len(scores)), best]
+
+    size = transform.input_size
     out: list[Detection] = []
-    for box, score, label in zip(raw_boxes, raw_scores, raw_labels):
-        if float(score) < confidence:
-            continue
-        frame_box = transform.to_frame(tuple(float(v) for v in box[:4]))
+    for index in np.nonzero(best_score >= confidence)[0]:
+        cx, cy, w, h = boxes[index]
+        input_box = (
+            (cx - w / 2) * size, (cy - h / 2) * size,
+            (cx + w / 2) * size, (cy + h / 2) * size,
+        )
+        frame_box = transform.to_frame(input_box)
         width = max(frame_box[2] - frame_box[0], 0.0)
         height = max(frame_box[3] - frame_box[1], 0.0)
-        index = int(label)
-        name = class_names[index] if 0 <= index < len(class_names) else "other"
+
+        label = int(best[index])
+        raw = class_names[label] if 0 <= label < len(class_names) else "other"
+        name = (class_map or {}).get(raw, raw) if class_map else raw
         out.append(
-            Detection(name, float(score), frame_box, width * height, False, t)
+            Detection(name, float(best_score[index]), frame_box,
+                      width * height, False, t)
         )
     return out
 
@@ -151,14 +207,16 @@ class ONNXDetector:
     def __init__(
         self,
         model_path: str | Path,
-        class_names: list[str],
+        class_names: list[str] | None = None,
         input_size: int = 640,
         providers: list[str] | None = None,
+        class_map: dict[str, str] | None = None,
     ):
         self.model_path = Path(model_path)
-        self.class_names = class_names
+        self.class_names = class_names if class_names is not None else COCO80
         self.input_size = input_size
         self.providers = providers
+        self.class_map = class_map if class_map is not None else COCO_TO_CLASS
         self._session = None
 
     def load(self) -> None:
@@ -181,12 +239,14 @@ class ONNXDetector:
         self, crop: np.ndarray, transform: CropTransform, confidence: float, t: float = 0.0
     ) -> list[Detection]:
         self.load()
-        blob = crop.astype(np.float32).transpose(2, 0, 1)[None] / 255.0
-        inputs = {self._session.get_inputs()[0].name: blob}
-        boxes, scores, labels = self._session.run(None, inputs)[:3]
-        return decode_boxes(
-            np.asarray(boxes).reshape(-1, 4),
-            np.asarray(scores).reshape(-1),
-            np.asarray(labels).reshape(-1),
-            transform, self.class_names, confidence, t,
+        # BGR from OpenCV -> RGB, CHW, scaled to [0, 1]. D-FINE's processor does
+        # not apply ImageNet mean/std normalisation.
+        rgb = crop[:, :, ::-1].astype(np.float32) / 255.0
+        blob = np.ascontiguousarray(rgb.transpose(2, 0, 1)[None])
+        logits, pred_boxes = self._session.run(
+            None, {self._session.get_inputs()[0].name: blob}
+        )[:2]
+        return decode_detr(
+            logits[0], pred_boxes[0], transform, self.class_names,
+            confidence, t, self.class_map,
         )

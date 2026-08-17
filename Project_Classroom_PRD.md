@@ -364,6 +364,23 @@ Learned scoring — weakly supervised anomaly ranking under multiple-instance le
 
 There is no detector fallback and no mandatory RT-DETRv2 A/B. D-FINE-M outperforms RT-DETRv2-M on COCO, the ranking in the literature is clear, and running the comparison consumes compute without changing the decision.
 
+#### 8.1.1 Forward pass verified on real footage
+
+`onnx-community/dfine_l_obj2coco_e25-ONNX` (125 MB) was run against a real corpus frame. The checkpoint is Objects365-pretrained then COCO-tuned — precisely the lineage this section specifies as the fine-tuning starting point.
+
+D-FINE exports DETR-style outputs, **not** a boxes/scores/labels triple: `logits` of shape (300 queries, 80 classes) pre-sigmoid, and `pred_boxes` as normalised centre-x/centre-y/width/height. The heads are trained with focal loss, so each class is an independent sigmoid with no background class to discard. Decoding accordingly is a correctness requirement, not a detail.
+
+| Region | Supersampling | Detections | People |
+|---|---:|---:|---:|
+| Full frame (comparison) | 0.50× | 69 | 16 |
+| Seat L-front | 1.74× | 12 | 2 |
+| Seat C-front | 1.69× | 21 | 3 |
+| Seat R-cluster | 1.57× | 21 | 13 |
+
+Boxes map back to correct frame coordinates, and detected source footprints spanned 91 to 46,519 px² (median 6,154). **Two detections fell below the 300 px² floor and were correctly emitted as `insufficient`** rather than as class labels — the abstention rule firing on real data, not just on fixtures.
+
+The class labels are stock COCO and are *not* expected to be correct for this domain: COCO's "cell phone" is a large, clear handheld object, nothing like 30×20 px on distant CCTV. What this establishes is that the plumbing — inference, decode, crop transform, coordinate mapping, abstention — is correct. Domain accuracy still requires the fine-tune in §8.1, which requires the annotated corpus.
+
 #### Detection strategy
 
 - Start from Objects365-pretrained weights; fine-tune, never train from scratch.
