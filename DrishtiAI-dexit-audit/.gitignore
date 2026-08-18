@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+data/
+calib/
+.venv/
+models/
+tools/llamacpp/
+data/
+runs/
+*.out
+artifacts/
+PRD.md
