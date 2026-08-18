@@ -125,6 +125,51 @@ migration plan.
 
 ---
 
+## 0.9 🔵 Measurement correction found while building Phase 1
+
+Two defects and one correction came out of the first complete-decode pass. The
+correction needs your awareness because it changes a number in the previous
+report.
+
+**Four of six corpus files are variable frame rate, not three.** The previous
+implementation judged VFR from the standard deviation of PTS deltas and
+classified `04.CCTV Candidate Talking.mkv` as constant rate. Measuring the
+coefficient of variation of inter-frame intervals says otherwise, and the
+interval histogram settles it: **144 of its frames are held for 160 ms against a
+120 ms majority** — a third longer, in two exactly discrete durations. That is
+variable frame rate by any definition.
+
+The two populations separate by a factor of 150 with nothing between them, so
+this is not a threshold judgement call:
+
+| File | cv | Verdict |
+|---|---:|---|
+| 01 mobile phone | 0.0000 | CFR |
+| 02 mobile phone | 0.0007 | CFR |
+| **04 candidate talking** | **0.1061** | **VFR — previously called CFR** |
+| 05 reception crowd | 0.2041 | VFR |
+| Seat 12 paper | 0.3131 | VFR |
+| 03 mobile usage | 0.3571 | VFR |
+
+**Nothing downstream was wrong because of it** — the pipeline reads PTS
+everywhere regardless of the flag, which is exactly why that rule exists. But
+the old PRD §5.1 table and the build report both say three files, and both will
+be corrected.
+
+**Two defects of mine, both found by running the decode:**
+
+- **The complete-duration requirement was being violated by 11 frames per
+  file.** The decode loop constructed a fresh generator on every iteration, so
+  the decoder's internal buffer was never flushed and the last 11 frames of
+  every file were dropped. Under 1% and invisible in any summary — and a direct
+  violation of PRD 18's first line. Fixed; all six files now decode to exactly
+  the frame count a plain full decode produces.
+- **End-of-stream was being recorded as a decode error.** PyAV surfaces EOF from
+  `avcodec_send_packet` as `EOFError`, which was landing in the error list, so
+  every perfectly readable file reported one failure. Fixed.
+
+---
+
 ## 1. 🔴 Blocking inputs that do not exist
 
 §3 lists six blocking inputs. Four of them are absent today. The PRD is explicit
