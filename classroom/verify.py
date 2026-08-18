@@ -76,7 +76,19 @@ GRAMMAR = (
     # Bounded for the same reason as obslist: an unbounded string lets the model
     # run to the token limit inside one field, and the result is truncated
     # mid-quote and unparseable.
-    'string ::= "\\"" [^"\\n\\r\\t]{0,200} "\\""\n'
+    # The lower bound is not decoration. A live run produced an observation list
+    # whose first entry was a real sentence and whose remaining four entries
+    # were the literal string `" ,"` -- the model padding the list to satisfy a
+    # grammar that accepted any length including none. A floor of twelve
+    # characters makes that padding unrepresentable rather than discouraged.
+    #
+    # The upper bound rose from 200 to 240 after the same run cut observations
+    # mid-word: "...Both hands are visible on the desk surface, near the
+    # keyboard. The 7". The real fix for that is in the prompt, which now asks
+    # for one short observation per item instead of a paragraph; the extra
+    # headroom is so a well-formed short observation is never the thing that
+    # trips the bound.
+    'string ::= "\\"" [^"\\n\\r\\t]{12,240} "\\""\n'
     # The review note gets its own, larger bound. At 200 characters the model's
     # note was being cut mid-sentence, which is worse than useless to a reviewer
     # -- a truncated explanation reads as a complete one. Observations are short
@@ -125,9 +137,13 @@ Rules, in order of precedence:
 3. Report only what is in the image. The numbers supplied with the request    describe pixel motion, not behaviour; never turn them into an observation.
 4. If the image cannot support any conclusion, set evidence_quality to    "insufficient" and say why in the note.
 
+5. A red box marks the seat under review. Describe only the person inside    that box. Other people are visible in these frames and are not the subject;    if the box is empty, say so and set evidence_quality to "insufficient".
+
+Each supported observation is ONE short statement -- a clause or a sentence, not a paragraph, and never a repeat of a previous one. Give between one and five. If you have only one thing to say, give one.
+
 Useful things to report when visible: head orientation and whether it is turned down or toward a neighbour; where each hand is; whether a hand passes below the desk edge; whether the candidate leans out of their own seat area; whether anyone else is within reach."""
 
-USER_TEMPLATE = """This contact sheet holds {count} stills from one seat, numbered in the top-left corner of each tile and read left to right, top to bottom.
+USER_TEMPLATE = """This contact sheet holds {count} numbered stills, read left to right and top to bottom, followed by a magnified crop of the seat under review. The red box marks that seat in every full-frame tile.
 
 {legend}
 
@@ -241,9 +257,24 @@ def sanitize(v: Verification) -> tuple[Verification, list[str]]:
 
 
 def build_contact_sheet(
-    frames: list[np.ndarray], columns: int = 3, tile: int = 320
+    frames: list[np.ndarray], columns: int = 3, tile: int = 320,
+    highlight: list[tuple[float, float]] | None = None,
 ) -> np.ndarray:
-    """Tile selected frames into one image for the verifier."""
+    """Tile selected frames into one image for the verifier.
+
+    `highlight` is the polygon of the seat the event belongs to, in source-frame
+    coordinates. It is drawn on every tile, scaled with the tile, because
+    without it the verifier has no way to know which of several people in a wide
+    CCTV frame is the subject.
+
+    That is not a hypothetical. Measured on a full run of
+    `03.CCTV Mobile Usage.mkv`: every event sent to the verifier belonged to the
+    right-hand desk row, which was unoccupied, and the model described in
+    confident detail the candidate seated on the far left of the frame --
+    `evidence_quality: "sufficient"`, `confidence: 1.0`. The seat label was in
+    the metadata as text. A vision model cannot resolve a text label to a region
+    of an image, so the attribution was never conveyed at all.
+    """
     if not frames:
         raise ValueError("no frames supplied for the contact sheet")
     rows = (len(frames) + columns - 1) // columns
@@ -256,9 +287,51 @@ def build_contact_sheet(
         r, c = divmod(index, columns)
         y, x = r * tile + (tile - rh) // 2, c * tile + (tile - rw) // 2
         sheet[y : y + rh, x : x + rw] = resized
+
+        # Drawn after placement, in sheet coordinates, so the box lands on the
+        # pixels it describes whatever the tile scaling turned out to be.
+        if highlight:
+            pts = np.array([[int(px * scale) + x, int(py * scale) + y]
+                            for px, py in highlight], dtype=np.int32)
+            cv2.polylines(sheet, [pts], True, (60, 60, 255), 2, cv2.LINE_AA)
+
         cv2.putText(sheet, str(index + 1), (c * tile + 8, r * tile + 24),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (60, 210, 255), 2, cv2.LINE_AA)
     return sheet
+
+
+def build_event_sheet(
+    frames: list[np.ndarray], polygon: list[tuple[float, float]],
+    columns: int = 3, tile: int = 320,
+) -> np.ndarray:
+    """Timeline tiles with the seat marked, plus a magnified crop of that seat.
+
+    The magnified tile is what the original prompt already described and the
+    implementation never produced. At the measured object scale a full 720p
+    frame shrunk into a 320 px tile leaves a hand roughly four pixels across;
+    the crop is the only tile on which anything at seat scale is legible.
+    """
+    from . import crops
+
+    if not frames:
+        raise ValueError("no frames supplied for the contact sheet")
+    marked = build_contact_sheet(frames, columns, tile, highlight=polygon)
+
+    # The crop comes from the frame nearest the middle of the sequence, which is
+    # where the peak sits by construction in `select_frames`.
+    middle = frames[len(frames) // 2]
+    crop, _transform = crops.seat_crop(middle, polygon, tile, min_crop_px=32)
+    strip = np.zeros((tile, marked.shape[1], 3), dtype=np.uint8)
+    ch, cw = crop.shape[:2]
+    scale = min(tile / cw, tile / ch)
+    rw, rh = max(int(cw * scale), 1), max(int(ch * scale), 1)
+    strip[(tile - rh) // 2:(tile - rh) // 2 + rh, 8:8 + rw] = cv2.resize(
+        crop, (rw, rh), interpolation=cv2.INTER_AREA)
+    cv2.putText(strip, "seat under review, magnified", (rw + 24, tile // 2),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (60, 210, 255), 2, cv2.LINE_AA)
+    cv2.rectangle(strip, (6, (tile - rh) // 2 - 2), (8 + rw, (tile - rh) // 2 + rh),
+                  (60, 60, 255), 2)
+    return np.vstack([marked, strip])
 
 
 def select_frames(t_start: float, t_end: float, peak_t: float, count: int) -> list[float]:

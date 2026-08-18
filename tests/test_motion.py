@@ -20,7 +20,7 @@ import numpy as np  # noqa: E402
 
 from classroom import calibration as cal_mod, db, motion  # noqa: E402
 from classroom.calibration import Calibration, MaskRegion, Seat  # noqa: E402
-from classroom.config import BaselineConfig, MotionConfig  # noqa: E402
+from classroom.config import BaselineConfig, MotionConfig, SegmentConfig  # noqa: E402
 from tests.fixtures import SCENE, make_scene_video  # noqa: E402
 
 EVENT = (3.0, 5.0)
@@ -182,6 +182,52 @@ def main() -> int:
         )
         ok &= check("rescan is idempotent", recount[0]["c"] == again, f"{recount[0]['c']}")
         conn.close()
+
+    print("\na near-static zone cannot out-score an occupied one")
+    # Measured on 03.CCTV Mobile Usage: an unoccupied desk row produced the
+    # twelve highest-scoring events in the recording, peaking at z = 29.8, while
+    # the one occupied seat peaked at 9.5. The empty region carried forty times
+    # less motion. A near-zero MAD in the denominator turns one block of
+    # compression noise into an enormous standardised value, and neither MAD
+    # floor engages because the seat's own MAD is small but not tiny.
+    from classroom.motion import Baseline, Window, ZoneStats  # noqa: E402
+
+    bcfg = BaselineConfig()
+    empty_key = ("R-desk", "desk")
+    busy_key = ("S-61", "desk")
+    baselines = {
+        # Real distributions from that run.
+        empty_key: Baseline(0.0130, 0.0081, 0.13, None, None, 529),
+        busy_key: Baseline(0.1835, 0.1616, 0.95, None, None, 529),
+    }
+
+    def one_window(key, residual, area_ratio, blocks):
+        w = Window(t_start=0.0, t_end=0.5, frames=8, global_dx=0.0, global_dy=0.0,
+                   global_ratio=0.0, luma_mean=130.0)
+        w.zones[key] = ZoneStats(0, 0, 0, area_ratio, 0, residual, 0.0, blocks)
+        return w
+
+    # The empty zone at its measured worst: a huge z from 0.1% of the area.
+    quiet = motion.apply_baselines(
+        [one_window(empty_key, 0.2609, 0.0011, 1)], baselines,
+        MotionConfig(), bcfg)[0]
+    raw_z = (0.2609 - 0.0130) / 0.0081
+    ok &= check("the raw z-score really is that large", raw_z > 25, f"{raw_z:.1f}")
+    ok &= check("but the area floor suppresses it",
+                quiet.deviation[empty_key] <= 0.0,
+                f"{quiet.deviation[empty_key]:.2f}")
+
+    # The occupied zone at its measured minimum area for a hot window.
+    busy = motion.apply_baselines(
+        [one_window(busy_key, 0.9482, 0.1458, 76)], baselines,
+        MotionConfig(), bcfg)[0]
+    ok &= check("a genuine event at the measured minimum area survives",
+                busy.deviation[busy_key] >= SegmentConfig().start_z,
+                f"{busy.deviation[busy_key]:.2f}")
+
+    ok &= check("the floor sits between the two measured populations",
+                0.0333 < bcfg.min_area_ratio <= 0.1458,
+                f"{bcfg.min_area_ratio}")
 
     print(f"\n{'ALL PASS' if ok else 'FAILURES PRESENT'}")
     return 0 if ok else 1

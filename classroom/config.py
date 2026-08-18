@@ -103,6 +103,37 @@ class BaselineConfig:
     # a fraction, so it does not shift with zone size.
     min_moving_blocks: int = 1
 
+    # And a *fraction* of the zone, which the absolute count above cannot
+    # substitute for. A large zone accumulates stray blocks in proportion to its
+    # size, so one moving block means something quite different in a 520-block
+    # seat than in a 660-block one -- and the count guard passes both.
+    #
+    # Found on a full run of `03.CCTV Mobile Usage.mkv`. An unoccupied desk row
+    # produced the twelve highest-scoring events in the recording, peaking at
+    # z = 29.8, while the one genuinely occupied seat peaked at 9.5. The region
+    # is visually static: monitors off, nobody in frame, nothing moving across
+    # any sampled peak. Measured over the whole recording:
+    #
+    #     seat     median resid    MAD      mean area ratio   max z
+    #     R-desk      0.0130     0.0081        0.0011          29.8
+    #     S-61        0.1835     0.1616        0.0465           9.5
+    #
+    # The empty seat carries forty times less motion and scores three times
+    # higher, because a near-zero MAD in the denominator turns a single block of
+    # compression noise into an enormous standardised value. Neither existing
+    # floor engages: the seat's own MAD (0.0081) sits well above both
+    # min_mad_absolute and min_mad_fraction * median.
+    #
+    # Across every window above the start threshold, the two seats separate
+    # completely with no overlap:
+    #
+    #     R-desk  n=142   area ratio  median 0.0033   max 0.0333
+    #     S-61    n= 39   area ratio  median 0.2625   min 0.1458
+    #
+    # A 4.4x gap. At 0.05 all 142 spurious windows are removed and all 39
+    # genuine ones survive, with wide margin on both sides.
+    min_area_ratio: float = 0.05
+
 
 @dataclass(frozen=True)
 class SegmentConfig:

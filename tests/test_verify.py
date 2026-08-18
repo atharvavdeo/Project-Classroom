@@ -163,6 +163,45 @@ def main() -> int:
     except ValueError:
         ok &= check("empty sheet rejected", True)
 
+    print("\nthe sheet identifies which seat is under review")
+    # Measured on a full run: every event sent to the verifier belonged to an
+    # unoccupied desk row, and the model described in confident detail a
+    # candidate seated elsewhere in the frame -- evidence_quality "sufficient",
+    # confidence 1.0. The seat was named only as metadata text, which a vision
+    # model cannot resolve to a region of an image.
+    plain = [np.full((720, 1280, 3), 90, dtype=np.uint8) for _ in range(6)]
+    polygon = [(700.0, 120.0), (1180.0, 120.0), (1180.0, 480.0), (700.0, 480.0)]
+    unmarked = verify.build_contact_sheet(plain, columns=3, tile=320)
+    marked = verify.build_contact_sheet(plain, columns=3, tile=320, highlight=polygon)
+    ok &= check("a highlight changes the sheet",
+                not np.array_equal(unmarked, marked))
+    # The box must land on the seat, not merely somewhere. Tile 0 scales the
+    # 1280x720 frame by 0.25 and centres it, so the polygon maps to a known
+    # rectangle; red pixels outside it mean the transform is wrong.
+    scale = 320 / 1280
+    y0 = (320 - int(720 * scale)) // 2
+    red = (marked[:, :, 2].astype(int) - marked[:, :, 1]) > 100
+    ys, xs = np.nonzero(red[:320, :320])
+    expected = (y0 + 120 * scale, y0 + 480 * scale, 700 * scale, 1180 * scale)
+    # Two pixels of tolerance: the polyline is two pixels thick and antialiased.
+    drawn = (ys.min(), ys.max(), xs.min(), xs.max())
+    ok &= check("the box lands on the seat's mapped rectangle",
+                all(abs(a - b) <= 2 for a, b in zip(drawn, expected)),
+                f"drawn {drawn} vs expected "
+                f"{tuple(round(v, 1) for v in expected)}")
+    ok &= check("every tile carries the mark",
+                all(red[r * 320:(r + 1) * 320, c * 320:(c + 1) * 320].sum() > 0
+                    for r in range(2) for c in range(3)))
+
+    sheet = verify.build_event_sheet(plain, polygon, columns=3, tile=320)
+    ok &= check("the event sheet appends a magnified seat tile",
+                sheet.shape[0] == marked.shape[0] + 320,
+                f"{sheet.shape} vs {marked.shape}")
+    ok &= check("the prompt tells the model what the box means",
+                "red box" in verify.SYSTEM and "not the subject" in verify.SYSTEM)
+    ok &= check("an empty box has a defined answer",
+                "if the box is empty" in verify.SYSTEM)
+
     print("\nframe selection covers the event shape")
     picks = verify.select_frames(t_start=10.0, t_end=16.0, peak_t=13.0, count=6)
     ok &= check("requested count returned", len(picks) == 6, str(len(picks)))

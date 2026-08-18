@@ -65,6 +65,12 @@ def build(
     bitrate: int = 1_900_000,
     oscillations: float = 3.0,
     sensor_noise: float = 2.0,
+    # With the triangle wave below, |velocity| is constant at
+    # shift_px * (2/pi) * 2*pi*oscillations / (duration*fps). At 36 px over a
+    # 6 s event at 25 fps with three oscillations that is about 2.9 px/frame,
+    # comfortably clear of the 2.0 px/frame block threshold for the whole swing
+    # rather than only at its fastest instant.
+    shift_px: float = 36.0,
     seed: int = 17,
 ) -> Path:
     """Render the recording.
@@ -84,6 +90,23 @@ def build(
     static -- which gives the per-seat MAD nothing to measure and leaves the
     robust z-score dominated by its own floor. Real footage always carries a
     noise floor, and the gate has to work above it rather than in its absence.
+
+    `shift_px` translates the composited content inside its window, and it is
+    the difference between exercising the whole motion path and exercising half
+    of it. A cross-fade changes pixel *values* without moving anything, so the
+    encoder codes it as residual and emits almost no motion vectors. Measured on
+    the harness before this existed: during planted events the mean area ratio
+    was 0.0000-0.0008 -- essentially no block cleared the 2 px/frame threshold --
+    while the residual rose 1.8x to 4.7x. Real events on real footage run at an
+    area ratio of 0.15-0.69.
+
+    The consequence was invisible and serious. The harness validated the
+    statistical path (residual -> robust z) and never the kinematic one
+    (motion vectors -> moving blocks), so a guard keyed on moving blocks could
+    be added, be correct on real footage, and take the harness's recall from 5/5
+    to 0/5 -- which is exactly what happened when `min_area_ratio` arrived. The
+    composite now translates as well as fades, so a planted event displaces
+    pixels the way a moving person does.
     """
     rng = np.random.default_rng(seed)
     out_path = Path(out_path)
@@ -115,6 +138,23 @@ def build(
                 swing = 0.5 * (1.0 - float(np.cos(2 * np.pi * oscillations * phase)))
                 alpha = envelope * swing
                 alt = alternates[event.source_index].astype(np.float32)
+                if shift_px > 0:
+                    # A triangle wave, not a sine. A sinusoidal displacement has
+                    # zero velocity at each turning point and peaks a quarter
+                    # cycle away from the alpha peak, so the frames where the
+                    # composite is most visible are the frames where nothing is
+                    # moving -- which produced a spiky signal of two to four
+                    # qualifying windows per event and no sustained detection at
+                    # all. A triangle wave holds |velocity| constant across the
+                    # whole swing. Diagonal, because a purely horizontal shift is
+                    # the case block matching handles best and would flatter the
+                    # gate.
+                    travel = shift_px * envelope * (2.0 / np.pi) * float(
+                        np.arcsin(np.sin(2 * np.pi * oscillations * phase)))
+                    matrix = np.float32([[1, 0, travel], [0, 1, travel * 0.4]])
+                    alt = cv2.warpAffine(
+                        alt, matrix, (width, height),
+                        flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
                 mask = masks[(event.seat_label, event.region)] * alpha
                 frame = frame * (1.0 - mask) + alt * mask
 
@@ -207,7 +247,11 @@ def score_recall(
     if duration_s:
         metrics["false_events_per_hour"] = spurious / (duration_s / 3600.0)
 
-    if ranks is not None and detected:
+    if ranks is not None:
+        # Reported even when nothing was detected. Omitting the key made a
+        # caller reading `metrics["precision_at_k"]` raise KeyError on a run
+        # that found no events -- so a total-recall failure surfaced as a crash
+        # in the reporting code rather than as the failing check it is.
         k = len(truth)
         order = sorted(range(len(detected)), key=lambda i: -ranks[i])[:k]
         hits = sum(1 for i in order if i in matched_detections)

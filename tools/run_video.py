@@ -669,6 +669,7 @@ def main() -> int:
             stage_started = time.perf_counter()
             (run_dir / "verify").mkdir(exist_ok=True)
             ranked = sorted(events, key=lambda e: -e["score"])[:args.events or 5]
+            by_label = {seat.label: seat for seat in cal.seats}
 
             with llama_server(cfg.verify, args.llama_port, args.llama_binary,
                               run_dir / "verify" / "server.log") as base_url:
@@ -679,7 +680,15 @@ def main() -> int:
                         event["t_start"], event["t_end"], event["peak_t"],
                         cfg.verify.contact_sheet_frames)
                     frames = evidence.read_frames(str(args.video), times)
-                    sheet = verify.build_contact_sheet([f for _, f in frames])
+                    # The seat is marked on every tile and magnified below them.
+                    # Passing the label as metadata text conveys nothing to a
+                    # vision model: in the first run of this file the verifier
+                    # described, with confidence 1.0, a candidate seated in a
+                    # different part of the frame from the seat that raised the
+                    # event.
+                    polygon = by_label[event["seat_label"]].polygon
+                    sheet = verify.build_event_sheet(
+                        [f for _, f in frames], polygon)
                     sheet_dir = run_dir / "events" / str(event["id"])
                     sheet_dir.mkdir(parents=True, exist_ok=True)
                     sheet_path = sheet_dir / "sheet.jpg"

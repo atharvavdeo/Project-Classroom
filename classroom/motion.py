@@ -418,6 +418,15 @@ def apply_baselines(
             # while a genuine event scored 6.3 with twenty-five.
             if stats.moving_blocks < baseline_cfg.min_moving_blocks:
                 z = min(z, 0.0)
+            # And require that enough of the zone moved, not merely one block of
+            # it. The count guard above cannot make this distinction: a stray
+            # block is a stray block whatever the zone's size, so on a large
+            # region it passes while representing a thousandth of the area.
+            # Measured on real footage -- an empty desk row produced the twelve
+            # highest-scoring events in a recording at 0.1% area, against 26%
+            # for the one seat that was actually occupied.
+            if stats.area_ratio < baseline_cfg.min_area_ratio:
+                z = min(z, 0.0)
             # A frame-wide exposure step or camera bump explains the motion
             # better than the candidate does. Suppress rather than escalate.
             if window.exposure_step or window.camera_moved:

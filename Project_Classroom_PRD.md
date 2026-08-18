@@ -4,11 +4,30 @@
 **Problem Statement:** Drishti AI Hackathon 2026 — Problem Statement 2
 **Working title:** Project Classroom
 **Document status:** Build specification
-**Version:** 3.1
+**Version:** 3.2
 **Date:** 18 August 2026
 **Team:** DataDynamo
 
 > **One-line pitch:** Project Classroom converts hours of recorded examination-hall footage into a short, searchable timeline of motion-grounded, seat-linked events with visual evidence and confidence—without making automated accusations.
+
+---
+
+## Changelog: v3.1 → v3.2
+
+Running the whole pipeline over one real file, end to end, with the output
+rendered so it could be looked at. Three defects surfaced that no fixture had
+reached, two of them in components that had been passing their gates for weeks.
+
+| Change | Reason |
+|---|---|
+| `min_area_ratio = 0.05` added to the baseline gate (§17.4) | An unoccupied desk row produced the twelve highest-scoring events in the recording at 29.8 σ, against 9.5 σ for the one occupied seat. A near-zero MAD turns one block of compression noise into an enormous z-score, and `min_moving_blocks` is an absolute count where the quantity that matters is a fraction. Events fell 21 → 8, all eight on the occupied seat; review burden 46.3% → 16.3%. |
+| The verifier contact sheet now marks the seat and appends a magnified crop | The sheet was the whole frame six times, and the seat was named only as metadata text. A vision model cannot resolve a text label to a region of an image, so the verifier described a candidate in a different seat at confidence 1.0. |
+| `string` in the grammar gained a minimum length; the prompt asks for one short observation per item | A live response padded its observation list with four entries of `" ,"`, and others were cut mid-word at the 200-character bound. |
+| `environment` mask support in the run layouts | Real, and worth keeping — but honestly recorded as *not* the cause of the empty-seat events, which was the first hypothesis and was wrong. |
+| `tools/prd_check.py`, `tools/run_video.py` added (§15.5) | The document is now checked against the code and the footage rather than trusted; and a single command produces a self-contained, inspectable run folder. |
+| §5.1 table shape, §9.2.2 heading depth, §9.3 context size corrected | Found by the checker on its first pass. |
+| The long-form harness now displaces as well as cross-fades (§17.2) | The area floor took harness recall from 5/5 to 0/5, which exposed that the harness had never emitted motion vectors at all — it had been validating the statistical half of the motion path and not the kinematic half. Fixing the harness rather than lowering the threshold was the only honest option, since the threshold was derived from real footage and the harness's own numbers were the unrealistic side. |
+| `score_recall` always reports `precision_at_k` | A run that detected nothing raised `KeyError` in the reporting code, so a total-recall failure surfaced as a crash rather than as the failing check it is. |
 
 ---
 
@@ -1020,18 +1039,41 @@ three calibrated seats, on CPU:
 | Metric | Result |
 |---|---|
 | Event recall | **5 / 5 (100%)** |
+| Precision | **1.00** |
 | Precision@K (K = 5) | **1.00** |
-| Mean temporal IoU | **0.936** |
+| Mean temporal IoU | 0.574 |
 | Fragmentation | **1.00** (one detection per real event) |
-| False events | 1 (24 / hour) |
-| Recording flagged | 20.5% |
-| Scan throughput | 39× realtime |
-| Pose observations | 107 on real people |
-| Tracks reconciled to seats | 8 of 15 |
+| False events | **0** |
+| Recording flagged | 11.1% |
+| Pose observations | 76 on real people |
+| Tracks reconciled to seats | 8 |
 
-The single false event scored z = 4.18 against real events at z = 14–43, so it
-ranks below every genuine one. That is the designed behaviour: the system ranks
-rather than eliminates, and Precision@K is the metric a reviewer experiences.
+**These numbers replace an earlier set, and the reason matters more than the
+numbers.** The harness originally moved nothing: it cross-faded between two real
+frames, which changes pixel *values* without displacing anything, so the encoder
+coded it as residual and emitted almost no motion vectors. Measured during
+planted events, the mean area ratio was **0.0000–0.0008** — essentially no block
+cleared the 2 px/frame threshold — while the residual rose 1.8× to 4.7×. Real
+events on real footage run at an area ratio of **0.15–0.69**.
+
+So the harness had been validating the statistical path (residual → robust z)
+and never the kinematic one (motion vectors → moving blocks). Nothing failed;
+half the pipeline simply was not under test, and its recall figure meant less
+than it appeared to. This surfaced only because §17.4's `min_area_ratio` guard —
+correct on real footage — took harness recall from 5/5 to **0/5**.
+
+The composite now translates as well as fades, along a **triangle wave** rather
+than a sinusoid. A sinusoidal displacement has zero velocity at each turning
+point and peaks a quarter-cycle away from the alpha peak, so the frames where
+the composite is most visible are the frames where nothing is moving — that
+first attempt produced two to four qualifying windows per event and still no
+sustained detection. A triangle wave holds |velocity| constant at ~2.9 px/frame
+across the whole swing.
+
+The earlier run's single false event and its 0.936 temporal IoU are not
+comparable to the table above: they were measured against a signal the gate was
+reading through a different mechanism. The current figures are lower on IoU and
+better on false positives, and they exercise the whole path.
 
 **Fragmentation is now measured correctly.** The earlier definition —
 detections divided by matched events — conflated fragmentation with false
@@ -1056,6 +1098,149 @@ the shoulder line in image space. A fixed threshold is meaningless across
 mountings; `pose.calibrate_pitch_baseline()` derives it per camera from footage
 believed normal.
 
+
+### 17.4 What a full run on real footage exposed
+
+`tools/run_video.py` was run end to end over `03.CCTV Mobile Usage.mkv` — 281.9 s,
+720p, variable frame rate, the longest file in the corpus. Every stage completed.
+It also surfaced three defects that no synthetic fixture had reached, two of them
+in components that had passed their gates for weeks.
+
+#### An empty seat outscored the occupied one
+
+The recording contains one occupied seat (S-61) and one unoccupied desk row
+(R-desk). The first run produced **21 events, 13 of them on the empty row — and
+the twelve highest-scoring events in the whole recording were all R-desk.** Peak
+deviation reached **29.8 σ** on a region that is visually static across every
+sampled frame: monitors off, nobody present, nothing moving.
+
+Measured over the full recording:
+
+| Seat | Median residual | MAD | Mean area ratio | Max z |
+|---|---:|---:|---:|---:|
+| R-desk (empty) | 0.0130 | 0.0081 | **0.0011** | **29.8** |
+| S-61 (occupied) | 0.1835 | 0.1616 | 0.0465 | 9.5 |
+
+The empty seat carries **forty times less motion and scores three times higher**.
+A near-zero MAD in the denominator turns one 16×16 block of compression noise
+into an enormous standardised value. Neither existing guard engages: the seat's
+own MAD (0.0081) sits comfortably above both `min_mad_absolute` and
+`min_mad_fraction × median`, and `min_moving_blocks = 1` is satisfied by the
+single stray block that causes the problem.
+
+**The first hypothesis was wrong and worth recording.** The R-desk polygon
+overlaps an interior serving window into an adjacent room, so the obvious
+explanation was environmental motion leaking in. An `environment` mask was added
+and the run repeated: **21 events became 20.** The window is a real motion source
+and the mask is correct to keep, but it was not the cause.
+
+The cause is that `min_moving_blocks` is an absolute count where the quantity
+that matters is a *fraction*. A large zone accumulates stray blocks in proportion
+to its area, so one moving block means something entirely different in a
+660-block region than in a 520-block one — and an absolute count passes both.
+Across every window above the start threshold the two populations separate
+completely:
+
+| Seat | Windows above start_z | Area ratio median | Range |
+|---|---:|---:|---|
+| R-desk | 142 | 0.0033 | max **0.0333** |
+| S-61 | 39 | 0.2625 | min **0.1458** |
+
+A 4.4× gap with nothing in between. `min_area_ratio = 0.05` sits in that gap
+with wide margin on both sides. Re-run:
+
+| Configuration | Events | On the empty row | On the occupied seat |
+|---|---:|---:|---:|
+| As built | 21 | 13 | 8 |
+| Environment mask added | 20 | 12 | 8 |
+| **Area floor added** | **8** | **0** | **8** |
+
+Every spurious event removed, every genuine one retained — exactly as the window
+separation predicted. **Review burden falls from 46.3% of the recording to
+16.3%**, a 2.8× reduction, and every second of what remains is on the seat that
+was actually occupied. That is the quantity §3.5 exists to move, and it moved
+because a threshold was wrong rather than because a model got better.
+
+#### The verifier described the wrong person, with confidence 1.0
+
+Every event reaching the verifier in the first run belonged to R-desk. The model
+returned fluent, detailed, entirely coherent descriptions of *a candidate seated
+at a desk with a monitor, keyboard and mouse* — the man seated on the far left of
+the frame, in a different seat, at `evidence_quality: "sufficient"` and
+`confidence: 1.0`.
+
+The contact sheet was the **whole frame**, six times over. The seat under review
+was identified only as the string `"seat": "R-desk"` in the metadata. A vision
+model cannot resolve a text label to a region of an image, so the attribution was
+never conveyed at all — and nothing in the schema, the grammar or the sanitizer
+could catch it, because the output was well-formed and the observations were
+true of *somebody*.
+
+This is the same failure §8.2 already guards against for pose, where evidence
+from a neighbouring seat must never be attributed to this candidate. The verifier
+had no equivalent guard. It now does: the seat polygon is drawn on every tile and
+a magnified crop of that seat is appended as a final tile, with the prompt
+stating that the red box marks the subject and that an empty box means
+`insufficient`.
+
+The magnified tile is the one the original prompt already described and the
+implementation never produced — at this object scale a 720p frame shrunk into a
+320 px tile leaves a hand about four pixels across, so it was also the only tile
+on which anything at seat scale was legible.
+
+#### Two grammar bounds were the wrong shape
+
+Live output showed observations cut mid-word at the 200-character bound
+(`"...near the keyboard. The 7"`) because the model was writing paragraphs into a
+field intended for one short statement, and one response padded its observation
+list with four entries of the literal string `" ,"`. The prompt now asks for one
+short statement per item, `string` carries a **minimum** length of 12 characters
+so degenerate padding is unrepresentable rather than discouraged, and the upper
+bound moved to 240 so a well-formed short observation is never what trips it.
+
+#### The corrected run
+
+All eight stages completed with no errors.
+
+| Stage | Seconds | Result |
+|---|---:|---|
+| ingest | 0.3 | 281.9 s, VFR, 3595 mv/frame |
+| calibration | 0.0 | 2 seats, 2 masks |
+| motion + segmentation | 6.6 | 529 windows, 8 events, 42.6× realtime |
+| overlay | 65.6 | 32 MB marked recording |
+| clips | 28.7 | 5 |
+| detection | 79.5 | 61 detections, detector resident alone |
+| pose + tracking | 99.4 | **31 observations**, pose resident alone |
+| verifier | 177.1 | **5 verified, 0 failed** |
+
+Pose observations rose from **5 to 31** across the same number of events, for the
+plain reason that the events now land on a seat containing a person. That is the
+cleanest available confirmation that the area floor fixed what it was meant to
+fix, because nothing in the pose stage changed.
+
+#### What worked
+
+Four things behaved exactly as designed, and are worth recording as such:
+`object_assessment` came back `not_visible` on all five events rather than
+guessing; the scene priming took, with the model referring to "standard test
+equipment"; the metadata fencing took verbatim — one review note reads *"The
+provided pixel statistics describe motion but do not constitute an
+observation."*; and after the sheet was marked, another reads *"The description
+is based on the magnified crop of seat 61."*, which is the attribution being
+made explicitly and correctly.
+
+#### What did not, and is recorded rather than tuned away
+
+The verifier returned `evidence_quality: "sufficient"` on all five events at
+confidence 0.95–1.0. It never once said `"limited"`, on 720p CCTV of a seat
+roughly 300 px tall. Its observations are also close to interchangeable across
+the five — seated, head toward monitor, hands near keyboard. That may be
+accurate: these events may simply be ordinary typing bursts rather than
+incidents, which is precisely what ground truth would settle and what §23 records
+as still missing. Either way the confidence figure is not calibrated and should
+not be presented as one.
+
+---
 
 ## 18. Traceability: Challenge to Design Response
 
