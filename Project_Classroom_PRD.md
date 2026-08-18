@@ -309,6 +309,37 @@ Every occupied seat in a CBT hall produces continuous hand motion. The baseline 
 
 This failure was caught by the integration harness (§15.1): a seat with three planted events had two of them silently suppressed, while a seat with one event was detected correctly. Recall went from 1/3 to 3/3 once the fraction guard was added. The learning span must also be drawn from footage believed normal, never from the recording under analysis.
 
+#### 7.2.2 Two defects in the robust baseline, found on real footage
+
+The per-seat robust z-score is the single most load-bearing number in the system, and two independent flaws in it were only exposed by running real pixels through. Both produced *silent* failure — no error, just wrong answers.
+
+**The spread floor cannot be absolute.** Residual magnitudes are scene-dependent. On real 720p CCTV a seat's median residual is around 0.011–0.021 with a MAD near 0.0016–0.0025; a high-contrast synthetic fixture produces values two orders of magnitude larger. An absolute floor tuned on one is catastrophic on the other: a floor of 0.05 against a true MAD of 0.0016 divides every z-score by thirty. Measured consequence — **zero events detected on real footage, peak z of 1.5 where the true value was 47.** The floor is now relative to the seat's own median.
+
+**A relative floor alone is equally wrong.** On a genuinely static seat both median and MAD approach zero, so a relative floor collapses too, and a trivial fluctuation divided by a near-zero denominator reports an enormous deviation from nothing at all. Measured: **an idle seat scored z = 16.6 with zero moving blocks, higher than a real event scoring 6.3 with twenty-five.**
+
+Neither is fixable by tuning one number. The resolution is a conjunction: a relative floor, a small absolute floor sized to the observed residual scale, **and** a requirement that blocks physically moved — counted per frame, not from the window mean, since a block moving in three frames of twelve has its mean residual quartered.
+
+The block motion threshold itself is now justified by measurement rather than assertion. Peak moving-block counts, active seat versus idle seat in the same frame:
+
+| Threshold (px/frame) | Active seat | Idle seat |
+|---:|---:|---:|
+| 0.25 | 57 | 47 |
+| 0.50 | 51 | 42 |
+| 1.00 | 44 | 42 |
+| **2.00** | **40** | **4** |
+
+Below 2.0 the compressor's noise floor swamps the signal and the two become indistinguishable. Above it, slow deliberate movement — roughly 1–2 px/frame at this scale — starts being discarded.
+
+#### 7.2.3 Synthetic fixtures mislead in specific, identifiable ways
+
+Three fixture artefacts were mistaken for pipeline behaviour before real footage settled them, and they are worth recording because any future fixture will repeat them:
+
+1. **A smooth background breaks the encoder.** Two textured seats on a plain gradient leave H.264 without distinctive reference blocks, so a change in one region emits spurious vectors in another — the idle seat fired during the active seat's event. Real rooms are textured throughout. Fixtures now carry static grain.
+2. **Fixture motion was slower than real motion.** A box drifting once across a seat moves ~0.5–1 px/frame, below the block threshold and slower than a real hand. Fixtures now sweep.
+3. **A perfectly static background is not a realistic quiet baseline.** It gives the per-seat MAD nothing to measure. Real footage always carries a noise floor and the gate must work above it, not in its absence.
+
+The rule this establishes: **where a synthetic fixture and real footage disagree, the footage is right.** Fixtures exist to exercise mechanisms quickly, not to define correct behaviour.
+
 ### 7.3 Robust event boundaries
 
 ```mermaid
@@ -815,6 +846,56 @@ These require measured evidence before appearing as achieved: "processes faster 
 When confidence is inadequate, Project Classroom must retain the clip if motion is meaningful; label the evidence as limited or insufficient; avoid object or intent claims; allow a reviewer to inspect the clean source; and log the reason for uncertainty.
 
 ---
+
+## 17.2 Long-form harness: measured results
+
+The harness in §17.1 is implemented (`classroom/harness.py`). It holds a real
+frame as the quiet baseline and, at chosen timestamps, cross-fades one seat
+region to the *same region from a different real timestamp* — so the motion is
+genuine, the people are real, and the insertion times are exactly known.
+
+Full pipeline over a 150-second synthesised recording, five planted events,
+three calibrated seats, on CPU:
+
+| Metric | Result |
+|---|---|
+| Event recall | **5 / 5 (100%)** |
+| Precision@K (K = 5) | **1.00** |
+| Mean temporal IoU | **0.936** |
+| Fragmentation | **1.00** (one detection per real event) |
+| False events | 1 (24 / hour) |
+| Recording flagged | 20.5% |
+| Scan throughput | 39× realtime |
+| Pose observations | 107 on real people |
+| Tracks reconciled to seats | 8 of 15 |
+
+The single false event scored z = 4.18 against real events at z = 14–43, so it
+ranks below every genuine one. That is the designed behaviour: the system ranks
+rather than eliminates, and Precision@K is the metric a reviewer experiences.
+
+**Fragmentation is now measured correctly.** The earlier definition —
+detections divided by matched events — conflated fragmentation with false
+positives, which have different causes and different fixes. It now counts
+detections *per matched truth event*.
+
+### 17.3 Per-camera pitch baseline, calibrated
+
+Task closed using real observations. From 78 resolvable head pitches across the
+corpus frames:
+
+```
+min -1.78   median -0.63   max -0.30
+calibrated threshold (90th percentile): -0.321
+library default:                        +0.350
+```
+
+This confirms the prediction in §8.2.1 quantitatively. The default was not
+merely imprecise but **the wrong sign** — every upright candidate on this
+camera scores negative, because the camera looks down and the nose sits above
+the shoulder line in image space. A fixed threshold is meaningless across
+mountings; `pose.calibrate_pitch_baseline()` derives it per camera from footage
+believed normal.
+
 
 ## 18. Traceability: Challenge to Design Response
 

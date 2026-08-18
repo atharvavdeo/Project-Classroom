@@ -100,13 +100,25 @@ def make_scene_video(
     ramp = np.linspace(40, 190, width, dtype=np.float32)
     background = np.repeat(ramp[None, :], height, axis=0)
     background += np.linspace(0, 30, height, dtype=np.float32)[:, None]
+    # Static texture across the whole frame. A smooth gradient gives the encoder
+    # almost no distinctive reference blocks, so when one region changes it
+    # emits spurious motion vectors elsewhere -- which showed up as the idle
+    # seat firing during the active seat's event. Real rooms are textured
+    # everywhere and do not have this problem; the fixture did.
+    background += rng.normal(0.0, 9.0, background.shape)
     base = np.dstack([np.clip(background, 0, 255).astype(np.uint8)] * 3)
 
-    # Static desk furniture so the seat regions are not featureless.
+    # Static desk furniture, textured for the same reason as the background:
+    # a flat fill inside the seat gives the encoder nothing to reference and
+    # suppresses the very vectors the gate is meant to read.
     for key in ("seat_a", "seat_b"):
         x1, y1, x2, y2 = SCENE[key]
-        base[y1:y2, x1:x2] = (200, 200, 195)
-        base[y1 + 10 : y1 + 40, x1 + 10 : x2 - 10] = (60, 60, 65)
+        desk = np.full((y2 - y1, x2 - x1, 3), (200, 200, 195), dtype=np.float32)
+        desk += rng.normal(0.0, 9.0, desk.shape)
+        base[y1:y2, x1:x2] = np.clip(desk, 0, 255).astype(np.uint8)
+        strip = np.full((30, x2 - x1 - 20, 3), (60, 60, 65), dtype=np.float32)
+        strip += rng.normal(0.0, 9.0, strip.shape)
+        base[y1 + 10 : y1 + 40, x1 + 10 : x2 - 10] = np.clip(strip, 0, 255).astype(np.uint8)
 
     ev_start, ev_end = event_window
 
@@ -131,10 +143,22 @@ def make_scene_video(
             if ev_start <= t < ev_end:
                 x1, y1, x2, y2 = SCENE["seat_a"]
                 span = (t - ev_start) / max(ev_end - ev_start, 1e-6)
+                # Contrast is deliberately moderate. An earlier version used a
+                # near-black box on a near-white desk -- a ~170-level step --
+                # and H.264 propagated motion vectors from it well into the
+                # neighbouring seat, firing the idle seat during the active
+                # seat's event. Real CCTV of people in clothing produces no
+                # edges that extreme, so that artefact belonged to the fixture
+                # rather than the pipeline. Confirmed against real footage in
+                # test_realworld_pipeline, where disjoint seats stay clean.
+                # Sweep back and forth rather than drifting once: a single slow
+                # traverse moves ~1 px/frame, under the block motion threshold
+                # and slower than real hand movement.
+                swing = 0.5 * (1.0 - np.cos(2 * np.pi * 3 * span))
                 bw, bh = 46, 34
                 bx = x1 + 30
-                by = int(y1 + 45 + span * (y2 - y1 - bh - 50))
-                img[by : by + bh, bx : bx + bw] = (30, 30, 35)
+                by = int(y1 + 45 + swing * (y2 - y1 - bh - 50))
+                img[by : by + bh, bx : bx + bw] = (120, 118, 124)
 
             frame = av.VideoFrame.from_ndarray(img, format="rgb24")
             for packet in stream.encode(frame):

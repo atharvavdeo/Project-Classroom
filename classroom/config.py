@@ -20,8 +20,19 @@ class MotionConfig:
     window_s: float = 0.5
 
     # A 16x16 block must move more than this (pixels/frame) to count as moving.
-    # At 0.08 bits/pixel the compressor emits small spurious vectors constantly;
-    # 2.0 sits above that noise floor on all six profiled files.
+    # At 0.08 bits/pixel the compressor emits small spurious vectors constantly,
+    # and this is the threshold that separates real motion from them. Measured
+    # peak moving-block counts, active seat versus idle seat in the same frame:
+    #
+    #     threshold   active   idle
+    #        0.25        57      47
+    #        0.50        51      42
+    #        1.00        44      42
+    #        2.00        40       4      <- separation
+    #
+    # Below 2.0 the compressor's noise floor swamps the signal and the two seats
+    # become indistinguishable. Raising it further would start discarding slow
+    # deliberate movement, which sits around 1-2 px/frame at this scale.
     block_mag_threshold: float = 2.0
 
     # Global motion: if this fraction of unmasked blocks moves coherently, the
@@ -59,7 +70,38 @@ class BaselineConfig:
     # Guards against a degenerate baseline on a seat that was empty or static
     # for the whole learning span.
     min_windows: int = 60
-    min_mad: float = 0.05
+
+    # The spread floor is *relative* to the seat's own median, not absolute.
+    #
+    # This matters more than it looks. Residual magnitudes are scene-dependent:
+    # on real 720p CCTV a seat's median residual is around 0.01 with a MAD near
+    # 0.0016, while a high-contrast synthetic fixture produces values two orders
+    # of magnitude larger. An absolute floor tuned on one is catastrophic on the
+    # other -- a floor of 0.05 against a true MAD of 0.0016 divides every
+    # z-score by 30 and the gate goes blind, detecting nothing at all.
+    #
+    # Found exactly that way: fixtures passed, real footage produced zero events
+    # with peak z of 1.5 where the true value was ~47.
+    min_mad_fraction: float = 0.05
+
+    # Absolute floor, and it carries real weight rather than merely avoiding a
+    # division by zero. This is the other half of the lesson above: on a seat
+    # that is genuinely static both the median and the MAD approach zero, so a
+    # purely *relative* floor also collapses, and a trivial fluctuation divided
+    # by a near-zero denominator reports an enormous deviation from nothing at
+    # all. Measured: a static seat produced z = 16.6 with zero moving blocks.
+    #
+    # 0.001 is set from the observed scale. Real seats sit at a median residual
+    # of 0.011-0.021 with a MAD of 0.0016-0.0025, so the relative term governs
+    # them and this floor never binds. A static seat has a median near zero and
+    # peak residuals around 0.002, which this floor correctly keeps below the
+    # start threshold.
+    min_mad_absolute: float = 0.001
+
+    # Minimum blocks in a zone that must exceed the motion threshold before any
+    # activity is reported, regardless of the statistics. An absolute count, not
+    # a fraction, so it does not shift with zone size.
+    min_moving_blocks: int = 1
 
 
 @dataclass(frozen=True)

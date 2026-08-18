@@ -69,7 +69,7 @@ class Calibration:
     homography: list[list[float]] | None = None
     validated: bool = False
 
-    def validate(self) -> None:
+    def validate(self, max_overlap_px: float = 0.0) -> None:
         if not self.seats:
             raise ValueError("calibration has no seats")
         labels = [s.label for s in self.seats]
@@ -79,6 +79,28 @@ class Calibration:
             seat.validate()
         for mask in self.masks:
             mask.validate()
+        self._check_disjoint(max_overlap_px)
+
+    def _check_disjoint(self, max_overlap_px: float) -> None:
+        """Reject overlapping seats.
+
+        Seat attribution is the identity mechanism (PRD 3.2), so two seats
+        sharing area means one candidate's motion is credited to two people.
+        Left unchecked it shows up as phantom events on the neighbouring seat
+        whenever the real one moves -- which is exactly how it was found.
+        """
+        offenders: list[str] = []
+        for i, a in enumerate(self.seats):
+            for b in self.seats[i + 1:]:
+                area = _polygon_overlap_px(a.polygon, b.polygon,
+                                           self.frame_w, self.frame_h)
+                if area > max_overlap_px:
+                    offenders.append(f"{a.label}/{b.label} share {area:.0f} px^2")
+        if offenders:
+            raise ValueError(
+                "seat polygons overlap, so motion would be attributed to more "
+                "than one candidate: " + "; ".join(offenders)
+            )
 
     # ------------------------------------------------------------ transfer --
 
@@ -146,6 +168,15 @@ class Calibration:
 
 
 # ------------------------------------------------------------ rasterisation --
+
+
+def _polygon_overlap_px(a: list[Point], b: list[Point], w: int, h: int) -> float:
+    """Shared area of two polygons, in pixels.
+
+    Rasterised rather than computed analytically: the polygons are arbitrary,
+    the frame is small, and this runs once per calibration save.
+    """
+    return float((_fill(a, w, h) & _fill(b, w, h)).sum())
 
 
 def _fill(polygon: list[Point], w: int, h: int) -> np.ndarray:

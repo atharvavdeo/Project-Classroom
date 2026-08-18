@@ -119,6 +119,8 @@ def main() -> int:
             Seat("a", rect(0, 0, 10, 10), zones={"lap": rect(0, 0, 5, 5)})])),
         ("unknown mask kind", Calibration(1, W, H, seats=[Seat("a", rect(0, 0, 10, 10))],
                                           masks=[MaskRegion("blur", rect(0, 0, 5, 5))])),
+        ("overlapping seats", Calibration(1, W, H, seats=[
+            Seat("a", rect(100, 100, 400, 400)), Seat("b", rect(300, 300, 600, 600))])),
     ]:
         try:
             bad.validate()

@@ -41,6 +41,7 @@ class ZoneStats:
     coherence: float
     residual: float
     below_desk: float
+    moving_blocks: int = 0
 
 
 @dataclass
@@ -110,10 +111,11 @@ def _zone_stats(
     zone_mask: np.ndarray,
     threshold: float,
     desk_row: int | None,
+    ever_moved: np.ndarray | None = None,
 ) -> ZoneStats:
     values = residual[zone_mask]
     if values.size == 0:
-        return ZoneStats(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        return ZoneStats(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0)
 
     moving = values > threshold
     area_ratio = float(moving.mean())
@@ -137,6 +139,15 @@ def _zone_stats(
         rows = np.nonzero(zone_mask)[0][moving]
         below = float((rows >= desk_row).mean())
 
+    # Blocks that crossed the threshold in *any* frame of the window. Derived
+    # from the per-frame fields rather than the window mean: a block that moves
+    # in three frames of twelve has its mean residual quartered, which hides
+    # genuine but brief motion.
+    if ever_moved is not None:
+        moved_count = int(ever_moved[zone_mask].sum())
+    else:
+        moved_count = int(moving.sum())
+
     return ZoneStats(
         mag_median=float(np.median(values)),
         mag_p90=float(np.percentile(values, 90)),
@@ -145,6 +156,7 @@ def _zone_stats(
         coherence=coherence,
         residual=float(values.mean()),
         below_desk=below,
+        moving_blocks=moved_count,
     )
 
 
@@ -165,6 +177,7 @@ def scan(
     acc_res = np.zeros((grid_h, grid_w), dtype=np.float64)
     acc_dx = np.zeros((grid_h, grid_w), dtype=np.float64)
     acc_dy = np.zeros((grid_h, grid_w), dtype=np.float64)
+    acc_moved = np.zeros((grid_h, grid_w), dtype=bool)
     frames = 0
     gdx_sum = gdy_sum = gratio_sum = 0.0
     luma_values: list[float] = []
@@ -203,6 +216,7 @@ def scan(
                 gratio = float((raw_mag[scoreable] > cfg.block_mag_threshold).mean())
 
                 res = np.hypot(dx - gdx, dy - gdy)
+                acc_moved |= res > cfg.block_mag_threshold
                 acc_res += res
                 acc_dx += dx - gdx
                 acc_dy += dy - gdy
@@ -216,10 +230,12 @@ def scan(
                     yield _emit(
                         window_start, t, frames, acc_res, acc_dx, acc_dy,
                         gdx_sum, gdy_sum, gratio_sum, luma_values, masks, cfg,
+                        acc_moved,
                     )
                 acc_res[:] = 0.0
                 acc_dx[:] = 0.0
                 acc_dy[:] = 0.0
+                acc_moved[:] = False
                 gdx_sum = gdy_sum = gratio_sum = 0.0
                 frames = 0
                 luma_values = [_luma_mean(frame)]
@@ -234,7 +250,7 @@ def scan(
             yield _emit(
                 window_start, window_start + cfg.window_s, frames,
                 acc_res, acc_dx, acc_dy, gdx_sum, gdy_sum, gratio_sum,
-                luma_values, masks, cfg,
+                luma_values, masks, cfg, acc_moved,
             )
 
 
@@ -251,6 +267,7 @@ def _emit(
     luma_values: list[float],
     masks: BlockMasks,
     cfg: MotionConfig,
+    ever_moved: np.ndarray | None = None,
 ) -> Window:
     residual = acc_res / frames
     dx = acc_dx / frames
@@ -270,7 +287,7 @@ def _emit(
             continue
         window.zones[(label, zone)] = _zone_stats(
             residual, dx, dy, zone_mask, cfg.block_mag_threshold,
-            masks.desk_line_row.get(label),
+            masks.desk_line_row.get(label), ever_moved,
         )
     return window
 
@@ -289,6 +306,10 @@ class Baseline:
     typing_mad: float | None
     sample_windows: int
 
+    def _floor(self, centre: float, cfg: BaselineConfig) -> float:
+        """Spread floor, scaled to this seat's own signal level."""
+        return max(abs(centre) * cfg.min_mad_fraction, cfg.min_mad_absolute)
+
     def deviation(self, value: float, cfg: BaselineConfig) -> tuple[float, str]:
         """Robust z-score against the regime the value itself falls in.
 
@@ -296,13 +317,14 @@ class Baseline:
         the wrong null hypothesis. A seat that is typing is compared against
         its typing distribution, not against silence.
         """
-        idle_mad = max(self.mad, cfg.min_mad)
+        idle_mad = max(self.mad, self._floor(self.median, cfg))
         idle_z = (value - self.median) / idle_mad
 
         if self.typing_median is None or idle_z < cfg.typing_z:
             return idle_z, "idle"
 
-        typing_mad = max(self.typing_mad or cfg.min_mad, cfg.min_mad)
+        typing_floor = self._floor(self.typing_median, cfg)
+        typing_mad = max(self.typing_mad or typing_floor, typing_floor)
         return (value - self.typing_median) / typing_mad, "typing"
 
 
@@ -335,7 +357,8 @@ def learn_baselines(
         # active regime. A regime is only real when the seat spends a large
         # share of the span in it -- otherwise these are events, and folding
         # them into the baseline would teach it to ignore them.
-        cut = median + cfg.typing_z * max(mad, cfg.min_mad)
+        floor = max(abs(median) * cfg.min_mad_fraction, cfg.min_mad_absolute)
+        cut = median + cfg.typing_z * max(mad, floor)
         active = values[values > cut]
         if active.size / values.size >= cfg.min_regime_fraction:
             typing_median = float(np.median(active))
@@ -386,6 +409,15 @@ def apply_baselines(
                 regime[key] = "unknown"
                 continue
             z, which = baseline.deviation(stats.residual, baseline_cfg)
+            # Require that something physically moved. A zone can carry a
+            # sizeable mean residual spread thinly across blocks that all sit
+            # below the motion threshold -- diffuse compression noise rather
+            # than a person -- and because such a seat also has a small MAD,
+            # the z-score comes out *higher* than a real event elsewhere.
+            # Measured: an idle seat reached z = 16.6 with zero moving blocks
+            # while a genuine event scored 6.3 with twenty-five.
+            if stats.moving_blocks < baseline_cfg.min_moving_blocks:
+                z = min(z, 0.0)
             # A frame-wide exposure step or camera bump explains the motion
             # better than the candidate does. Suppress rather than escalate.
             if window.exposure_step or window.camera_moved:

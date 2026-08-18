@@ -40,6 +40,9 @@ def make_recording(path: Path) -> Path:
     rng = np.random.default_rng(11)
     ramp = np.linspace(40, 190, W, dtype=np.float32)
     bg = np.repeat(ramp[None, :], H, axis=0) + np.linspace(0, 30, H, dtype=np.float32)[:, None]
+    # Static texture: a smooth gradient leaves the encoder without distinctive
+    # reference blocks and it emits spurious vectors in unchanged regions.
+    bg = bg + rng.normal(0.0, 9.0, bg.shape)
     base = np.dstack([np.clip(bg, 0, 255).astype(np.uint8)] * 3)
     for box in SEATS.values():
         x1, y1, x2, y2 = box
@@ -62,11 +65,16 @@ def make_recording(path: Path) -> Path:
             for seat, start, end in PLANTED:
                 if start <= t < end:
                     x1, y1, x2, y2 = SEATS[seat]
+                    # Sweep back and forth rather than drifting once. A single
+                    # slow traverse moves ~0.5 px/frame, below the block motion
+                    # threshold and slower than real hand movement, so it is not
+                    # a realistic test of the gate.
                     span = (t - start) / max(end - start, 1e-6)
+                    swing = 0.5 * (1.0 - np.cos(2 * np.pi * 3 * span))
                     bw, bh = 46, 34
                     bx = x1 + 30
-                    by = int(y1 + 45 + span * (y2 - y1 - bh - 50))
-                    img[by : by + bh, bx : bx + bw] = (30, 30, 35)
+                    by = int(y1 + 45 + swing * (y2 - y1 - bh - 50))
+                    img[by : by + bh, bx : bx + bw] = (120, 118, 124)
             frame = av.VideoFrame.from_ndarray(img, format="rgb24")
             for packet in stream.encode(frame):
                 container.mux(packet)
