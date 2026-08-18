@@ -267,3 +267,62 @@ CREATE TABLE IF NOT EXISTS annotation (
     exhaustive      INTEGER NOT NULL DEFAULT 0,  -- 1 if its span was labelled exhaustively
     note            TEXT
 );
+
+-- The exhaustively-reviewed spans. Without these, recall has no denominator and
+-- false-events-per-hour has no clock: an annotator who labels three incidents
+-- in a five-hour recording has not established that the other 4h57m were quiet,
+-- only that they did not look. A span is a promise that everything inside it
+-- was watched and every qualifying action inside it was written down.
+CREATE TABLE IF NOT EXISTS annotated_span (
+    id              INTEGER PRIMARY KEY,
+    source_video_id INTEGER NOT NULL REFERENCES source_video(id) ON DELETE CASCADE,
+    t_start         REAL NOT NULL,
+    t_end           REAL NOT NULL,
+    seat_label      TEXT,               -- NULL means every seat in frame was reviewed
+    annotator       TEXT NOT NULL,
+    note            TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    CHECK (t_end > t_start)
+);
+
+CREATE INDEX IF NOT EXISTS idx_span_video_t
+    ON annotated_span (source_video_id, t_start);
+
+-- Box-level ground truth for the detector fine-tune. Deliberately a separate
+-- table from `detection`: system output and human labels must never share a
+-- table, or an evaluation eventually scores the model against itself.
+--
+-- `negative` marks a box drawn around a confuser that the stock detector called
+-- an object and a human says is not one. On this corpus those carry more weight
+-- than the positives, because the measured stock-weight failure is 60% false
+-- positives on computer mice, keyboard edges and monitor bezels rather than
+-- missed phones.
+CREATE TABLE IF NOT EXISTS box_annotation (
+    id              INTEGER PRIMARY KEY,
+    source_video_id INTEGER REFERENCES source_video(id) ON DELETE CASCADE,
+    frame_path      TEXT NOT NULL,      -- extracted still the box was drawn on
+    t               REAL,               -- PTS of that still, when known
+    seat_label      TEXT,
+    cls             TEXT NOT NULL,      -- phone_like|paper_like|person|mouse|keyboard|monitor|other
+    negative        INTEGER NOT NULL DEFAULT 0,
+    x1 REAL NOT NULL, y1 REAL NOT NULL, x2 REAL NOT NULL, y2 REAL NOT NULL,
+    px_area         REAL NOT NULL,
+    visibility      TEXT NOT NULL DEFAULT 'clear',
+    annotator       TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    CHECK (x2 > x1 AND y2 > y1)
+);
+
+CREATE INDEX IF NOT EXISTS idx_box_frame ON box_annotation (frame_path);
+
+-- A frame that was reviewed and found to contain nothing worth boxing is a
+-- training example, not an absence of data. Without this the exporter cannot
+-- tell "no objects here" from "not looked at yet", and every unreviewed frame
+-- would silently become a negative.
+CREATE TABLE IF NOT EXISTS reviewed_frame (
+    frame_path      TEXT PRIMARY KEY,
+    source_video_id INTEGER REFERENCES source_video(id) ON DELETE CASCADE,
+    t               REAL,
+    annotator       TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);

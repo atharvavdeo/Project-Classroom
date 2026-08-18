@@ -4,11 +4,27 @@
 **Problem Statement:** Drishti AI Hackathon 2026 — Problem Statement 2
 **Working title:** Project Classroom
 **Document status:** Build specification
-**Version:** 3.0
+**Version:** 3.1
 **Date:** 18 August 2026
 **Team:** DataDynamo
 
 > **One-line pitch:** Project Classroom converts hours of recorded examination-hall footage into a short, searchable timeline of motion-grounded, seat-linked events with visual evidence and confidence—without making automated accusations.
+
+---
+
+## Changelog: v3.0 → v3.1
+
+Phase 8. The system was complete and unmeasured; this revision builds the instrument that measures it, and closes the last open model question.
+
+| Change | Reason |
+|---|---|
+| Ground-truth store added: `annotated_span`, `box_annotation`, `reviewed_frame` (§15.5) | Recall needs a denominator and false-events/hour needs a clock. Reviewed footage is now recorded as data, so neither can be computed over footage nobody watched. |
+| Annotation tooling built — `annotate_timeline.py`, `annotate_boxes.py` | The remaining blocker was labels, not engineering. It is now a labelling job with a tool, not a labelling job with a plan. |
+| Evaluation module and CLI added — `classroom.cli evaluate`, `coverage` | Every metric in §15.2 that applies to events is implemented and gated; with no ground truth the report states that plainly rather than printing zeros. |
+| Scoring decisions made explicit (§15.6) | Benign motion is not a false positive; invisible actions are excluded; matching is one-to-one. Each moves the headline number and is only defensible if stated. |
+| **Pose choice settled: RTMO-l does not close the gap** (§8.2.1) | 25 people vs top-down's 43, for double RTMO-m's cost. The deficit is architectural. §8.2 had still declared RTMO-l as the decision while §8.2.1 reversed it — that contradiction is now resolved throughout. |
+| Detector fine-tune driven and preflighted, not run | It needs box labels and a CUDA build of torch. The preflight refuses rather than starting a run that would produce a worse detector than the stock weights while looking like progress. |
+| Seek defect found and fixed in the annotator (§15.5) | A backward seek to the head of a file silently skipped up to 18 frames. Every mark made there would have been permanently wrong in the ground truth everything else is measured against. |
 
 ---
 
@@ -40,7 +56,7 @@ The stack is deliberately precision-first and has exactly one path through each 
 - **Codec motion vectors** as the whole-video motion layer; **DIS optical flow** for sub-pixel refinement on candidate windows only.
 - **Seat/desk-anchored regions** with explicit screen, desk and torso zones as the stable identity and localization layer.
 - **D-FINE-L**, fine-tuned from Objects365 weights, on native-resolution seat crops.
-- **RTMO** via `rtmlib` for crowded-person pose.
+- **Top-down pose** (YOLOX + RTMPose) via `rtmlib`; measured against both RTMO sizes on this footage (§8.2.1).
 - **ByteTrack** with mandatory seat reconciliation.
 - **Gemma 4 E4B instruction-tuned** as the visual verifier with grammar-constrained JSON output.
 - **FastAPI + React + SQLite + Roboflow Supervision** for the investigator experience, event storage, evaluation, and visual overlays.
@@ -244,7 +260,7 @@ flowchart LR
 
     J --> K["DIS optical flow refine"]
     J --> L["D-FINE on native-res seat crops"]
-    J --> M["RTMO pose"]
+    J --> M["Top-down pose"]
     J --> N["ByteTrack + seat reconciliation"]
 
     K --> O["Temporal evidence fusion"]
@@ -477,16 +493,17 @@ like those. In a CBT hall the confusers are the equipment on every desk:
 These must be the core of the fine-tuning negatives. A model trained against
 erasers and rulers would not touch the errors this footage actually produces.
 
-### 8.2 Pose: RTMO
+### 8.2 Pose: top-down (YOLOX + RTMPose)
 
 | Property | Decision |
 |---|---|
-| Model | RTMO-l |
+| Model | YOLOX-m person detector → RTMPose-m, `balanced` preset |
 | Runtime | `rtmlib` (ONNXRuntime only — avoids compiling `mmcv`) |
-| Published baseline | 73.2 AP CrowdPose, state of the art among one-stage methods |
+| Published baseline | RTMO-l scores 73.2 AP CrowdPose, state of the art among one-stage methods |
 | Scope | Candidate clips only |
+| Alternatives kept selectable | RTMO-m, RTMO-l — for reproducing §8.2.1, not as runtime fallbacks |
 
-RTMO is specifically strong on the medium and hard occlusion splits, which is what booth partitions and chair backs produce here. Foreground candidates are 150–350 px tall, comfortably in range; back rows degrade and are marked accordingly.
+The published one-stage numbers are strong, and RTMO is specifically good on the medium and hard occlusion splits that booth partitions and chair backs produce. **That is not what happens on this footage.** §8.2.1 is the measurement, and it reverses the choice: benchmark position on CrowdPose did not survive contact with 720p CCTV of a CBT hall. Foreground candidates are 150–350 px tall, comfortably in range for either approach; back rows degrade and are marked accordingly.
 
 Two constraints are mandatory:
 
@@ -508,7 +525,19 @@ Both pose approaches were run against real corpus frames on CPU via ONNXRuntime:
 
 This reverses the v3.0 decision. RTMO was chosen because its cost does not scale with crowd size, and that property is real — but **this pipeline runs pose on candidate clips only**, so throughput was never the binding constraint, and §14 already establishes that compute is not a concern on the target hardware. Paying for a speed advantage that does not bind with more than half the person recall is the wrong trade.
 
-**Top-down (YOLOX + RTMPose via `rtmlib`) is therefore the default.** RTMO remains selectable so the comparison can be reproduced; it is not a runtime fallback. RTMO-l has not been evaluated and may narrow the gap — that is the one pose benchmark still worth running.
+**RTMO-l has now been evaluated, and it does not narrow the gap.** Re-run via `tools/pose_ab.py` over eight frames spread across all six cameras, every model seeing exactly the same ones:
+
+| Model | People | Resolvable pitch | s/frame | People/frame |
+|---|---:|---:|---:|---:|
+| **top-down** | **43** | **36** | 3.74 | 5.4 |
+| RTMO-m | 23 | 15 | 1.00 | 2.9 |
+| RTMO-l | 25 | 16 | 2.00 | 3.1 |
+
+Going from the medium to the large one-stage model buys **two more people and one more resolvable pitch for double the cost**. Top-down remains 1.72× ahead on person recall and 2.25× ahead on usable head pitch. The deficit is architectural, not a matter of capacity, which closes the last open model question in the stack.
+
+The overlays settle what the counts cannot: on the densest frame top-down finds 13 people where RTMO-l finds 6, and the seven it adds are individually visible seated candidates deeper in the row — not duplicate skeletons stacked on one person.
+
+**Top-down (YOLOX + RTMPose via `rtmlib`) is therefore the default.** Both one-stage sizes remain selectable so the comparison can be reproduced; neither is a runtime fallback.
 
 Two further findings, both of which change how the pitch signal must be used:
 
@@ -638,8 +667,9 @@ Each phase is completed and validated before the next begins. No phase is skippe
 | **3 · Motion scan** | Codec-MV whole-video scan, global-motion and exposure compensation, per-seat statistics with typing baseline | Full 5-hour scan completes; masked regions produce zero motion |
 | **4 · Segmentation** | Per-seat hysteresis state machine, PTS-accurate event boundaries | One sustained action is not fragmented; shake and exposure tests produce no high-priority events |
 | **5 · Console** | Heatmap, timeline, event log, FastAPI, React review UI | **PS2-complete without any neural network** |
-| **6 · Detection + pose** | D-FINE on seat crops, RTMO, ByteTrack with seat reconciliation | Object output includes the `uncertain` state; low-pixel objects abstain |
+| **6 · Detection + pose** | D-FINE on seat crops, top-down pose, ByteTrack with seat reconciliation | Object output includes the `uncertain` state; low-pixel objects abstain |
 | **7 · Scoring + verifier** | Hand-set priority score, Gemma verifier with GBNF | 100% schema-valid output; verifier failure leaves events intact |
+| **8 · Ground truth + measurement** | Annotation tooling, evaluation metrics, COCO export, detector fine-tune driver | Metrics refuse to report over unreviewed footage; export refuses a set too small to help |
 
 Phases 1–5 require no GPU. This is deliberate: the PS2 deliverable is complete and demonstrable before any model is loaded.
 
@@ -720,7 +750,7 @@ Phases 1–5 require no GPU. This is deliberate: the PS2 deliverable is complete
 | Motion — tier 1 | Codec motion vectors (`flags2=+export_mvs`) | Python | Whole-video gate at 16×16 blocks |
 | Motion — tier 2 | `cv2.DISOpticalFlow` | Python/C++ | Sub-pixel refinement on candidates |
 | Detection | D-FINE-L | PyTorch → ONNX | Person and prohibited-object evidence |
-| Pose | RTMO-l via `rtmlib` | ONNXRuntime CUDA | Head, wrist, torso and interaction evidence |
+| Pose | YOLOX + RTMPose (top-down) via `rtmlib` | ONNXRuntime CUDA | Head, wrist, torso and interaction evidence |
 | Tracking | ByteTrack via Supervision | Python | Short-track continuity, reconciled to seats |
 | Visual verifier | Gemma 4 E4B instruction-tuned | llama.cpp CUDA + GBNF | Event verification and explanation |
 | CV utilities | Roboflow Supervision | Python | Detections, zones, annotations, metrics |
@@ -833,6 +863,47 @@ The 51% row is the realistic ceiling for appearance-only cheating detection on C
 ### 15.4 Presentation-safe claims
 
 These require measured evidence before appearing as achieved: "processes faster than real time", "reduces review time by X%", "detects phones at Y% accuracy", "supports N people", "eliminates false positives". Until measured, they are labelled targets.
+
+---
+
+### 15.5 The measurement instrument
+
+Ground truth is stored in three tables, all separate from anything the pipeline writes to. System output and human labels never share a table: an evaluation that reads both from one place eventually scores the model against itself.
+
+| Table | Holds | Why it exists |
+|---|---|---|
+| `annotated_span` | Stretches of footage a human watched end to end | The denominator. Without it, recall over a five-hour recording where ten minutes were labelled is not pessimistic — it is meaningless, and false-events/hour is computed against a clock nobody watched |
+| `annotation` | Labelled actions: seat, interval, type, visibility | The numerator |
+| `box_annotation` + `reviewed_frame` | Object labels, and frames reviewed but found empty | A reviewed empty frame is a *background training example*. Without the second table the exporter cannot tell "nothing here" from "not looked at yet", and every unreviewed frame silently becomes a negative |
+
+Tooling:
+
+| Tool | Purpose |
+|---|---|
+| `tools/annotate_timeline.py` | PTS-accurate scrubber; mark-in/mark-out, review spans |
+| `tools/annotate_boxes.py` | Box drawing with a pixel loupe, class keys including the three confusers |
+| `tools/export_dataset.py` | COCO export, split by camera |
+| `tools/finetune_dfine.py` | Preflight and config generation for the D-FINE fine-tune |
+| `tools/pose_ab.py` | Measured pose-model comparison |
+| `python -m classroom.cli coverage` | How much footage is annotated — asked before any other number |
+| `python -m classroom.cli evaluate` | The measured report |
+
+**One defect found while building this.** `tools/annotate_timeline.py` seeks by presentation timestamp, and a backward seek to a timestamp at or before the first keyframe does not land on the first frame — the demuxer skips forward to the *next* keyframe. Measured: `seek(0)` lands at **0.483 s** on `03.CCTV Mobile Usage.mkv` and at **1.040 s** on the Seat 12 file, skipping seven and eighteen frames. Nothing raises. The annotator is simply shown a frame from a second later than the one being labelled, and every mark made near the head of a file is wrong by that much — permanently, in the ground truth that everything else is measured against. The unreachable head is now measured once per file at open, and any seek below it decodes from the start. Verified to land on the exact correct frame across five of the six files, including all three VFR ones.
+
+### 15.6 Scoring decisions that change the headline number
+
+Three choices are made explicitly rather than inherited from a metrics library, because each one moves the reported figure and each is defensible only if stated.
+
+**Benign motion is not a false positive.** A candidate stretching produces real motion, and a motion-first system is right to surface it. Counting that as an error would reward a duller gate that also misses someone reaching into a bag. `benign_movement` and `staff_interaction` matches are reported separately as *dismissible* — a few seconds of reviewer time each — and that cost appears as review burden instead.
+
+**Actions labelled `insufficient` visibility are excluded from recall.** They are not in the footage in any recoverable sense. Scoring them caps the achievable ceiling below 100% for reasons that have nothing to do with the system. An event that fires on one anyway is not an error either — it found something genuine — so it is counted as dismissible rather than as a false positive.
+
+**Matching is one-to-one, by descending overlap.** One system event spanning three separate actions has found one of them, not three. Equally, three fragments over one action score one hit and two false positives — which is exactly the fragmentation penalty §7.3 exists to avoid.
+
+Temporal IoU is reported at 0.10, 0.30 and 0.50 together, never at one value. The product claim is that a reviewer is taken to the right moment; an event covering the first third of an action satisfies that claim completely. Strict IoU measures boundary agreement, which is a different and lesser question. Reporting only the loose figure would flatter the system; reporting only the strict one would misrepresent what it is for.
+
+Alongside these: **review burden** — the share of reviewed footage the system flags. A system with perfect recall that flags 90% of the recording has not helped anyone, and this is the number §3.5 actually promises to move.
+
 
 ---
 
@@ -953,7 +1024,7 @@ believed normal.
 
 | Problem-statement challenge | Design response | Proof required |
 |---|---|---|
-| Crowded examination halls | Seat polygons, RTMO, ByteTrack, overlapping seat events | Multi-person staged benchmark |
+| Crowded examination halls | Seat polygons, top-down pose, ByteTrack, overlapping seat events | Multi-person staged benchmark |
 | Subtle motion | Codec-MV gate, DIS refinement, seat-specific robust baseline, pose deltas | Recall on head/hand/object events |
 | Camera noise | Temporal robust statistics and coherence filters | Compression stress test |
 | Lighting variations | Exposure-change detection; no blanket CLAHE | Glare/brightness test |
@@ -975,7 +1046,7 @@ believed normal.
 
 ### 19.1 Technical
 
-**Feasible** because the system processes recorded files with no real-time deadline; codec motion vectors are confirmed present in every source file; the whole-video pass is measured at 12 minutes for 5 hours; D-FINE and RTMO provide pretrained, exportable models; and the UI and evidence workflow are independent of model tuning.
+**Feasible** because the system processes recorded files with no real-time deadline; codec motion vectors are confirmed present in every source file; the whole-video pass is measured at 12 minutes for 5 hours; D-FINE and the `rtmlib` pose models are pretrained and exportable; and the UI and evidence workflow are independent of model tuning.
 
 **Not yet proven** because tiny phone visibility depends on camera placement and source resolution; no public dataset represents this deployment; false-positive costs are high; and privacy, retention and institutional procedures require governance.
 
@@ -1062,7 +1133,7 @@ Disallowed:
 - [ ] An occupied, actively typing seat does not generate continuous events.
 - [ ] Object output includes phone-like, paper-like, other and uncertain states.
 - [ ] Low-pixel objects are marked insufficient rather than confidently classified.
-- [ ] RTMO pose output is tied to calibrated seats.
+- [ ] Pose output is tied to calibrated seats.
 - [ ] Wrist keypoints are masked when hands fall below the desk line.
 - [ ] Tracker identity is reconciled by seat.
 - [ ] Gemma produces schema-valid output on 100% of verifier calls via GBNF.
@@ -1076,7 +1147,9 @@ Disallowed:
 
 ## 23. Known Gaps
 
+- **No ground truth has been labelled yet.** The instrument for producing it is built and tested (§15.5), and every metric is implemented and gated, but until a human annotates review spans and actions there are no accuracy numbers — and `classroom.cli evaluate` says so rather than reporting anything. This is the single remaining blocker, and it is human work.
 - Continuous recording is required for honest event-recall and false-events-per-hour measurement. The profiled corpus is pre-cut clips.
+- The detector fine-tune is driven and preflighted but not run: it needs box labels, and it needs a CUDA build of PyTorch. The environment used for development carries a CPU-only build (`torch 2.10.0+cpu`), so the preflight correctly refuses there; the run belongs on the 32 GB 4090.
 - Reliable phone/chit detection cannot be guaranteed at the measured ~30×20 px footprint. Abstention is the designed outcome, not a failure.
 - Positive object examples will remain scarce regardless of corpus length, because genuine incidents are rare.
 - Multi-camera synchronization depends on source timestamp quality and per-site calibration.
@@ -1119,7 +1192,7 @@ For the build:
 2. Use **DIS optical flow** for refinement on candidates only.
 3. Model the **CBT scene explicitly** — screen masks, overlay masks, reflection masks, typing baselines. This is where the false-positive battle is won.
 4. Use **D-FINE-L on native-resolution seat crops**, fine-tuned from Objects365 with hard negatives from this dataset.
-5. Use **RTMO via rtmlib**, with wrist masking below the desk line and head pitch from nose-to-shoulder offset.
+5. Use **top-down pose (YOLOX + RTMPose) via rtmlib**, with wrist masking below the desk line and head pitch from nose-to-shoulder offset. The choice is measured, not inherited from the CrowdPose leaderboard (§8.2.1).
 6. Use **ByteTrack with seat reconciliation**; seats, not track IDs, carry identity.
 7. Use **Gemma 4 E4B with GBNF-constrained output**, prompted for posture and interaction rather than object identification.
 8. **Score behaviour, corroborate with objects.** The dominant measurable pattern is sustained downward head pitch with below-desk hand dwell.

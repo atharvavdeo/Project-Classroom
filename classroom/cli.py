@@ -3,6 +3,8 @@
     python -m classroom.cli ingest --session "CBT centre" D:/DrishtiAI/*.mkv
     python -m classroom.cli probe   D:/DrishtiAI/some.mkv
     python -m classroom.cli videos
+    python -m classroom.cli coverage
+    python -m classroom.cli evaluate
 """
 from __future__ import annotations
 
@@ -11,7 +13,7 @@ import glob as globlib
 import sys
 from pathlib import Path
 
-from . import db, ingest
+from . import annotate, db, evaluate, ingest
 from .config import Config
 
 
@@ -158,6 +160,48 @@ def cmd_events(args) -> int:
     return 0
 
 
+def cmd_evaluate(args) -> int:
+    cfg = Config.load(args.config)
+    conn = db.connect(cfg.db_path)
+    print(evaluate.report(conn, args.video_id))
+    conn.close()
+    return 0
+
+
+def cmd_coverage(args) -> int:
+    """How much footage has been reviewed, per video.
+
+    Separate from `evaluate` because it answers the question that comes first:
+    is there enough ground truth yet for any of the other numbers to mean
+    anything.
+    """
+    cfg = Config.load(args.config)
+    conn = db.connect(cfg.db_path)
+    rows = db.all_rows(
+        conn, "SELECT id, path, duration_s FROM source_video ORDER BY id")
+    if not rows:
+        print("no video ingested")
+        conn.close()
+        return 0
+    print(f"{'id':>4}  {'reviewed':>9}  {'of':>9}  {'share':>6}  "
+          f"{'actions':>7}  file")
+    total_reviewed = total_duration = 0.0
+    for r in rows:
+        spans = annotate.load_spans(conn, r["id"])
+        reviewed = annotate.coverage_s(spans)
+        actions = len(annotate.load_annotations(conn, r["id"]))
+        share = reviewed / r["duration_s"] if r["duration_s"] else 0.0
+        total_reviewed += reviewed
+        total_duration += r["duration_s"]
+        print(f"{r['id']:>4}  {reviewed:>8.1f}s  {r['duration_s']:>8.1f}s  "
+              f"{share * 100:>5.1f}%  {actions:>7}  {Path(r['path']).name[:44]}")
+    share = total_reviewed / total_duration if total_duration else 0.0
+    print(f"\n{total_reviewed / 60:.1f} min reviewed of "
+          f"{total_duration / 60:.1f} min ({share * 100:.1f}%)")
+    conn.close()
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="classroom")
     parser.add_argument("--config", default=None, help="path to a JSON config overlay")
@@ -191,6 +235,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--video-id", type=int, default=None)
     p.add_argument("--limit", type=int, default=25)
     p.set_defaults(func=cmd_events)
+
+    p = sub.add_parser("coverage", help="how much footage has been annotated")
+    p.set_defaults(func=cmd_coverage)
+
+    p = sub.add_parser("evaluate", help="measured accuracy against ground truth")
+    p.add_argument("--video-id", type=int, default=None)
+    p.set_defaults(func=cmd_evaluate)
 
     args = parser.parse_args(argv)
     return args.func(args)

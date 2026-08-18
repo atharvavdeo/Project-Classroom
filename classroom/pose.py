@@ -160,30 +160,49 @@ def below_desk_evidence(observations: list[PoseObservation]) -> float:
     return float(np.mean([o.wrists_below > 0 for o in observations]))
 
 
-RTMO_MODEL = (
-    "https://download.openmmlab.com/mmpose/v1/projects/rtmo/onnx_sdk/"
-    "rtmo-m_16xb16-600e_body7-640x640-39e78cc4_20231211.zip"
-)
+_RTMO_BASE = "https://download.openmmlab.com/mmpose/v1/projects/rtmo/onnx_sdk/"
 
-# Measured on real corpus frames, CPU, ONNXRuntime (see PRD 8.2.1):
+# Both published one-stage sizes. The medium model was the one benchmarked
+# first; the large one is here so the comparison below can be re-run against the
+# strongest one-stage option rather than only the convenient one.
+RTMO_MODELS = {
+    "rtmo-m": _RTMO_BASE + "rtmo-m_16xb16-600e_body7-640x640-39e78cc4_20231211.zip",
+    "rtmo-l": _RTMO_BASE + "rtmo-l_16xb16-600e_body7-640x640-b37118ce_20231211.zip",
+}
+
+# Retained under its original name for anything that imported it directly.
+RTMO_MODEL = RTMO_MODELS["rtmo-m"]
+
+# Measured on real corpus frames, CPU, ONNXRuntime, via tools/pose_ab.py
+# (see PRD 8.2.1). Eight frames spread across all six cameras, every model
+# seeing exactly the same ones:
 #
-#   frame              top-down (YOLOX+RTMPose)   one-stage RTMO-m
-#   paper_t0045        15 people, 10 pitch 0.65s   6 people,  4 pitch 0.65s
-#   phone1_t0060        3 people,  3 pitch 0.78s   1 person,  0 pitch 0.75s
-#   crowd_t0060        13 people, 12 pitch 1.21s   6 people,  5 pitch 0.50s
-#   phone3_t0120        1 person,  1 pitch 0.56s   1 person,  1 pitch 0.85s
+#   model      people   pitch resolved   s/frame   people/frame
+#   topdown        43              36      3.74            5.4
+#   rtmo-m         23              15      1.00            2.9
+#   rtmo-l         25              16      2.00            3.1
 #
-# Top-down recalls 2.3x more people and 2.6x more resolvable head pitch at
-# comparable cost, and skeleton overlays confirm the extra detections are real
-# people rather than duplicates. RTMO's advantage is that its cost does not
-# scale with crowd size -- but this pipeline runs pose on candidate clips only,
-# so throughput was never the binding constraint, and paying for it with more
-# than half the person recall is the wrong trade here.
+# The large one-stage model was the last open question in the stack, on the
+# theory that RTMO-m was simply too small. It is not: going from m to l buys two
+# more people and one more resolvable pitch for double the cost, leaving
+# top-down still 1.72x ahead on person recall and 2.25x ahead on usable head
+# pitch. The gap is architectural rather than a matter of capacity.
 #
-# Top-down is therefore the default. RTMO stays selectable so the comparison
-# can be reproduced, not as a runtime fallback.
+# The skeleton overlays settle what the counts cannot -- that the extra
+# detections are distinct seated candidates deeper in each row, not duplicate
+# skeletons stacked on one person. On the densest frame top-down finds 13 where
+# rtmo-l finds 6, and the seven it adds are individually visible people.
+#
+# RTMO's real advantage is that its cost does not scale with crowd size. This
+# pipeline runs pose on candidate clips only, so throughput was never the
+# binding constraint, and paying for it with more than half the person recall is
+# the wrong trade here.
+#
+# Top-down is therefore the default. Both one-stage sizes stay selectable so the
+# comparison can be reproduced, not as a runtime fallback.
 TOPDOWN = "topdown"
-ONESTAGE = "rtmo"
+ONESTAGE = "rtmo-m"
+MODELS = (TOPDOWN, "rtmo-m", "rtmo-l")
 
 
 class PoseEstimator:
@@ -201,8 +220,11 @@ class PoseEstimator:
         device: str = "cpu",
         confidence: float = 0.3,
     ):
-        if model not in (TOPDOWN, ONESTAGE):
-            raise ValueError(f"unknown pose model {model!r}")
+        if model == "rtmo":
+            model = ONESTAGE   # the medium model, named before there were two
+        if model not in MODELS:
+            raise ValueError(
+                f"unknown pose model {model!r}; expected one of {MODELS}")
         self.model = model
         self.backend, self.device = backend, device
         self.confidence = confidence
@@ -221,7 +243,7 @@ class PoseEstimator:
             from rtmlib import RTMO
 
             self._model = RTMO(
-                RTMO_MODEL, model_input_size=(640, 640),
+                RTMO_MODELS[self.model], model_input_size=(640, 640),
                 backend=self.backend, device=self.device,
             )
 
