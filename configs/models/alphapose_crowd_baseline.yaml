@@ -1,0 +1,21 @@
+# PRD 5, pose family, crowd challenger. PRD 19 is explicit that AlphaPose is
+# reasonable on CrowdPose and PoseFlow grounds but unproven for dense
+# far-hand accuracy on this hall, so it is measured rather than assumed.
+#
+# Licence is the open question in doubt.md 4.2: some AlphaPose whole-body
+# checkpoints carry a non-commercial research licence. UNCONFIRMED is the
+# state, not a guess, and preflight refuses a configuration whose licence is
+# unconfirmed rather than running it and hoping.
+config_id: alphapose_crowd_baseline
+vram_gb: 4.0
+family: pose
+description: AlphaPose CrowdPose challenger. Checkpoint pending owner selection.
+probe: python_import
+module: alphapose
+input_size: 256x192
+precision: fp32
+licence: UNCONFIRMED
+licence_url: https://github.com/MVIG-SJTU/AlphaPose
+extra:
+  checkpoint_pending: true
+  note: doubt.md 4.2 needs the exact checkpoint and its licence.

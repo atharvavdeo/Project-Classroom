@@ -1,0 +1,18 @@
+# PRD 5, object family. Native crop inference under one explicit resize
+# policy.
+config_id: dfine_native
+vram_gb: 4.0
+family: object
+description: D-FINE-L over native-resolution seat crops, no slicing.
+probe: onnx_session
+checkpoint: models/dfine/onnx/model.onnx
+input_size: 640x640
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/Peterande/D-FINE/blob/master/LICENSE
+thresholds:
+  confidence: 0.35
+  # Below this source-frame footprint the answer is
+  # insufficient_visual_evidence, never a class label. Measured: a phone at
+  # a near seat is about 30x20 px, which is 600 px^2 and already marginal.
+  min_object_px_area: 300.0

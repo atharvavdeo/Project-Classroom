@@ -30,7 +30,8 @@ sys.path.insert(0, str(ROOT))
 from pipeline import artifacts, baseline as bl, gates, motion, roi, segmentation as seg  # noqa: E402
 from pipeline.calibration import CalibrationProfile, SEAT_CONTEXT  # noqa: E402
 from pipeline.health import HealthTimeline  # noqa: E402
-from pipeline.run_manifest import BLOCKED, COMPLETE, RunManifest, RunStatus  # noqa: E402
+from pipeline.run_manifest import (BLOCKED, COMPLETE, RunManifest,  # noqa: E402
+                                   RunStatus, SKIPPED_UNAVAILABLE)
 
 
 def bbox(polygon) -> tuple[float, float, float, float]:
@@ -196,6 +197,43 @@ def main() -> int:
             "source_crop": {"x1": box[0], "y1": box[1], "x2": box[2], "y2": box[3]}
             if box else None,
         })
+
+    # Stages this pass actually performed, recorded rather than left `pending`.
+    # PRD 18 requires the run to evidence its own coverage, and a stage that ran
+    # but reports `pending` is indistinguishable from one that never ran.
+    manifest_record = RunManifest.read(paths)
+    paths.write_json("04_calibration/calibration_snapshot.json", {
+        "version_id": profile.version_id,
+        "approval_state": profile.approval_state,
+        "operator": profile.operator,
+        "reviewer": profile.reviewer,
+        "seats": [s.seat_id for s in profile.seats],
+        "frame_w": profile.frame_w, "frame_h": profile.frame_h,
+    })
+    status.finish("source", COMPLETE,
+                  sources=len(manifest_record.sources))
+    status.finish("01_ingest", COMPLETE,
+                  covered_ms=scan.duration_ms, total_ms=scan.duration_ms,
+                  reason="one complete forward decode pass; motion vectors "
+                         f"{'present' if scan.motion_vectors_available else 'absent'}")
+    status.finish("02_health", COMPLETE,
+                  covered_ms=scan.duration_ms, total_ms=scan.duration_ms,
+                  observations=len(scan.observations))
+    status.finish("04_calibration", COMPLETE,
+                  reason=f"{profile.version_id} ({profile.approval_state})",
+                  seats=len(profile.seats))
+    # Honest about what did not run: no camera-motion condition was observed on
+    # this pass, so no global transform was estimated. Identity is the named
+    # baseline (PRD 6.3.2), not a silent default.
+    moved = [o for o in scan.observations
+             if o.condition in ("camera_motion", "camera_repositioned")]
+    status.finish("03_alignment",
+                  COMPLETE if moved else SKIPPED_UNAVAILABLE,
+                  reason=None if moved else
+                  "no camera_motion or camera_repositioned condition was "
+                  "observed, so no global transform was estimated. Identity is "
+                  "the named baseline, not a silent default (PRD 6.3.2)",
+                  observations=len(moved))
 
     status.finish("05_motion_roi", COMPLETE,
                   covered_ms=scan.duration_ms, total_ms=scan.duration_ms,

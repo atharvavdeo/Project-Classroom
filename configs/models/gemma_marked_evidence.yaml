@@ -1,0 +1,28 @@
+# PRD 11. Observational review of flagged evidence only. It cannot create
+# candidates, alter boundaries, or alter rank.
+#
+# The probe is subprocess_version because weight existence proves nothing:
+# the shipped llama-server.exe is a 9 KB stub that loads its DLLs from its
+# own directory. It passed an existence check and then failed CreateProcess
+# with "the system cannot find the file specified" -- naming a file that
+# demonstrably existed -- killing a run at its last stage after five minutes
+# of CV work.
+config_id: gemma_marked_evidence
+vram_gb: 7.0
+family: vlm
+description: Gemma 4 E4B instruction-tuned, GBNF-constrained, via llama-server.
+probe: subprocess_version
+binary: tools/llamacpp/llama-server.exe
+binary_args:
+  - --version
+checkpoint: models/gemma/gemma-4-E4B_q4_0-it.gguf
+precision: q4_0
+licence: Gemma-Terms-of-Use
+licence_url: https://ai.google.dev/gemma/terms
+thresholds:
+  temperature: 0.1
+  n_ctx: 4096
+  max_tokens: 768
+extra:
+  mmproj: models/gemma/gemma-4-E4B-it-mmproj.gguf
+  contact_sheet_frames: 6

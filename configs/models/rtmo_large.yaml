@@ -1,0 +1,18 @@
+# The large one-stage model. Measured: two more people and one more
+# resolvable pitch than RTMO-m for double the cost, and still 1.72x behind
+# top-down. Kept so that comparison stays reproducible.
+config_id: rtmo_large
+vram_gb: 5.0
+family: pose
+description: RTMO-l one-stage multi-person pose at 640x640.
+probe: python_import
+module: rtmlib
+input_size: 640x640
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/Tau-J/rtmlib/blob/main/LICENSE
+thresholds:
+  keypoint_confidence: 0.3
+extra:
+  variant: rtmo-l
+  backend: onnxruntime

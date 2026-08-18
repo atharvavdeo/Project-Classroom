@@ -1,0 +1,21 @@
+config_id: rf_detr_sahi
+vram_gb: 4.0
+family: object
+description: RF-DETR with SAHI slicing over the candidate crop only.
+probe: python_import
+module: rfdetr
+input_size: 560x560
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/roboflow/rf-detr/blob/main/LICENSE
+thresholds:
+  confidence: 0.35
+  min_object_px_area: 300.0
+extra:
+  variant_pending: true
+  slice_height: 320
+  slice_width: 320
+  overlap_height_ratio: 0.25
+  overlap_width_ratio: 0.25
+  merge_nms_iou: 0.5
+  scope: candidate_crop_only

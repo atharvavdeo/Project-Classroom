@@ -1,0 +1,19 @@
+# PRD 5, object family. A second detector so the family can support a
+# comparison at all: a single-member family cannot name a winner.
+# Variant and weights are the open question in doubt.md 4.3.
+config_id: rf_detr_native
+vram_gb: 4.0
+family: object
+description: RF-DETR over native-resolution seat crops. Variant pending.
+probe: python_import
+module: rfdetr
+input_size: 560x560
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/roboflow/rf-detr/blob/main/LICENSE
+thresholds:
+  confidence: 0.35
+  min_object_px_area: 300.0
+extra:
+  variant_pending: true
+  note: doubt.md 4.3 needs base or large, staged or downloaded.
