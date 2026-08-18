@@ -140,10 +140,23 @@ class GateLog:
         return self.add(GateRecord(gate, condition, state, start_ms, end_ms,
                                    reason, **kw))
 
-    def over(self, start_ms: float, end_ms: float) -> list[GateRecord]:
-        return [r for r in self.records if r.overlaps(start_ms, end_ms)]
+    def over(self, start_ms: float, end_ms: float,
+             seat_id: str | None = None) -> list[GateRecord]:
+        """Records overlapping an interval, optionally for one seat only.
 
-    def worst(self, start_ms: float, end_ms: float) -> str:
+        The seat filter is not optional in practice. Without it, a record about
+        seat A's zone applies to seat B's event whenever they overlap in time,
+        and on real footage that meant every event in a recording inherited the
+        most restrictive state any seat had at that instant. A record with no
+        seat is frame-global (camera motion, exposure, decode gap) and applies
+        to everything.
+        """
+        return [r for r in self.records
+                if r.overlaps(start_ms, end_ms)
+                and (seat_id is None or r.seat_id is None or r.seat_id == seat_id)]
+
+    def worst(self, start_ms: float, end_ms: float,
+              seat_id: str | None = None) -> str:
         """The most restrictive state applying to an interval.
 
         Ordered by how much they restrict use, not by severity of the underlying
@@ -151,13 +164,14 @@ class GateLog:
         `suppress_from_auto_ranking`, which restricts more than `uncertain`.
         """
         order = [FAILED, SUPPRESS_FROM_AUTO_RANKING, UNCERTAIN, DEPRIORITISE, PASS]
-        states = {r.state for r in self.over(start_ms, end_ms)}
+        states = {r.state for r in self.over(start_ms, end_ms, seat_id)}
         for state in order:
             if state in states:
                 return state
         return PASS
 
-    def multiplier(self, start_ms: float, end_ms: float) -> float:
+    def multiplier(self, start_ms: float, end_ms: float,
+                   seat_id: str | None = None) -> float:
         """Combined ranking penalty for an interval.
 
         Multiplicative rather than a minimum: two independent weak signals over
@@ -165,7 +179,7 @@ class GateLog:
         it to zero regardless of what else applies.
         """
         value = 1.0
-        for record in self.over(start_ms, end_ms):
+        for record in self.over(start_ms, end_ms, seat_id):
             value *= record.penalty
         return value
 
