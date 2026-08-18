@@ -183,12 +183,22 @@ All figures measured 18 August 2026 with PyAV 18.1.0 against the source files. T
 
 | File | Container | Codec | Resolution | FPS | Duration | Mbps | VFR | MV/frame |
 |---|---|---|---:|---:|---:|---:|---|---:|
-| 01 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 131 s | 1.95 | no | 3649 |
-| 02 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 212 s | 1.95 | no | 3621 |
-| 03 · mobile usage | matroska | mpeg4 | 1280×720 | 12.1 | 282 s | 1.87 | **yes** | 3594 |
-| 04 · candidate talking | matroska | h264 | 640×480 | 8.0 | 143 s | 0.24 | no | 1290 |
-| 05 · reception crowd | mp4 | mpeg4 | 1280×720 | 25.0 | 241 s | 10.53 | **yes** | 3584 |
-| Seat 12 · paper | matroska | mpeg4 | 1280×720 | 25.0 | 88 s | 1.75 | **yes** | 3575 |
+| 01 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 131.3 s | 1.95 | no | 3647 | 3283 |
+| 02 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 212.2 s | 1.95 | no | 3622 | 5305 |
+| 03 · mobile usage | matroska | mpeg4 | 1280×720 | **15.0** | 281.9 s | 1.87 | **yes** | 3595 | 4227 |
+| 04 · candidate talking | matroska | h264 | 640×480 | 8.0 | 143.3 s | 0.24 | no | 1282 | 1146 |
+| 05 · reception crowd | mp4 | mpeg4 | 1280×720 | 25.0 | 240.8 s | 10.53 | **yes** | 3581 | 6021 |
+| Seat 12 · paper | matroska | mpeg4 | 1280×720 | **21.9** | 88.4 s | 1.75 | **yes** | 3568 | 1936 |
+
+Total: 1,097.9 s (18.3 min). Reproduce with `python tools/validate_corpus.py`.
+
+**Two frame rates in this table were previously wrong, and the reason matters.**
+v3.0 recorded 12.1 fps for file 03 and 25.0 fps for the Seat 12 clip. Those were
+the rates the *container declared*. Counting frames against PTS duration gives
+15.0 and 21.9. Both corrected files are variable frame rate — precisely the case
+where declared metadata is unreliable, and precisely why §6.1 forbids trusting
+it. The original table was built from container metadata before the ingest layer
+existed; it has now been rebuilt from measurement.
 
 ### 5.2 Derived facts
 
@@ -417,13 +427,55 @@ The class labels are stock COCO and are *not* expected to be correct for this do
 - Start from Objects365-pretrained weights; fine-tune, never train from scratch.
 - Extract seat/desk/hand crops at native resolution and upscale into the detector.
 - Preserve multiple adjacent frames for temporal confirmation.
-- Train explicit hard negatives drawn from this dataset: white erasers, calculators, ID cards, watches, pens and pen caps, folded answer sheets, hands and dark shadows, rulers, transparent stationery, computer mice, and dark keyboard regions.
+- Train explicit hard negatives drawn from this dataset, ordered by measured confusion rate (§8.1.2): **computer mice, keyboards and dark key fields, monitor bezels and screen edges**, then card readers, cable runs, hands and dark shadows, ID cards, watches, folded answer sheets, and transparent stationery. The first three account for the large majority of observed false positives; the paper-hall confusers inherited from earlier drafts barely appear.
 
 #### Phone versus paper
 
 The system must not classify all paper as suspicious, because rough sheets are normal in a CBT hall. It uses object appearance; approximate aspect ratio and reflectance; location relative to hand, desk, pocket and screen; whether the object appears from below the desk line; whether it moves between seats; whether it persists across frames; and a separate `paper_like` / `uncertain` class instead of forcing `phone`.
 
 **If an object is below the validated minimum pixel footprint, the output is `insufficient visual evidence`, never a confident label.** At the measured ~30×20 px this will be a frequent and correct outcome. Published classroom-cheating CCTV results top out near 51% accuracy; the abstention path is what keeps this system honest above that ceiling.
+
+#### 8.1.2 Stock-weight false positives, measured on the full corpus
+
+D-FINE-L with stock Objects365→COCO weights was run over 48 frames sampled
+evenly across all six source files. Every `cell phone` detection was cropped and
+adjudicated by eye (`docs/phone_candidates.jpg`).
+
+| | Count |
+|---|---:|
+| Person detections | 339 (2.2–17.2 per frame by camera) |
+| `phone_like` (COCO cell phone) | 23 |
+| — genuine phones | ~9, **all from the reception camera** |
+| — keyboard / monitor edge | 5, all ~3,550 px², one static object |
+| — computer mouse | 3 |
+| — ambiguous hand or paper | ~3 |
+| `paper_like` (COCO book) | 144, of which 118 on one 640×480 camera |
+| `tv` (the monitors) | 624 |
+
+**Precision on the phone class is roughly 40%** — consistent with the 43–51%
+published classroom-CCTV results in §15.3, and confirmation that stock weights
+cannot carry this class. Median footprint of the detections was 768 px², *larger*
+than the 600 px² of a real phone at a near seat, because the false positives are
+bigger objects: the detector is finding dark rectangles, not phones.
+
+**No genuine phone was detected on any seated-candidate camera.** All nine came
+from the reception view, where subjects stand close to the lens. That is exactly
+what the 30×20 px measurement in §5.2 predicts and independently confirms it.
+
+##### The hard-negative list was written for the wrong room
+
+§8.1 inherited a hard-negative list from a paper-examination model: erasers,
+pens, rulers, folded answer sheets. The measured false positives are nothing
+like those. In a CBT hall the confusers are the equipment on every desk:
+
+- **computer mice** — dark, palm-sized, held in the hand, the single most
+  phone-like object in the room
+- **keyboards and their dark key fields**
+- **monitor bezels and screen edges**
+- **desk-mounted card readers and cable runs**
+
+These must be the core of the fine-tuning negatives. A model trained against
+erasers and rulers would not touch the errors this footage actually produces.
 
 ### 8.2 Pose: RTMO
 

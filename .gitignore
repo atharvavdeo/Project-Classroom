@@ -5,3 +5,4 @@ calib/
 .venv/
 models/
 tools/llamacpp/
+data/

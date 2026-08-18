@@ -173,10 +173,16 @@ class Calibration:
 def _polygon_overlap_px(a: list[Point], b: list[Point], w: int, h: int) -> float:
     """Shared area of two polygons, in pixels.
 
-    Rasterised rather than computed analytically: the polygons are arbitrary,
-    the frame is small, and this runs once per calibration save.
+    Each mask is eroded by one pixel first. `fillPoly` includes the boundary, so
+    two seats drawn flush against each other share a one-pixel column that is
+    not a real overlap -- erosion removes it while leaving genuine intersection
+    intact. Rasterised rather than solved analytically: the polygons are
+    arbitrary, the frame is small, and this runs once per calibration save.
     """
-    return float((_fill(a, w, h) & _fill(b, w, h)).sum())
+    kernel = np.ones((3, 3), np.uint8)
+    fa = cv2.erode(_fill(a, w, h), kernel, iterations=1)
+    fb = cv2.erode(_fill(b, w, h), kernel, iterations=1)
+    return float((fa & fb).sum())
 
 
 def _fill(polygon: list[Point], w: int, h: int) -> np.ndarray:
