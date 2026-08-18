@@ -81,7 +81,11 @@ def main() -> int:
     print("\nrunning the production verifier path (CPU, expect minutes)")
     started = time.perf_counter()
     try:
-        result = verifier.verify(sheet_path, metadata, timeout=1800)
+        result = verifier.verify(
+            sheet_path, metadata, timeout=1800,
+            legend=verify.frame_legend([0.0, 1.0, 2.0, 2.0], 1.0, 2.0, 2.0),
+            frame_count=len(sheet_frames),
+        )
     except verify.TruncatedVerification as exc:
         print(f"  truncated: {exc}")
         return 1

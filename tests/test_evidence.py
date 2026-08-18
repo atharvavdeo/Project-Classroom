@@ -206,6 +206,60 @@ def main() -> int:
     except FileNotFoundError:
         ok &= check("missing detector weights raise", True)
 
+    print("\ntwo separate model passes do not erase each other")
+    # The normal shape when only one model is resident at a time: detector
+    # first, pose second. Clearing both tables on every persist meant the
+    # pose-only pass silently deleted the detections, and the run still
+    # reported success.
+    import tempfile
+
+    from classroom import db, evidence
+    from classroom.evidence import EventEvidence
+
+    with tempfile.TemporaryDirectory() as tmp:
+        conn = db.connect(Path(tmp) / "e.db")
+        conn.execute("INSERT INTO session (id, name) VALUES (1, 't')")
+        conn.execute("INSERT INTO camera (id, session_id, label) VALUES (1, 1, 'c')")
+        conn.execute(
+            "INSERT INTO source_video (id, camera_id, path, sha256, size_bytes, "
+            "container, codec, pix_fmt, width, height, avg_fps, duration_s, "
+            "frame_count, is_vfr, has_mv) VALUES (1, 1, 'x', 'a', 1, 'mkv', "
+            "'h264', 'yuv420p', 1280, 720, 25.0, 10.0, 250, 0, 1)"
+        )
+        conn.execute("INSERT INTO calibration (id, camera_id, version, frame_w, "
+                     "frame_h) VALUES (1, 1, 1, 1280, 720)")
+        conn.execute("INSERT INTO seat (id, calibration_id, seat_label, polygon) "
+                     "VALUES (1, 1, 'A', '[]')")
+        conn.execute(
+            "INSERT INTO event (id, source_video_id, seat_id, t_start, t_end, "
+            "peak_t, peak_deviation) VALUES (1, 1, 1, 0.0, 2.0, 1.0, 5.0)")
+
+        detection = Detection("phone_like", 0.8, (10, 10, 40, 30), 900.0, False, 1.0)
+        evidence.persist(conn, EventEvidence(
+            1, "A", [detection], [], object_evidence=0.7,
+            pitch_evidence=None, below_desk_evidence=None))
+        n_det = conn.execute("SELECT COUNT(*) FROM detection").fetchone()[0]
+        ok &= check("detector pass writes detections", n_det == 1, str(n_det))
+
+        observation = pose.observe(np.zeros((17, 3), dtype=np.float32), None)
+        evidence.persist(conn, EventEvidence(
+            1, "A", [], [observation], object_evidence=None,
+            pitch_evidence=0.3, below_desk_evidence=0.0))
+        n_det = conn.execute("SELECT COUNT(*) FROM detection").fetchone()[0]
+        n_pose = conn.execute("SELECT COUNT(*) FROM pose_observation").fetchone()[0]
+        ok &= check("pose pass preserves the detections", n_det == 1, str(n_det))
+        ok &= check("pose pass writes its own rows", n_pose == 1, str(n_pose))
+
+        evidence.persist(conn, EventEvidence(
+            1, "A", [detection, detection], [], object_evidence=0.7,
+            pitch_evidence=None, below_desk_evidence=None))
+        n_det = conn.execute("SELECT COUNT(*) FROM detection").fetchone()[0]
+        n_pose = conn.execute("SELECT COUNT(*) FROM pose_observation").fetchone()[0]
+        ok &= check("re-running the detector replaces its own rows", n_det == 2,
+                    str(n_det))
+        ok &= check("and leaves the pose rows alone", n_pose == 1, str(n_pose))
+        conn.close()
+
     print(f"\n{'ALL PASS' if ok else 'FAILURES PRESENT'}")
     return 0 if ok else 1
 

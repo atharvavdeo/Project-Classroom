@@ -6,3 +6,5 @@ calib/
 models/
 tools/llamacpp/
 data/
+runs/
+*.out

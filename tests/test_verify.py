@@ -117,9 +117,38 @@ def main() -> int:
                 all(k in verify.GRAMMAR for k in GOOD))
 
     print("\nprompt steers away from object identification")
-    ok &= check("prompt forbids verdict language", "Never state or imply" in verify.PROMPT)
-    ok &= check("prompt prefers uncertainty on objects",
-                "uncertain" in verify.PROMPT and "NOT identifiable" in verify.PROMPT)
+    ok &= check("forbids verdict language", "Never state or imply" in verify.SYSTEM)
+    ok &= check("offers abstention as a correct answer",
+                "not_visible" in verify.SYSTEM and "uncertain" in verify.SYSTEM
+                and "not failures" in verify.SYSTEM)
+    # The measured confusers on this corpus are CBT desk equipment, not the
+    # erasers and rulers a generic classroom prompt would guard against
+    # (PRD 8.1.2). A model with no prior for what is normally on the desk has
+    # nothing to weigh "phone" against.
+    for item in ("monitor", "keyboard", "mouse"):
+        ok &= check(f"names {item} as normal desk equipment", item in verify.SYSTEM)
+    ok &= check("fences the metadata off as non-observational",
+                "not behaviour" in verify.SYSTEM
+                or "not observations" in verify.USER_TEMPLATE)
+    ok &= check("the user turn carries the tile legend",
+                "{legend}" in verify.USER_TEMPLATE and "{count}" in verify.USER_TEMPLATE)
+
+    print("\nthe tile legend is derived, not asserted")
+    # The previous prompt described five tiles in prose while the configured
+    # sheet held six, so the model was told the last tile was a magnified crop
+    # when it was another timeline frame.
+    for count in (4, 5, 6, 8):
+        times = verify.select_frames(10.0, 16.0, 13.0, count)
+        legend = verify.frame_legend(times, 10.0, 16.0, 13.0)
+        ok &= check(f"legend has one line per tile at count={count}",
+                    len(legend.splitlines()) == len(times),
+                    f"{len(legend.splitlines())} vs {len(times)}")
+    times = verify.select_frames(10.0, 16.0, 13.0, 6)
+    legend = verify.frame_legend(times, 10.0, 16.0, 13.0)
+    ok &= check("the peak tile is labelled as the peak",
+                legend.count("peak of the flagged motion") == 1, legend)
+    ok &= check("the pre-roll tile is labelled as before",
+                legend.count("before the flagged interval") == 1)
 
     print("\ncontact sheet")
     frames = [np.full((720, 1280, 3), i * 40, dtype=np.uint8) for i in range(5)]

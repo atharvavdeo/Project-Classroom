@@ -197,8 +197,8 @@ All figures measured 18 August 2026 with PyAV 18.1.0 against the source files. T
 
 ### 5.1 File inventory
 
-| File | Container | Codec | Resolution | FPS | Duration | Mbps | VFR | MV/frame |
-|---|---|---|---:|---:|---:|---:|---|---:|
+| File | Container | Codec | Resolution | FPS | Duration | Mbps | VFR | MV/frame | Frames |
+|---|---|---|---:|---:|---:|---:|---|---:|---:|
 | 01 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 131.3 s | 1.95 | no | 3647 | 3283 |
 | 02 · mobile phone | matroska | h264 | 1280×720 | 25.0 | 212.2 s | 1.95 | no | 3622 | 5305 |
 | 03 · mobile usage | matroska | mpeg4 | 1280×720 | **15.0** | 281.9 s | 1.87 | **yes** | 3595 | 4227 |
@@ -620,7 +620,7 @@ The grammar was validated against a live `llama-server` (build b10472). Writing 
 
 A response that still hits the limit raises `TruncatedVerification` rather than being half-parsed.
 
-### 9.2.2 Verified end to end on real footage
+#### 9.2.2 Verified end to end on real footage
 
 The production path — contact sheet from real frames, production grammar, production schema — was run against the official `google/gemma-4-E4B-it-qat-q4_0-gguf` weights (4.8 GB model, 0.92 GB vision projector) on CPU:
 
@@ -648,12 +648,47 @@ The verifier runs out of process against `llama-server` rather than through in-p
 | Model | Gemma 4 E4B instruction-tuned |
 | Runtime | llama.cpp with CUDA |
 | Residency | Co-resident with CV models on the 32 GB target |
-| Context | Capped to the evidence packet; long context is not used |
+| Context | 4096 tokens, capped to the evidence packet; long context is not used |
 | Input | 4–8 selected frames |
 | Concurrency | One verifier request at a time |
 
 There is no E2B fallback, no 12B quality mode, no NVFP4 profile and no sequential-residency scheduler. The 32 GB target makes all of that machinery unnecessary, and each removed branch is a path that would otherwise need testing.
 
+### 9.4 Prompt revision, and what it is correcting
+
+The verifier prompt was rewritten once the CBT scene model (§4) and the measured
+confuser set (§8.1.2) were established. It is now a standing **system** message
+carrying the rules and the scene, plus a per-event **user** message carrying the
+tile legend and the reference values. Three changes, each answering a specific
+measured failure rather than general prompt hygiene:
+
+**The scene is described before the task is given.** Every desk in this footage
+holds a monitor, a keyboard and a mouse, and those three objects are precisely
+what the stock detector misread as phones — 40% precision, computer mice the
+largest single confuser. A model with no prior for what is normally on the desk
+sees a small dark rectangle beside a hand and has nothing to weigh "phone"
+against. Naming the furniture is the cheapest correction available, and it is
+the same correction the hard-negative list needed.
+
+**The reference values are fenced off as pixel statistics.** The evidence packet
+carries a motion z-score. A model told "peak deviation 8.2 σ" will narrate the
+dramatic event that number implies — the deviation is a statement about pixels,
+not about behaviour, and the prompt now says so explicitly. This is anchoring,
+and it is the failure mode most likely to survive a grammar constraint: the
+schema is satisfied while the observations are invented.
+
+**The tile legend is generated from the frame timestamps, not asserted in
+prose.** The previous prompt described five tiles — before, onset, peak, end,
+and a magnified crop — while `contact_sheet_frames` defaults to six. The model
+was therefore told the last tile was a magnified seat crop when it was another
+timeline frame. Nothing raised; the model simply described a crop it had not
+been shown. The legend is now built from the same timestamps that select the
+frames, so the two cannot disagree, and the gate asserts one legend line per
+tile at four different frame counts.
+
+The abstention wording also changed from "prefer uncertain" to naming
+`not_visible` and `uncertain` as **correct answers, not failures** — the same
+distinction §8.1 makes structurally for the detector.
 ---
 
 ## 10. Build Phases
@@ -885,6 +920,8 @@ Tooling:
 | `tools/export_dataset.py` | COCO export, split by camera |
 | `tools/finetune_dfine.py` | Preflight and config generation for the D-FINE fine-tune |
 | `tools/pose_ab.py` | Measured pose-model comparison |
+| `tools/prd_check.py` | Reads this document as data and checks it against the code and the footage |
+| `tools/run_video.py` | One video end to end into a self-contained run folder, with overlays |
 | `python -m classroom.cli coverage` | How much footage is annotated — asked before any other number |
 | `python -m classroom.cli evaluate` | The measured report |
 

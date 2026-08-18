@@ -156,24 +156,35 @@ def analyse_event(
 
 
 def persist(conn: sqlite3.Connection, evidence: EventEvidence) -> None:
-    """Write model evidence. Idempotent per event."""
-    conn.execute("DELETE FROM detection WHERE event_id = ?", (evidence.event_id,))
-    conn.execute("DELETE FROM pose_observation WHERE event_id = ?", (evidence.event_id,))
+    """Write model evidence. Idempotent per event, per stream.
 
-    db.insert_many(
-        conn, "detection",
-        ["event_id", "t", "cls", "confidence", "x1", "y1", "x2", "y2",
-         "px_area", "abstained"],
-        [(evidence.event_id, d.t, d.cls, d.confidence, *d.box, d.px_area,
-          int(d.abstained)) for d in evidence.detections],
-    )
-    db.insert_many(
-        conn, "pose_observation",
-        ["event_id", "t", "track_id", "keypoints", "head_pitch", "wrist_masked"],
-        [(evidence.event_id, 0.0, o.track_id,
-          str([[float(x) for x in row] for row in o.keypoints]),
-          o.head_pitch, int(o.wrist_masked)) for o in evidence.poses],
-    )
+    Each stream clears only itself. That distinction matters as soon as the two
+    models are run in separate passes -- which is the normal shape when only one
+    model is resident at a time. Clearing both tables on every call meant a
+    pose-only second pass silently deleted the detections the first pass had
+    just written, and the loss was invisible: the run reported success and the
+    event simply had no object evidence.
+    """
+    if evidence.object_evidence is not None:
+        conn.execute("DELETE FROM detection WHERE event_id = ?", (evidence.event_id,))
+        db.insert_many(
+            conn, "detection",
+            ["event_id", "t", "cls", "confidence", "x1", "y1", "x2", "y2",
+             "px_area", "abstained"],
+            [(evidence.event_id, d.t, d.cls, d.confidence, *d.box, d.px_area,
+              int(d.abstained)) for d in evidence.detections],
+        )
+
+    if evidence.pitch_evidence is not None or evidence.below_desk_evidence is not None:
+        conn.execute(
+            "DELETE FROM pose_observation WHERE event_id = ?", (evidence.event_id,))
+        db.insert_many(
+            conn, "pose_observation",
+            ["event_id", "t", "track_id", "keypoints", "head_pitch", "wrist_masked"],
+            [(evidence.event_id, 0.0, o.track_id,
+              str([[float(x) for x in row] for row in o.keypoints]),
+              o.head_pitch, int(o.wrist_masked)) for o in evidence.poses],
+        )
 
 
 def run(

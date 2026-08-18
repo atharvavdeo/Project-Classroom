@@ -89,27 +89,75 @@ GRAMMAR = (
     'ws ::= [ \\t\\n]{0,4}\n'
 )
 
-PROMPT = """You are reviewing a still contact sheet from examination-hall CCTV.
+# The prompt is split into a standing system message and a per-event user
+# message. The rules do not change between events, and keeping them out of the
+# user turn stops per-event metadata from being read as a new instruction.
+#
+# Three things in here are answers to measured failure modes rather than
+# generic prompt hygiene:
+#
+#   * **The scene is described before the task.** Every desk in this footage
+#     carries a monitor, a keyboard and a mouse, and those three objects are
+#     exactly what the stock detector misread as phones -- 40% precision, with
+#     computer mice the single largest confuser (PRD 8.1.2). A model with no
+#     prior for what is normally on the desk sees a small dark rectangle beside
+#     a hand and has nothing to weigh "phone" against. Naming the furniture is
+#     the cheapest available correction.
+#
+#   * **The metadata is fenced off as reference, not evidence.** The packet
+#     carries a motion z-score, and a model told "peak deviation 8.2 sigma" will
+#     happily narrate the dramatic event that number implies. The deviation is a
+#     statement about pixels, not about behaviour, and the prompt says so.
+#
+#   * **The frame legend is generated, not asserted.** The previous version
+#     described five tiles in prose while the configured sheet held six, so the
+#     model was told the last tile was a magnified crop when it was another
+#     timeline frame. The legend is now built from the same timestamps that
+#     select the frames, so the two cannot disagree.
+SYSTEM = """You are an evidence reviewer for recorded examination-hall CCTV. You describe what is visible in still frames. You do not decide whether any rule was broken -- a human reviewer does that, using your description.
 
-The frames, in order, show: before the event, its onset, its peak, its end, and
-a magnified crop of the seat involved.
+The scene is a computer-based test centre. Every candidate sits at a desk that normally holds a monitor, a keyboard, a mouse and its cable, and many desks have a glass or acrylic partition. Small dark rectangular objects on these desks are usually that equipment. Seats carry printed number placards, and a date and time is burned into the image.
 
-Describe ONLY what is visible. Follow these rules exactly:
+Rules, in order of precedence:
 
-1. Report posture and movement: head orientation, arm and hand position, whether
-   a hand passes below the desk line, and any interaction with a neighbouring
-   seat.
-2. Do NOT claim an object is a phone unless its shape and screen are plainly
-   visible. At this resolution an object is usually NOT identifiable; prefer
-   "uncertain" or "not_visible".
-3. Never state or imply that cheating, misconduct or rule-breaking occurred.
-   Report observations only.
-4. If the image quality cannot support a conclusion, say so with
-   evidence_quality "insufficient".
+1. Never state or imply that cheating, misconduct, or a rule violation    occurred. Report posture, movement and position only.
+2. Do not name an object as a phone or paper unless its shape and edges are    plainly resolvable. The footage is 720p from a ceiling mount; an object the    size of a hand occupies roughly thirty pixels across, which is not enough to    tell a phone from a mouse. When it is not resolvable, answer "not_visible"    or "uncertain". These are correct answers, not failures.
+3. Report only what is in the image. The numbers supplied with the request    describe pixel motion, not behaviour; never turn them into an observation.
+4. If the image cannot support any conclusion, set evidence_quality to    "insufficient" and say why in the note.
 
-Metadata for this event:
+Useful things to report when visible: head orientation and whether it is turned down or toward a neighbour; where each hand is; whether a hand passes below the desk edge; whether the candidate leans out of their own seat area; whether anyone else is within reach."""
+
+USER_TEMPLATE = """This contact sheet holds {count} stills from one seat, numbered in the top-left corner of each tile and read left to right, top to bottom.
+
+{legend}
+
+Reference values for this event (pixel statistics, not observations):
 {metadata}
-"""
+
+Describe what is visible."""
+
+
+def frame_legend(times: list[float], t_start: float, t_end: float, peak_t: float) -> str:
+    """Label each tile with what it shows, derived from the actual timestamps."""
+    lines = []
+    for index, t in enumerate(times, start=1):
+        if t < t_start:
+            role = "before the flagged interval"
+        elif abs(t - peak_t) < 1e-6:
+            role = "peak of the flagged motion"
+        elif abs(t - t_start) < 1e-6:
+            role = "start of the flagged interval"
+        elif abs(t - t_end) < 1e-6:
+            role = "end of the flagged interval"
+        else:
+            role = "during the flagged interval"
+        lines.append(f"  {index}. t={t:.2f}s -- {role}")
+    return "\n".join(lines)
+
+
+# Retained so anything importing the single-string prompt keeps working; the
+# request path uses SYSTEM and USER_TEMPLATE.
+PROMPT = SYSTEM + "\n\n" + USER_TEMPLATE
 
 
 class TruncatedVerification(RuntimeError):
@@ -264,23 +312,32 @@ class GemmaVerifier:
             )
 
     def verify(
-        self, sheet_path: str | Path, metadata: dict, timeout: float = 600.0
+        self, sheet_path: str | Path, metadata: dict, timeout: float = 600.0,
+        legend: str = "", frame_count: int | None = None,
     ) -> Verification:
         import base64
         import urllib.request
 
         self.load()
         image = base64.b64encode(Path(sheet_path).read_bytes()).decode("ascii")
+        user_text = USER_TEMPLATE.format(
+            count=frame_count if frame_count is not None
+            else self.cfg.contact_sheet_frames,
+            legend=legend or "  (tile timestamps were not supplied)",
+            metadata=json.dumps(metadata, indent=2),
+        )
         payload = {
-            "messages": [{
-                "role": "user",
-                "content": [
-                    {"type": "image_url",
-                     "image_url": {"url": f"data:image/jpeg;base64,{image}"}},
-                    {"type": "text",
-                     "text": PROMPT.format(metadata=json.dumps(metadata, indent=2))},
-                ],
-            }],
+            "messages": [
+                {"role": "system", "content": SYSTEM},
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "image_url",
+                         "image_url": {"url": f"data:image/jpeg;base64,{image}"}},
+                        {"type": "text", "text": user_text},
+                    ],
+                },
+            ],
             "grammar": GRAMMAR,
             "n_predict": self.cfg.max_tokens,
             "temperature": self.cfg.temperature,
