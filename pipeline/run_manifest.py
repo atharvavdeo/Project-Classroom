@@ -26,7 +26,7 @@ import json
 import platform
 import subprocess
 import sys
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 
 from .artifacts import MANIFEST_FILE, STATUS_FILE, RunPaths, sha256_file, utc_now
@@ -211,6 +211,21 @@ class RunStatus:
         self.paths = paths
         self.run_id = run_id
         self.stages: dict[str, StageStatus] = {}
+        # Load what earlier stages already recorded. Each stage runs as its own
+        # tool invocation, so starting empty and then rewriting the file made
+        # every tool erase its predecessors: a completed run showed only the
+        # last two stages it happened to touch, and PRD 18 requires the run to
+        # record its own stage coverage.
+        existing = paths.dir / STATUS_FILE
+        if existing.is_file():
+            try:
+                recorded = json.loads(existing.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                recorded = {}
+            for row in recorded.get("stages", []):
+                known = {f.name for f in fields(StageStatus)}
+                self.stages[row["stage"]] = StageStatus(
+                    **{k: v for k, v in row.items() if k in known})
 
     def begin(self, stage: str) -> StageStatus:
         status = StageStatus(stage=stage, state=RUNNING, started_utc=utc_now())
