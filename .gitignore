@@ -1,12 +1,13 @@
+# Model weights. Multi-gigabyte binaries that GitHub rejects above 100 MB, and
+# which preflight already records by checkpoint hash and licence. Fetch them
+# per requirements-rtx3090.lock and the config files under configs/models/.
+models/
+
+# Run outputs. A sealed run is reproducible from its RUN_MANIFEST.json.
+artifacts/runs/
+
+# Test media and fixtures generated on demand.
+data/
+
 __pycache__/
 *.pyc
-data/
-calib/
-.venv/
-models/
-tools/llamacpp/
-data/
-runs/
-*.out
-artifacts/
-PRD.md

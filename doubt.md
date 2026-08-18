@@ -519,3 +519,174 @@ precisely so that a threshold change cannot later be credited to a model.
 Phases 4–7 need the environment (§1.4), the taxonomy (§1.2) and the reference
 manifest (§1.1). I will build the harnesses so they are ready to run the moment
 those land, and they will refuse to report a winner until they can.
+
+## 5. Phase 4 decisions (tracking and pose A/B)
+
+### 5.1 Pose models run on the full frame, not the manifest crop
+
+The pose manifest names *which person at which timestamp*. Each configuration is
+run on the whole frame in its native mode and its output matched back to the
+row's person box by IoU.
+
+The first implementation cropped to the row's box for every model. It produced
+RTMPose 70/74 rows against RTMO 1/74, which looks like a decisive finding and is
+not one: a top-down model runs its own person detector and finds the single
+person filling a crop trivially, while a one-stage model trained on whole scenes
+is out of distribution on an upscaled single-person crop. The crop was
+handicapping one competitor. PRD 4 calls that "an input change incorrectly
+credited to a model", so it was changed.
+
+**Needs a decision:** whether a crop-input variant should exist as its own named
+configuration (`rtmo_crop_input`) so the effect is measured rather than merely
+avoided. Not built, because PRD 5's configuration families do not list one.
+
+### 5.2 Seat-inconsistent transitions, not ID switches
+
+`tracking.continuity` reports the number of track IDs whose attributed seat
+changes mid-track. It is *not* an ID-switch count, and is never labelled as one.
+A true ID-switch metric needs per-person identity ground truth, which this
+corpus lacks and which PRD 1 forbids creating by face or name.
+
+**Needs a decision:** whether the owner will supply reviewer-assigned anonymous
+person IDs over a sampled interval. Without them, tracker continuity can be
+compared between configurations but not scored against truth.
+
+### 5.3 Continuity may resolve a tie, never overrule a contradiction
+
+An ambiguous frame is settled by the track's majority seat only when that seat is
+already among the frame's geometric candidates. Where the track says S-A and the
+geometry scores only S-B, the frame stays ambiguous. Measured on the fixture:
+this correctly attributed a straddling box to S-A even though S-B held the higher
+raw score (0.518 vs 0.486), because the 0.032 margin was under the floor and the
+geometry had therefore refused to decide.
+
+### 5.4 Person detection is D-FINE via the COCO `person` class
+
+`rf_detr_native` is unavailable (`rfdetr` not installed), so the person source is
+D-FINE's stock COCO head, not a fine-tuned person detector.
+
+**Needs a decision:** whether a dedicated person detector should be added as a
+named configuration. The pose comparison is valid either way -- both models get
+identical rows -- but person *recall* is currently D-FINE's recall, and no claim
+about it should be read as a claim about the pose stage.
+
+## 6. Phase 5 decisions (crops, detector A/B, SAHI)
+
+### 6.1 Measured result: SAHI adds detections but no phones
+
+On `03.CCTV Mobile Usage.mkv`, 3 events, 42 identical crop rows:
+
+| Configuration | Merged | Phone | Chit | Hard negatives | Crops/s |
+|---|---|---|---|---|---|
+| `dfine_native` | 300 | 14 | 0 | 169 | 3.0 |
+| `dfine_sahi` | 506 | 14 | 0 | 215 | 0.66 |
+
+Slicing produced **69% more detections and exactly zero additional phones**. The
+increase is entirely hard negatives (keyboard 28 -> 92) and `unknown_object`
+(116 -> 271), at 4.5x the cost. This is the outcome PRD 19 anticipated: slicing
+magnifies a region into the detector input but cannot restore detail the CCTV
+source never captured.
+
+**This is not yet a selection.** Both arms are unlabelled, the taxonomy is
+unapproved, and PRD 15 places selection at stage 12 against references. The
+finding to carry forward is that SAHI must justify its cost against reference
+data or be rejected -- which is exactly the owner's instruction that "if it
+performs worse or costs too much, the measurement report should reject it."
+
+### 6.2 The detector is D-FINE's stock COCO head
+
+`rf_detr_native` and `rf_detr_sahi` are `resource_unavailable` (`rfdetr` not
+installed) and stay in the table as such. D-FINE runs with `class_map={}` so the
+raw COCO names survive and map onto the provisional taxonomy per class; the
+legacy default folded everything into `phone_like`/`paper_like`/`other`, which
+would have made the hard-negative failure clusters PRD 10 requires unmeasurable.
+
+**Needs a decision:** COCO has no `secondary_paper_chit` class, so chit recall is
+structurally zero here (0 of 506 detections). No chit claim of any kind can be
+made until either the taxonomy is approved and a detector fine-tuned for it, or
+the owner accepts that Product Zero measures phones only.
+
+### 6.3 Defect found by running it: person detection was keyed per event
+
+`row_id` originally included the event, so two candidate intervals overlapping in
+time produced two sample rows at the same timestamp, the same frame was decoded
+and detected twice, and the resulting duplicate boxes:
+
+  * collided in `pose_row_id` -- 74 manifest rows carried only 42 unique IDs, so
+    observations overwrote each other;
+  * gave the tracker duplicate boxes per frame, opening a spurious track for
+    each: 16 tracks over 3 events, where the corrected run reports 9.
+
+A row is now a **frame**, and each row records every event it serves.
+
+### 6.4 SAHI overlap now means what it says
+
+`overlap: 0.25` originally padded each slice by the full fraction on both
+interior sides, producing a shared band of 0.5 x step. Each slice is now padded
+by half of it, so the band is exactly `overlap x step`. Also, `touches_edge`
+compared distance to the boundary symmetrically, which flagged a box ending
+exactly at an edge but missed one extending past it -- and a box crossing the
+boundary is more likely to be a fragment, not less.
+
+## 7. Phase 6 and 7 decisions (evidence, Gemma, evaluation)
+
+### 7.1 Measured result: 449 phone-class detections, 0 true positives
+
+Stage 12 on the full recording, 3 valid reference rows:
+
+| Configuration | TP | FP | Not routed | Precision |
+|---|---|---|---|---|
+| dfine_native | 0 | 449 | 3 | 0.000 |
+| dfine_sahi | 0 | 443 | 3 | 0.000 |
+
+The reference rows here are a **demonstration manifest with invented
+timestamps**, written to exercise stage 12 end to end. They are not real
+sightings, and the recall figures mean nothing. The false-positive count does:
+449 phone-class detections over 282 s is roughly 5,700 per hour from the stock
+COCO head. That is the hard-negative failure PRD 10 describes, measured.
+
+The report correctly declines to blame the detector, because motion routed none
+of the (invented) reference timestamps to a candidate, so the loss is not
+attributable to a single stage.
+
+**Needs a decision:** a real reference manifest. Until one exists, no recall,
+precision or FP/hour figure from this pipeline should be quoted.
+
+### 7.2 The gate audit could not sample normal footage
+
+`sampled_normal` came back 0 of 40 requested after 2,000 attempts: compression
+noise and reference neighbourhoods cover nearly the whole recording, so there is
+almost no undisturbed footage to draw from. This is now reported as a shortfall
+rather than omitted — the gate's behaviour on quiet footage is **unmeasured**,
+not measured as good.
+
+**Needs a decision:** whether to source a genuinely quiet recording for gate
+audit purposes, or accept that this measure stays unavailable on this corpus.
+
+### 7.3 Defects found by running Phase 6 and 7
+
+  * **`RunStatus` erased earlier stages.** Each stage tool constructed a fresh
+    status object and rewrote `RUN_STATUS.json`, so a completed run showed only
+    the last two stages touched. PRD 18 requires the run to record its own stage
+    coverage. Status is now loaded and merged.
+  * **The magnified subject crop never reached the contact sheet.** Subject and
+    object crops sit at the event *peak*, earlier than the last frame tile, and
+    the forward-only reader correctly refused to go backwards. The packet still
+    validated — composition is checked against the described tiles — so the one
+    element PRD 11 requires most was missing from every rendered sheet with
+    nothing reporting it. Tiles are now read in PTS order and composed in packet
+    order, with one reader per packet.
+  * **The final report claimed outcome (1) on a run with zero true positives.**
+    `choose_outcome` keyed off `normal_priority` from ranking, which counts how
+    much was surfaced, not whether any of it was right. It now decides on the
+    evaluation.
+  * **The identity checker fired on ordinary sentences.** `"he "` matched inside
+    "t*he* right hand" and `"man"` inside "hu*man*", so every correct
+    observational sentence was rejected as person-identifying. Word-boundary
+    matching. A rule that fires on correct output trains readers to ignore it.
+  * **`reference_result` tripped the isolation check.** A ranking field holding a
+    status sentence was named after data it deliberately does not contain. The
+    check is right to be strict; the field is now `evaluation_status`.
+  * **"23 schema-invalid" when Gemma never ran.** A review that was never
+    attempted is not a review that failed validation. `attempted` and
+    `not_attempted` are now separate counts.
