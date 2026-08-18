@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Classroom</title>
+<style>
+:root{
+  --ground:#10141a; --panel:#171d25; --panel-2:#1e2630; --rule:#2a343f;
+  --ink:#e2e8ee; --ink-2:#aab6c2; --muted:#7c8894;
+  --accent:#4fb098; --accent-dim:#1b3b34;
+  --hot:#d9694f; --warn:#c9924a; --ok:#63b074;
+  --mono:ui-monospace,"Cascadia Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:14px 20px;border-bottom:1px solid var(--rule);display:flex;
+  align-items:baseline;gap:20px;flex-wrap:wrap;background:var(--panel)}
+h1{font-size:15px;margin:0;letter-spacing:.06em;text-transform:uppercase;
+  font-family:var(--mono);color:var(--accent)}
+.stat{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.stat b{color:var(--ink);font-weight:600}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;padding:16px;
+  align-items:start}
+@media (max-width:1000px){main{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+  padding:14px 16px;margin-bottom:16px}
+.card h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  font-family:var(--mono);color:var(--muted);margin:0 0 12px;font-weight:600}
+select,button,input{background:var(--panel-2);color:var(--ink);
+  border:1px solid var(--rule);border-radius:3px;padding:6px 10px;
+  font:inherit;font-size:13px}
+button{cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+th{text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:7px 8px;border-bottom:1px solid var(--rule);font-weight:600}
+td{padding:7px 8px;border-bottom:1px solid var(--rule);color:var(--ink-2)}
+td.n{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--panel-2)}
+tbody tr.sel{background:var(--accent-dim)}
+.pill{display:inline-block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 7px;border-radius:2px;font-weight:700;font-family:var(--mono)}
+.p-relevant{background:#3a1f1c;color:var(--hot)}
+.p-irrelevant{background:#1d2a20;color:var(--ok)}
+.p-inconclusive{background:#2e2617;color:var(--warn)}
+.p-none{background:var(--panel-2);color:var(--muted)}
+.p-limited{background:#2e2617;color:var(--warn)}
+#timeline,#heat{width:100%;display:block;background:var(--panel-2);border-radius:3px}
+video{width:100%;border-radius:3px;background:#000;margin-bottom:10px}
+img.thumb{width:100%;border-radius:3px;display:block;margin-bottom:10px}
+.factors{font-family:var(--mono);font-size:11.5px;margin:10px 0}
+.factor{display:flex;justify-content:space-between;gap:10px;padding:3px 0;
+  border-bottom:1px solid var(--rule)}
+.factor span:last-child{font-variant-numeric:tabular-nums}
+.pos{color:var(--hot)} .neg{color:var(--ok)}
+.explain{background:var(--panel-2);border-left:2px solid var(--accent);
+  padding:10px 12px;font-size:13px;color:var(--ink-2);margin:10px 0;border-radius:0 3px 3px 0}
+.actions{display:flex;gap:6px;margin-top:12px}
+.actions button{flex:1;font-size:12px}
+.empty{color:var(--muted);font-size:13px;padding:16px 0;text-align:center}
+.legend{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px}
+.disclaimer{font-size:11px;color:var(--muted);padding:10px 20px;border-top:1px solid var(--rule);
+  font-style:italic}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Project Classroom</h1>
+  <span class="stat" id="stats">loading…</span>
+</header>
+
+<main>
+  <div>
+    <div class="card">
+      <h2>Activity timeline</h2>
+      <div class="controls">
+        <select id="video"></select>
+        <select id="seatFilter"><option value="">all seats</option></select>
+        <select id="statusFilter">
+          <option value="">any status</option>
+          <option value="unreviewed">unreviewed</option>
+          <option value="reviewed">reviewed</option>
+        </select>
+      </div>
+      <canvas id="timeline" height="200"></canvas>
+      <div class="legend" id="tlLegend"></div>
+    </div>
+
+    <div class="card">
+      <h2>Seat activity heatmap</h2>
+      <canvas id="heat" height="120"></canvas>
+      <div class="legend">Peak deviation from each seat's own baseline.</div>
+    </div>
+
+    <div class="card">
+      <h2>Events</h2>
+      <table>
+        <thead><tr>
+          <th>id</th><th>seat</th><th class="n">start</th><th class="n">dur</th>
+          <th class="n">peak z</th><th class="n">score</th><th>evidence</th><th>review</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="empty" id="empty" hidden>No events. Run the pipeline first.</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card" id="detail">
+      <h2>Event review</h2>
+      <div class="empty">Select an event.</div>
+    </div>
+  </div>
+</main>
+
+<p class="disclaimer">Observations and evidence for human review. This system does not
+determine misconduct; every decision rests with the reviewer.</p>
+
+<script>
+const $ = s => document.querySelector(s);
+let state = {video:null, events:[], selected:null, timeline:null};
+
+const fmt = (t) => {
+  const m = Math.floor(t/60), s = (t%60);
+  return `${String(m).padStart(2,'0')}:${s.toFixed(1).padStart(4,'0')}`;
+};
+
+async function get(url){ const r = await fetch(url); if(!r.ok) throw new Error(url); return r.json(); }
+
+async function boot(){
+  const [videos, stats] = await Promise.all([get('/api/videos'), get('/api/stats')]);
+  $('#stats').innerHTML =
+    `<b>${stats.videos}</b> videos · <b>${stats.events}</b> events · ` +
+    `<b>${stats.reviewed}</b> reviewed · flagged <b>${(stats.flagged_seconds/60).toFixed(1)}</b> min ` +
+    `of <b>${(stats.footage_seconds/60).toFixed(1)}</b> min ` +
+    `(<b>${(stats.review_reduction*100).toFixed(1)}%</b> not flagged)`;
+
+  const sel = $('#video');
+  sel.innerHTML = videos.map(v =>
+    `<option value="${v.id}">#${v.id} ${v.camera} — ${v.width}×${v.height} ${v.codec} ${v.duration_s.toFixed(0)}s (${v.events} events)</option>`
+  ).join('');
+  if(!videos.length){ $('#empty').hidden = false; return; }
+  sel.onchange = () => load(+sel.value);
+  $('#seatFilter').onchange = $('#statusFilter').onchange = () => loadEvents();
+  await load(videos[0].id);
+}
+
+async function load(videoId){
+  state.video = videoId;
+  const [seats, tl, heat] = await Promise.all([
+    get(`/api/videos/${videoId}/seats`),
+    get(`/api/videos/${videoId}/timeline`),
+    get(`/api/videos/${videoId}/heatmap`),
+  ]);
+  $('#seatFilter').innerHTML = '<option value="">all seats</option>' +
+    seats.map(s => `<option value="${s.seat_label}">seat ${s.seat_label}</option>`).join('');
+  state.timeline = tl;
+  drawTimeline(tl);
+  drawHeat(heat);
+  await loadEvents();
+}
+
+async function loadEvents(){
+  const seat = $('#seatFilter').value, status = $('#statusFilter').value;
+  let url = `/api/events?video_id=${state.video}`;
+  if(seat) url += `&seat=${encodeURIComponent(seat)}`;
+  if(status) url += `&status=${status}`;
+  state.events = await get(url);
+  renderRows();
+}
+
+function renderRows(){
+  const tb = $('#rows');
+  $('#empty').hidden = state.events.length > 0;
+  tb.innerHTML = state.events.map(e => {
+    const v = e.verdict || 'none';
+    const q = e.evidence_quality === 'limited' ? 'p-limited' : 'p-none';
+    return `<tr data-id="${e.id}" class="${state.selected===e.id?'sel':''}">
+      <td>${e.id}</td><td>${e.seat_label}</td>
+      <td class="n">${fmt(e.t_start)}</td>
+      <td class="n">${(e.t_end-e.t_start).toFixed(1)}s</td>
+      <td class="n">${e.peak_deviation.toFixed(2)}</td>
+      <td class="n">${(e.score??0).toFixed(2)}</td>
+      <td><span class="pill ${q}">${e.evidence_quality||'—'}</span></td>
+      <td><span class="pill p-${v}">${v}</span></td>
+    </tr>`;
+  }).join('');
+  tb.querySelectorAll('tr').forEach(tr =>
+    tr.onclick = () => select(+tr.dataset.id));
+}
+
+async function select(id){
+  state.selected = id;
+  renderRows();
+  const e = await get(`/api/events/${id}`);
+  const factors = Object.entries(e.score_factors||{})
+    .sort((a,b) => Math.abs(b[1])-Math.abs(a[1]));
+  $('#detail').innerHTML = `
+    <h2>Event ${e.id} · seat ${e.seat_label}</h2>
+    ${e.thumb_path ? `<img class="thumb" src="/api/events/${id}/thumb" alt="Peak motion frame for event ${e.id}">` : ''}
+    ${e.clip_path ? `<video controls preload="metadata" src="/api/events/${id}/clip"></video>` : ''}
+    <div class="explain">${e.explanation || 'No description generated.'}</div>
+    <div class="factors">
+      <div class="factor"><span>source time</span><span>${fmt(e.t_start)} – ${fmt(e.t_end)}</span></div>
+      <div class="factor"><span>peak at</span><span>${fmt(e.peak_t)}</span></div>
+      <div class="factor"><span>evidence quality</span><span>${e.evidence_quality}</span></div>
+      ${factors.map(([k,v]) => `<div class="factor"><span>${k.replace(/_/g,' ')}</span>
+        <span class="${v>=0?'pos':'neg'}">${v>=0?'+':''}${v.toFixed(3)}</span></div>`).join('')}
+      <div class="factor"><span><b>total score</b></span><span><b>${(e.score??0).toFixed(3)}</b></span></div>
+    </div>
+    <div class="actions">
+      <button onclick="review(${id},'relevant')">Relevant</button>
+      <button onclick="review(${id},'irrelevant')">Irrelevant</button>
+      <button onclick="review(${id},'inconclusive')">Inconclusive</button>
+    </div>
+    ${e.reviews.length ? `<div class="factors">${e.reviews.map(r =>
+      `<div class="factor"><span>${r.reviewer}</span><span>${r.verdict}</span></div>`).join('')}</div>` : ''}
+  `;
+}
+
+async function review(id, verdict){
+  await fetch(`/api/events/${id}/reviews`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({verdict})
+  });
+  await loadEvents();
+  await select(id);
+  const stats = await get('/api/stats');
+  $('#stats').innerHTML = $('#stats').innerHTML.replace(/<b>\d+<\/b> reviewed/, `<b>${stats.reviewed}</b> reviewed`);
+}
+
+function drawTimeline(tl){
+  const c = $('#timeline'), ctx = c.getContext('2d');
+  c.width = c.clientWidth * devicePixelRatio;
+  c.height = 200 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = c.clientWidth, H = 200, pad = 28;
+  ctx.clearRect(0,0,W,H);
+
+  const seats = Object.keys(tl.series);
+  if(!seats.length){ return; }
+  let tMax = 0, zMax = 6;
+  seats.forEach(s => tl.series[s].forEach(([t,z]) => {
+    tMax = Math.max(tMax,t); zMax = Math.max(zMax,z); }));
+
+  ctx.strokeStyle = '#2a343f'; ctx.lineWidth = 1;
+  [0,2,4,6].forEach(z => {
+    const y = H-pad - (z/zMax)*(H-pad*1.4);
+    ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-6,y); ctx.stroke();
+    ctx.fillStyle = '#7c8894'; ctx.font = '10px ui-monospace';
+    ctx.fillText(String(z), 4, y+3);
+  });
+
+  // Start threshold: the line above which an event begins.
+  const yStart = H-pad - (4/zMax)*(H-pad*1.4);
+  ctx.strokeStyle = '#d9694f'; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(pad,yStart); ctx.lineTo(W-6,yStart); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const hues = ['#4fb098','#c9924a','#7aa5d2','#c07ac0','#8fbf6a','#d9694f'];
+  seats.forEach((s,i) => {
+    ctx.strokeStyle = hues[i%hues.length]; ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    tl.series[s].forEach(([t,z],j) => {
+      const x = pad + (t/tMax)*(W-pad-8);
+      const y = H-pad - (Math.max(z,0)/zMax)*(H-pad*1.4);
+      j ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+    });
+    ctx.stroke();
+  });
+
+  (tl.suppressed||[]).forEach(s => {
+    const x = pad + (s.t/tMax)*(W-pad-8);
+    ctx.fillStyle = 'rgba(201,146,74,.35)';
+    ctx.fillRect(x-1, pad*0.4, 2, H-pad-pad*0.4);
+  });
+
+  ctx.fillStyle = '#7c8894'; ctx.font = '10px ui-monospace';
+  ctx.fillText('0:00', pad, H-8);
+  ctx.fillText(fmt(tMax), W-46, H-8);
+
+  $('#tlLegend').innerHTML = seats.map((s,i) =>
+    `<span style="color:${hues[i%hues.length]}">■</span> seat ${s}`).join('  ') +
+    `   <span style="color:#d9694f">- -</span> event start threshold` +
+    ((tl.suppressed||[]).length ? `   <span style="color:#c9924a">▮</span> suppressed (camera/exposure)` : '');
+}
+
+function drawHeat(rows){
+  const c = $('#heat'), ctx = c.getContext('2d');
+  c.width = c.clientWidth * devicePixelRatio;
+  c.height = 120 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = c.clientWidth, H = 120;
+  ctx.clearRect(0,0,W,H);
+  if(!rows.length) return;
+
+  const max = Math.max(...rows.map(r => r.peak_deviation), 6);
+  const bw = Math.min((W-20)/rows.length, 90);
+  rows.forEach((r,i) => {
+    const frac = Math.max(r.peak_deviation,0)/max;
+    const h = frac*(H-42);
+    const x = 10 + i*bw;
+    // Cool at baseline, hot as deviation rises.
+    const t = Math.min(frac,1);
+    ctx.fillStyle = `rgb(${Math.round(79+(217-79)*t)},${Math.round(176+(105-176)*t)},${Math.round(152+(79-152)*t)})`;
+    ctx.fillRect(x, H-24-h, bw-6, h);
+    ctx.fillStyle = '#aab6c2'; ctx.font = '11px ui-monospace';
+    ctx.fillText(r.seat_label, x, H-8);
+    ctx.fillStyle = '#7c8894'; ctx.font = '10px ui-monospace';
+    ctx.fillText(r.peak_deviation.toFixed(1), x, H-28-h);
+  });
+}
+
+addEventListener('resize', () => {
+  if(state.timeline) drawTimeline(state.timeline);
+});
+boot().catch(e => { $('#stats').textContent = 'error: ' + e.message; });
+</script>
+</body>
+</html>
