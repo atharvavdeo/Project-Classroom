@@ -1,21 +1,23 @@
+# PRD 5, object family. RF-DETR (Roboflow) against D-FINE on identical crops.
+#
+# Apache-2.0, unlike AlphaPose: this one carries no commercial restriction.
+# Weights are fetched by the `rfdetr` package itself on first use and cached
+# under ~/.roboflow/models/, so there is no checkpoint path to declare here.
 config_id: rf_detr_sahi
-vram_gb: 4.0
+vram_gb: 3.0
+requires_gpu: false
 family: object
-description: RF-DETR with SAHI slicing over the candidate crop only.
+description: RF-DETR nano, COCO-80, candidate-crop slicing, 2x2 with overlap.
 probe: python_import
 module: rfdetr
-input_size: 560x560
+input_size: 640x640
 precision: fp32
 licence: Apache-2.0
 licence_url: https://github.com/roboflow/rf-detr/blob/main/LICENSE
 thresholds:
-  confidence: 0.35
-  min_object_px_area: 300.0
+  confidence: 0.25
 extra:
-  variant_pending: true
-  slice_height: 320
-  slice_width: 320
-  overlap_height_ratio: 0.25
-  overlap_width_ratio: 0.25
-  merge_nms_iou: 0.5
-  scope: candidate_crop_only
+  variant: nano
+  weights_cache: ~/.roboflow/models/rf-detr-nano.pth
+  note: COCO head. There is no secondary_paper_chit class, so chit recall is
+    structurally zero for this configuration as for D-FINE.

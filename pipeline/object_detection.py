@@ -46,17 +46,25 @@ HAND = "hand"
 BAG = "bag"
 MONITOR = "monitor_or_bezel"
 STATIONERY = "stationery"
+# Added beyond PRD 10's provisional list, and flagged for owner approval in
+# doubt.md. An open textbook or notebook on an examination desk is
+# unauthorised material in its own right; it is neither a chit nor nothing.
+# The name states what is visible and claims nothing about permission.
+BOOK_OR_NOTEBOOK = "book_or_notebook_like_object"
 UNKNOWN = "unknown_object"
 INSUFFICIENT = "insufficient_visual_evidence"
 
 TAXONOMY = (PHONE, CHIT, ANSWER_SHEET, CALCULATOR, MOUSE, KEYBOARD, HAND, BAG,
-            MONITOR, STATIONERY, UNKNOWN, INSUFFICIENT)
+            MONITOR, STATIONERY, BOOK_OR_NOTEBOOK, UNKNOWN, INSUFFICIENT)
 
 # The two classes the product exists to surface. Reported separately, always:
 # PRD 15 requires "Phone and chit results must be separate", because they fail
 # in different ways -- a phone is a rigid bright rectangle, a chit is a soft
 # low-contrast one, and a single averaged number hides whichever is worse.
-TARGET_CLASSES = (PHONE, CHIT)
+# Reported separately, always. `book_or_notebook_like_object` joins them
+# because an open book is unauthorised material a reviewer wants surfaced, and
+# folding it into a total would hide both it and the chit count.
+TARGET_CLASSES = (PHONE, CHIT, BOOK_OR_NOTEBOOK)
 
 # Objects that look like a phone at 30x20 px on poor CCTV. A detector calling
 # one of these a phone is the failure cluster PRD 10 names.
@@ -369,6 +377,106 @@ def compare(results: list[DetectorResult], crops: list,
 
 # --------------------------------------------------------------- runners --
 
+# COCO name -> provisional taxonomy. Shared by both detector families so the
+# mapping cannot differ between the arms of the comparison -- if it did, a
+# class-count difference would be the mapping's doing rather than the model's.
+COCO_TO_TAXONOMY = {
+    "cell phone": PHONE,
+    # COCO `book` does NOT mean `secondary_paper_chit`, and mapping it there was
+    # a category error with real consequences. Rendering the top ten "chit"
+    # detections on video 03 showed what the class actually fired on: a red
+    # snack packet at 121x63 px and a yellow notebook at 116x69 px. Every chit
+    # detection this pipeline had produced -- 232 rows on video 03, 27 on video
+    # 01 -- was a notebook or a wrapper.
+    #
+    # A book or notebook on an examination desk is the candidate's own
+    # stationery, quite possibly the answer sheet. Labelling it as a smuggled
+    # note manufactures evidence against the person using it. COCO cannot tell
+    # an answer sheet from a notebook from a chit, so the honest mapping is
+    # `unknown_object`: the detector found *something paper-like* and the class
+    # it assigned does not support any of the three readings.
+    #
+    # It is not `unknown_object` either. An open textbook or notebook on an
+    # examination desk is unauthorised material in its own right, and burying it
+    # under `unknown_object` discards a real observation. It gets its own
+    # observational class, which says exactly what the detector saw and nothing
+    # about what it means.
+    #
+    # A real chit claim needs a detector fine-tuned on labelled chits. Until
+    # then chit recall on this pipeline is zero and chit precision is undefined.
+    "book": BOOK_OR_NOTEBOOK,
+    "mouse": MOUSE, "keyboard": KEYBOARD, "laptop": MONITOR, "tv": MONITOR,
+    "remote": STATIONERY, "scissors": STATIONERY,
+    "backpack": BAG, "handbag": BAG, "suitcase": BAG,
+}
+
+
+def rfdetr_runner(variant: str = "nano", crop_cfg=None, confidence: float = 0.25,
+                  frame_reader=None, device: str = "cpu"):
+    """Adapter over Roboflow RF-DETR (Apache-2.0).
+
+    Runs on the same `ObjectCrop` rows as the D-FINE arm and returns boxes in
+    **source** coordinates, so PRD 4's identical-input requirement holds across
+    detector families as well as within one.
+
+    RF-DETR takes the crop as an image rather than a letterboxed 640x640 canvas
+    -- it does its own resizing internally. The crop is therefore cut at native
+    resolution and the returned boxes are offset by the crop origin, which is
+    the whole of the projection: no letterbox pad to undo, unlike the ONNX arm.
+    """
+    import numpy as _np
+    import rfdetr
+
+    from .crops import CropConfig
+
+    crop_cfg = crop_cfg or CropConfig()
+    classes = {
+        "nano": rfdetr.RFDETRNano, "small": rfdetr.RFDETRSmall,
+        "medium": rfdetr.RFDETRMedium, "base": rfdetr.RFDETRBase,
+        "large": rfdetr.RFDETRLarge,
+    }
+    if variant not in classes:
+        raise ValueError(f"unknown RF-DETR variant {variant!r}; "
+                         f"expected one of {sorted(classes)}")
+    model = classes[variant]()
+
+    from rfdetr.assets.coco_classes import COCO_CLASSES
+    names = (COCO_CLASSES if isinstance(COCO_CLASSES, dict)
+             else {i: n for i, n in enumerate(COCO_CLASSES)})
+
+    def run(crop):
+        if frame_reader is None:
+            raise RuntimeError(
+                "rfdetr_runner needs a frame_reader mapping a crop to its "
+                "source frame; without one there is nothing to detect on")
+        frame = frame_reader(crop)
+        if frame is None:
+            return []
+        height, width = frame.shape[:2]
+        x1, y1 = int(max(crop.x1, 0)), int(max(crop.y1, 0))
+        x2, y2 = int(min(crop.x2, width)), int(min(crop.y2, height))
+        if x2 <= x1 or y2 <= y1:
+            return []
+        patch = frame[y1:y2, x1:x2][:, :, ::-1]     # BGR -> RGB
+
+        detections = model.predict(_np.ascontiguousarray(patch),
+                                   threshold=confidence)
+        out = []
+        for box, score, class_id in zip(detections.xyxy, detections.confidence,
+                                        detections.class_id):
+            raw = names.get(int(class_id), "unknown")
+            if raw == "person":
+                continue
+            cls = COCO_TO_TAXONOMY.get(raw, UNKNOWN)
+            # Offset by the crop origin. A box left in crop space is wrong by
+            # exactly (x1, y1) and still draws a plausible overlay.
+            out.append((cls, float(score), float(box[0]) + x1, float(box[1]) + y1,
+                        float(box[2]) + x1, float(box[3]) + y1))
+        return out
+
+    return run
+
+
 def dfine_runner(model_path, crop_cfg=None, providers=None,
                  confidence: float = 0.25, frame_reader=None,
                  class_map: dict | None = None):
@@ -389,12 +497,7 @@ def dfine_runner(model_path, crop_cfg=None, providers=None,
     # into one bucket and make the failure clusters PRD 10 asks for unmeasurable.
     detector = ONNXDetector(str(model_path), providers=providers,
                             input_size=crop_cfg.input_size, class_map={})
-    mapping = class_map or {
-        "cell phone": PHONE, "book": CHIT, "paper": CHIT,
-        "mouse": MOUSE, "keyboard": KEYBOARD, "laptop": MONITOR,
-        "tv": MONITOR, "remote": STATIONERY, "scissors": STATIONERY,
-        "backpack": BAG, "handbag": BAG, "suitcase": BAG, "person": HAND,
-    }
+    mapping = class_map or COCO_TO_TAXONOMY
 
     def run(crop):
         if frame_reader is None:

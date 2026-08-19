@@ -113,7 +113,28 @@ def main() -> int:
              "configs/experiments/product_zero.yaml", "--sources", str(video),
              "--run-id", run_id], log, env)
 
-        # Phases 1-3 -- whole video, no neural model.
+        # Phase 1 -- decoded-PTS inventory, timestamp index, contact sheets.
+        code, timings["ingest"] = run(
+            "Phase 1  ingest inventory + contact sheets",
+            ["tools/validate_video.py", "--run", str(run_dir), str(video)],
+            log, env)
+
+        # PRD 6.3.7 -- every named transform run enabled and disabled. Nothing
+        # downstream consumes this; preprocessing may never replace source
+        # pixels in evaluation.
+        code, timings["preprocessing"] = run(
+            "Phase 1  preprocessing A/B (identity/CLAHE/denoise/sharpen)",
+            ["tools/run_preprocessing_ab.py", "--run", str(run_dir), str(video)],
+            log, env)
+
+        # Phase 2 -- global motion estimation on static background support,
+        # three named configurations including identity (PRD 6.3.1-6.3.5).
+        code, timings["alignment"] = run(
+            "Phase 2  alignment A/B (identity/features/ECC)",
+            ["tools/run_alignment.py", "--run", str(run_dir),
+             "--calibration", str(calibration), str(video)], log, env)
+
+        # Phases 2-3 -- whole video, no neural model.
         code, timings["motion"] = run(
             "Phases 1-3  health, motion, ROI, segmentation",
             ["tools/run_motion_scan.py", "--run", str(run_dir),

@@ -81,6 +81,11 @@ def main() -> int:
     ap.add_argument("--dfine", type=Path, default=None,
                     help="path to the D-FINE ONNX checkpoint")
     ap.add_argument("--rfdetr", type=Path, default=None)
+    ap.add_argument("--rfdetr-variant", default="nano",
+                    help="nano|small|medium|base|large. Weights are fetched by "
+                         "rfdetr itself on first use.")
+    ap.add_argument("--no-rfdetr", action="store_true",
+                    help="skip RF-DETR; it is recorded unavailable, not omitted")
     ap.add_argument("--pose-source", default="rtmpose_baseline",
                     help="which pose configuration positions the hand crops")
     ap.add_argument("--confidence", type=float, default=0.25)
@@ -138,12 +143,35 @@ def main() -> int:
         is_sahi = config_id.endswith("_sahi")
         weights = args.rfdetr if config_id.startswith("rf_detr") else args.dfine
 
-        if config_id.startswith("rf_detr"):
+        if config_id.startswith("rf_detr") and args.no_rfdetr:
             results.append(od.unavailable(
                 config_id, RESOURCE_UNAVAILABLE,
-                "rfdetr is not installed in this environment, so RF-DETR did "
-                "not run. It stays in the comparison as unavailable and is "
-                "never substituted by D-FINE (PRD 5).", crop_digest))
+                "skipped by --no-rfdetr; it stays in the comparison as "
+                "unavailable and is never substituted by D-FINE (PRD 5).",
+                crop_digest))
+            continue
+
+        if config_id.startswith("rf_detr"):
+            reader = SequentialFrameReader(args.video)
+            try:
+                base = od.rfdetr_runner(args.rfdetr_variant, crop_cfg,
+                                        confidence=args.confidence,
+                                        frame_reader=lambda c, _r=reader: _r(c))
+            except Exception as exc:                    # noqa: BLE001
+                results.append(od.unavailable(
+                    config_id, LAUNCH_FAILED,
+                    f"{type(exc).__name__}: {exc}", crop_digest))
+                continue
+            if is_sahi:
+                log = sahi.SliceLog()
+                slice_logs[config_id] = log
+                runner = sahi.sahi_runner(base, sahi_cfg, on_slice=log.record)
+            else:
+                runner = base
+            result = od.detect(crops, runner, config_id, detect_cfg, crop_digest)
+            if is_sahi:
+                result.slices_run = len(slice_logs[config_id].rows)
+            results.append(result)
             continue
         if not (weights and weights.is_file()):
             results.append(od.unavailable(
