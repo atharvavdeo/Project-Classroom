@@ -62,6 +62,7 @@ def main() -> int:
     ap.add_argument("--dfine", type=Path,
                     default=ROOT / "models/dfine/onnx/model.onnx")
     ap.add_argument("--limit-events", type=int, default=0)
+    ap.add_argument("--max-events", type=int, default=0)
     ap.add_argument("--sample-hz", type=float, default=1.0)
     ap.add_argument("--gemma-url", default=None)
     ap.add_argument("--tag", default="corpus")
@@ -129,6 +130,8 @@ def main() -> int:
                 str(video)]
         if args.limit_events:
             argv += ["--limit-events", str(args.limit_events)]
+        if args.max_events:
+            argv += ["--max-events", str(args.max_events)]
         code, timings["pose"] = run("Phase 4  tracking + pose A/B (3 models)",
                                     argv, log, env)
         run("Phase 4  pose comparison report",

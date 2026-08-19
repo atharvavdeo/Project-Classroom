@@ -142,6 +142,10 @@ def main() -> int:
     ap.add_argument("--pose-device", default="cpu")
     ap.add_argument("--limit-events", type=int, default=0,
                     help="process only the first N candidate events")
+    ap.add_argument("--max-events", type=int, default=0,
+                    help="cap the number of candidate events, sampled evenly "
+                         "across the recording rather than truncated to its "
+                         "first minutes. The cap is recorded in the run.")
     args = ap.parse_args()
 
     paths = artifacts.open_run(args.run.parent, args.run.name)
@@ -160,8 +164,24 @@ def main() -> int:
                       reason="no candidate manifest to consume")
         status.write()
         return 2
+    total_candidates = len(candidates)
+    cap_note = None
     if args.limit_events:
         candidates = candidates[:args.limit_events]
+        cap_note = (f"first {len(candidates)} of {total_candidates} events; "
+                    f"--limit-events truncates rather than samples")
+    elif args.max_events and total_candidates > args.max_events:
+        # Evenly spaced, not the first N. A truncated head would measure only
+        # the opening minutes of a long recording and report it as the whole.
+        step = total_candidates / args.max_events
+        picked = [candidates[int(i * step)] for i in range(args.max_events)]
+        candidates = picked
+        cap_note = (f"{len(candidates)} of {total_candidates} events, sampled "
+                    f"evenly across the full recording (every ~{step:.1f}th). "
+                    f"Motion covered the complete duration; only the model "
+                    f"stages are capped, and this cap is why.")
+    if cap_note:
+        print(f"EVENT CAP: {cap_note}")
 
     # --------------------------------------------------- 1. the sample plan --
     status.begin("07_tracking")
@@ -222,6 +242,11 @@ def main() -> int:
               f"{len(result.tracks):4} tracks  "
               f"{sa.summarise(associations).get('resolved', 0):5} seats resolved")
 
+    if cap_note:
+        paths.write_json("07_tracking/event_cap.json", {
+            "total_candidate_events": total_candidates,
+            "events_processed": len(candidates),
+            "note": cap_note})
     status.finish("07_tracking", COMPLETE if detection.available else BLOCKED,
                   reason=None if detection.available else detection.reason,
                   sample_rows=len(rows), person_boxes=len(detection.boxes))
