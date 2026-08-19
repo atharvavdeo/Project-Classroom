@@ -1,0 +1,666 @@
+{
+  "camera_id": "02",
+  "epoch_id": "e1",
+  "version": 1,
+  "frame_w": 1280,
+  "frame_h": 720,
+  "source_sha256": "f02bbf5fbaef6a0d572e94863eebebb256beee0e906783b75523f5ca5c8ea6f2",
+  "reference_pts_ms": 2680.0,
+  "operator": "tools/propose_calibration.py (automatic proposal)",
+  "reviewer": "",
+  "approval_state": "draft",
+  "approved_utc": null,
+  "parent_version": null,
+  "review_images": {},
+  "confidence_notes": "DRAFT. Proposed automatically from 117 person detections over 40 frames sampled across the whole recording. PRD 7 allows automatic proposal but never automatic approval, so this profile is unapproved and seat attribution is blocked downstream. A reviewer must confirm the zones, mark monitor and reflection exclusions, and resolve the ambiguous boundaries before any seat-attributed evidence may be produced.",
+  "proposal_source": "person_detection via D-FINE",
+  "seats": [
+    {
+      "seat_id": "02-P01",
+      "zones": {
+        "seat_context": [
+          [
+            793.3,
+            661.9
+          ],
+          [
+            1032.6,
+            661.9
+          ],
+          [
+            1032.6,
+            717.4
+          ],
+          [
+            793.3,
+            717.4
+          ]
+        ],
+        "upper_body": [
+          [
+            793.3,
+            661.9
+          ],
+          [
+            1032.6,
+            661.9
+          ],
+          [
+            1032.6,
+            698.5
+          ],
+          [
+            793.3,
+            698.5
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            793.3,
+            698.5
+          ],
+          [
+            1032.6,
+            698.5
+          ],
+          [
+            1032.6,
+            717.4
+          ],
+          [
+            793.3,
+            717.4
+          ]
+        ],
+        "lap_bag": [
+          [
+            793.3,
+            707.4
+          ],
+          [
+            1032.6,
+            707.4
+          ],
+          [
+            1032.6,
+            717.4
+          ],
+          [
+            793.3,
+            717.4
+          ]
+        ]
+      },
+      "desk_line_y": 698.5,
+      "adjacent": [
+        "02-P02",
+        "02-P03",
+        "02-P04",
+        "02-P05",
+        "02-P06",
+        "02-P07"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 35 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "02-P02",
+      "zones": {
+        "seat_context": [
+          [
+            608.3,
+            439.3
+          ],
+          [
+            727.9,
+            439.3
+          ],
+          [
+            727.9,
+            501.6
+          ],
+          [
+            608.3,
+            501.6
+          ]
+        ],
+        "upper_body": [
+          [
+            608.3,
+            439.3
+          ],
+          [
+            727.9,
+            439.3
+          ],
+          [
+            727.9,
+            480.4
+          ],
+          [
+            608.3,
+            480.4
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            608.3,
+            480.4
+          ],
+          [
+            727.9,
+            480.4
+          ],
+          [
+            727.9,
+            501.6
+          ],
+          [
+            608.3,
+            501.6
+          ]
+        ],
+        "lap_bag": [
+          [
+            608.3,
+            490.4
+          ],
+          [
+            727.9,
+            490.4
+          ],
+          [
+            727.9,
+            501.6
+          ],
+          [
+            608.3,
+            501.6
+          ]
+        ]
+      },
+      "desk_line_y": 480.4,
+      "adjacent": [
+        "02-P01",
+        "02-P03",
+        "02-P04",
+        "02-P05",
+        "02-P06",
+        "02-P07"
+      ],
+      "ambiguous_with": [
+        "02-P04"
+      ],
+      "notes": "proposed from 33 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "02-P03",
+      "zones": {
+        "seat_context": [
+          [
+            641.7,
+            243.4
+          ],
+          [
+            830.4,
+            243.4
+          ],
+          [
+            830.4,
+            386.2
+          ],
+          [
+            641.7,
+            386.2
+          ]
+        ],
+        "upper_body": [
+          [
+            641.7,
+            243.4
+          ],
+          [
+            830.4,
+            243.4
+          ],
+          [
+            830.4,
+            337.6
+          ],
+          [
+            641.7,
+            337.6
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            641.7,
+            337.6
+          ],
+          [
+            830.4,
+            337.6
+          ],
+          [
+            830.4,
+            386.2
+          ],
+          [
+            641.7,
+            386.2
+          ]
+        ],
+        "lap_bag": [
+          [
+            641.7,
+            360.5
+          ],
+          [
+            830.4,
+            360.5
+          ],
+          [
+            830.4,
+            386.2
+          ],
+          [
+            641.7,
+            386.2
+          ]
+        ]
+      },
+      "desk_line_y": 337.6,
+      "adjacent": [
+        "02-P01",
+        "02-P02",
+        "02-P04",
+        "02-P05",
+        "02-P06",
+        "02-P07"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 17 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "02-P04",
+      "zones": {
+        "seat_context": [
+          [
+            731.9,
+            443.4
+          ],
+          [
+            836.2,
+            443.4
+          ],
+          [
+            836.2,
+            516.5
+          ],
+          [
+            731.9,
+            516.5
+          ]
+        ],
+        "upper_body": [
+          [
+            731.9,
+            443.4
+          ],
+          [
+            836.2,
+            443.4
+          ],
+          [
+            836.2,
+            491.6
+          ],
+          [
+            731.9,
+            491.6
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            731.9,
+            491.6
+          ],
+          [
+            836.2,
+            491.6
+          ],
+          [
+            836.2,
+            516.5
+          ],
+          [
+            731.9,
+            516.5
+          ]
+        ],
+        "lap_bag": [
+          [
+            731.9,
+            503.3
+          ],
+          [
+            836.2,
+            503.3
+          ],
+          [
+            836.2,
+            516.5
+          ],
+          [
+            731.9,
+            516.5
+          ]
+        ]
+      },
+      "desk_line_y": 491.6,
+      "adjacent": [
+        "02-P01",
+        "02-P02",
+        "02-P03",
+        "02-P05",
+        "02-P06",
+        "02-P07"
+      ],
+      "ambiguous_with": [
+        "02-P02",
+        "02-P05"
+      ],
+      "notes": "proposed from 11 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "02-P05",
+      "zones": {
+        "seat_context": [
+          [
+            840.2,
+            494.6
+          ],
+          [
+            1022.4,
+            494.6
+          ],
+          [
+            1022.4,
+            620.5
+          ],
+          [
+            840.2,
+            620.5
+          ]
+        ],
+        "upper_body": [
+          [
+            840.2,
+            494.6
+          ],
+          [
+            1022.4,
+            494.6
+          ],
+          [
+            1022.4,
+            577.7
+          ],
+          [
+            840.2,
+            577.7
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            840.2,
+            577.7
+          ],
+          [
+            1022.4,
+            577.7
+          ],
+          [
+            1022.4,
+            620.5
+          ],
+          [
+            840.2,
+            620.5
+          ]
+        ],
+        "lap_bag": [
+          [
+            840.2,
+            597.8
+          ],
+          [
+            1022.4,
+            597.8
+          ],
+          [
+            1022.4,
+            620.5
+          ],
+          [
+            840.2,
+            620.5
+          ]
+        ]
+      },
+      "desk_line_y": 577.7,
+      "adjacent": [
+        "02-P01",
+        "02-P02",
+        "02-P03",
+        "02-P04",
+        "02-P06",
+        "02-P07"
+      ],
+      "ambiguous_with": [
+        "02-P04"
+      ],
+      "notes": "proposed from 6 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "02-P06",
+      "zones": {
+        "seat_context": [
+          [
+            565.8,
+            538.0
+          ],
+          [
+            744.0,
+            538.0
+          ],
+          [
+            744.0,
+            580.4
+          ],
+          [
+            565.8,
+            580.4
+          ]
+        ],
+        "upper_body": [
+          [
+            565.8,
+            538.0
+          ],
+          [
+            744.0,
+            538.0
+          ],
+          [
+            744.0,
+            566.0
+          ],
+          [
+            565.8,
+            566.0
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            565.8,
+            566.0
+          ],
+          [
+            744.0,
+            566.0
+          ],
+          [
+            744.0,
+            580.4
+          ],
+          [
+            565.8,
+            580.4
+          ]
+        ],
+        "lap_bag": [
+          [
+            565.8,
+            572.8
+          ],
+          [
+            744.0,
+            572.8
+          ],
+          [
+            744.0,
+            580.4
+          ],
+          [
+            565.8,
+            580.4
+          ]
+        ]
+      },
+      "desk_line_y": 566.0,
+      "adjacent": [
+        "02-P01",
+        "02-P02",
+        "02-P03",
+        "02-P04",
+        "02-P05",
+        "02-P07"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 5 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "02-P07",
+      "zones": {
+        "seat_context": [
+          [
+            394.2,
+            608.6
+          ],
+          [
+            675.2,
+            608.6
+          ],
+          [
+            675.2,
+            717.7
+          ],
+          [
+            394.2,
+            717.7
+          ]
+        ],
+        "upper_body": [
+          [
+            394.2,
+            608.6
+          ],
+          [
+            675.2,
+            608.6
+          ],
+          [
+            675.2,
+            680.6
+          ],
+          [
+            394.2,
+            680.6
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            394.2,
+            680.6
+          ],
+          [
+            675.2,
+            680.6
+          ],
+          [
+            675.2,
+            717.7
+          ],
+          [
+            394.2,
+            717.7
+          ]
+        ],
+        "lap_bag": [
+          [
+            394.2,
+            698.1
+          ],
+          [
+            675.2,
+            698.1
+          ],
+          [
+            675.2,
+            717.7
+          ],
+          [
+            394.2,
+            717.7
+          ]
+        ]
+      },
+      "desk_line_y": 680.6,
+      "adjacent": [
+        "02-P01",
+        "02-P02",
+        "02-P03",
+        "02-P04",
+        "02-P05",
+        "02-P06"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 3 frames of person detections; unreviewed"
+    }
+  ],
+  "masks": [
+    {
+      "kind": "static_background",
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1280.0,
+          0.0
+        ],
+        [
+          1280.0,
+          720.0
+        ],
+        [
+          0.0,
+          720.0
+        ]
+      ],
+      "note": "whole frame minus seats; seats are subtracted at use time by calibration.static_support()"
+    }
+  ]
+}

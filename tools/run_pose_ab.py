@@ -34,7 +34,7 @@ sys.path.insert(0, str(ROOT))
 from pipeline import artifacts, person_detection as pd, pose, seat_association as sa, tracking  # noqa: E402
 from pipeline.calibration import CalibrationProfile  # noqa: E402
 from pipeline.run_manifest import (BLOCKED, COMPLETE, LAUNCH_FAILED,  # noqa: E402
-                                   LICENCE_BLOCKED,
+                                   LICENCE_BLOCKED, MISSING_WEIGHTS,
                                    RESOURCE_UNAVAILABLE, RunManifest, RunStatus,
                                    SKIPPED_UNAVAILABLE)
 
@@ -245,11 +245,30 @@ def main() -> int:
     results = []
     for config_id in pose.POSE_CONFIGS:
         if config_id == pose.ALPHAPOSE:
-            results.append(pose.unavailable(
-                config_id, LICENCE_BLOCKED,
-                "AlphaPose checkpoint and licence status are unconfirmed "
-                "(doubt.md 4.2). It stays in the comparison as unavailable "
-                "rather than being dropped from it.", manifest))
+            ckpt = ROOT / "models/alphapose/fast_421_res152_256x192.pth"
+            mcfg = ROOT / "models/alphapose/256x192_res152_lr1e-3_1x-duc.yaml"
+            if not args.pose:
+                results.append(pose.unavailable(
+                    config_id, RESOURCE_UNAVAILABLE,
+                    "--pose was not requested", manifest))
+                continue
+            if not (ckpt.is_file() and mcfg.is_file()):
+                results.append(pose.unavailable(
+                    config_id, MISSING_WEIGHTS,
+                    f"checkpoint or model config absent under models/alphapose/",
+                    manifest))
+                continue
+            reader = frame_reader_for(args.video, True)
+            try:
+                runner = pose.alphapose_runner(config_id, str(mcfg), str(ckpt),
+                                               frame_reader=reader,
+                                               device=args.pose_device)
+            except Exception as exc:                    # noqa: BLE001
+                results.append(pose.unavailable(
+                    config_id, LAUNCH_FAILED,
+                    f"{type(exc).__name__}: {exc}", manifest))
+                continue
+            results.append(pose.run(manifest, runner, config_id, profile))
             continue
         if not args.pose:
             results.append(pose.unavailable(

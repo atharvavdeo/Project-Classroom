@@ -690,3 +690,101 @@ audit purposes, or accept that this measure stays unavailable on this corpus.
   * **"23 schema-invalid" when Gemma never ran.** A review that was never
     attempted is not a review that failed validation. `attempted` and
     `not_attempted` are now separate counts.
+
+## 8. AlphaPose is now genuinely available (supersedes 4.2)
+
+`alphapose_crowd_baseline` ran as `licence_blocked` in every earlier run. It is
+now `available` and produces real observations. What it took, and what the owner
+still needs to decide:
+
+### 8.1 The PyPI package is unusable; the source build works
+
+`pip install alphapose` (1.1, the only PyPI release) installs a **134 KB
+pure-Python wheel that omits `alphapose/models/layers/` entirely**, along with
+`detector/` and every compiled op. `import alphapose` succeeds and every model
+build fails. That is worse than a missing package, because a bare-import probe
+reports it available.
+
+Built instead from official MVIG-SJTU source (`python setup.py build develop`,
+commit `c60106d`). Three things had to be worked around, all recorded:
+
+  * `setup.py get_version()` uses `exec(...); locals()['__version__']`, which
+    PEP 667 broke in Python 3.13. Official AlphaPose targets Python 3.6.
+  * `setup.cfg` pins a Tsinghua mirror index that is unreachable here.
+  * `halpecocotools` fails to build without MSVC C++ 14.0. It is a **dataset
+    evaluation** dependency, not an inference one, so AlphaPose was installed
+    without it. Training or COCO evaluation would need the compiler.
+
+### 8.2 res152-DUC, not res50-DCN, and why
+
+The `fast_dcn_res50_256x192` checkpoint needs deformable convolution, whose
+compiled CUDA extension requires nvcc and MSVC — neither is present. The
+`fast_421_res152_256x192` checkpoint uses `FastPose_DUC`, which needs no
+deformable convolution. It loads with **990 tensors, 0 missing, 0 unexpected**,
+83.2M parameters, on CPU.
+
+Checkpoint source: `https://huggingface.co/AlexZheng/alphapose` (public,
+ungated). **Needs a decision:** the owner should confirm this mirror is
+acceptable provenance, or supply the checkpoint from the official Model Zoo.
+
+### 8.3 The licence is a real constraint, not an unknown
+
+The LICENSE shipped with the source reads:
+
+> ACADEMIC OR NON-PROFIT ORGANIZATION NONCOMMERCIAL RESEARCH USE ONLY
+
+Licensor is Shanghai Jiao Tong University. **Needs a decision before any
+commercial deployment.** For hackathon and research measurement it is within
+terms; shipping this in a product is not.
+
+### 8.4 AlphaPose covers every row by construction, and that is not a win
+
+First measured comparison (video 01, 19 identical manifest rows):
+
+| Configuration | Observations | Joints visible | Wrist visible | Wrist occluded | Rows/s |
+|---|---|---|---|---|---|
+| `rtmpose_baseline` | 14/19 | 87.9% | 16 | 12 | 2.54 |
+| `rtmo_baseline` | 8/19 | 77.9% | 13 | 3 | 5.81 |
+| `alphapose_crowd_baseline` | 19/19 | 85.8% | 26 | 12 | 2.75 |
+
+AlphaPose reports 19 of 19 because it is **top-down and handed the manifest
+row's box** — it cannot fail to return a person. RTMPose and RTMO run natively
+on the full frame and are matched back by IoU, so they can decline. The 19/19 is
+a property of the harness, not evidence that AlphaPose finds more people, and
+the selection report must not read it as recall.
+
+**Needs a decision:** whether to add a box-fed variant of RTMPose so the three
+are compared under one input regime, or to keep the native regimes and compare
+only on rows where all three answered.
+
+## 9. Calibration for videos 01, 02, 04, 05, 06
+
+Only video 03 has a reviewed profile. The other five now carry DRAFT profiles
+from `tools/propose_calibration.py`, built by running the real D-FINE detector
+over 40 frames sampled across each whole recording and clustering the person
+footprints:
+
+| Camera | Detections | Clusters kept | Seats proposed |
+|---|---|---|---|
+| 01 | 81 | 6 | 6 |
+| 02 | 117 | 7 | 7 |
+| 04 | 245 | 7 | 7 |
+| 05 | 306 | 20 | 12 |
+| 06 | 311 | 12 | 12 |
+
+Every profile is `approval_state: draft` with no reviewer, so
+`attribute_box` refuses to name a seat and all attribution returns
+`unattributed` (PRD 3). Motion, ROI, segmentation, pose and object detection
+still run — that is the "health diagnostic only" path.
+
+Overlapping proposals are clipped to axis-aligned Voronoi cells around the
+footprint centres, because the motion scanner requires disjoint zones: an
+earlier phase measured overlapping zones producing phantom events on the
+neighbouring seat whenever the real candidate moved. Every clipped pair is
+recorded as an ambiguous boundary.
+
+**Needs a decision — this is the largest open item.** A reviewer must confirm
+the zones, mark monitor/reflection/aisle exclusions, and approve each profile
+before any seat-attributed evidence from videos 01, 02, 04, 05 or 06 means
+anything. Until then those runs measure *motion in a proposed region*, not
+*motion at a seat*.

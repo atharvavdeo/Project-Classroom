@@ -16,3 +16,6 @@
 
 __pycache__/
 *.pyc
+
+# Run outputs and logs (see /artifacts/runs/ above).
+/artifacts/

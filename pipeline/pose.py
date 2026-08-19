@@ -706,6 +706,89 @@ def rtmlib_runner(config_id: str, frame_reader=None,
     return run_row
 
 
+def alphapose_runner(config_id: str, model_config: str, checkpoint: str,
+                     frame_reader=None, device: str = "cpu"):
+    """Adapter over AlphaPose, built from official MVIG-SJTU source.
+
+    Top-down by construction: AlphaPose estimates keypoints inside a person box
+    that something else supplied. Here that box is the manifest row's, which is
+    exactly what PRD 4 wants -- every configuration answering about the same
+    person at the same timestamp.
+
+    Unlike the rtmlib adapter this one is *given* the box rather than finding
+    it, so there is no full-frame pass and no IoU match back. That is a real
+    difference between the configurations and it is recorded in the report
+    rather than hidden: a top-down model handed a box cannot miss the person,
+    but it also cannot recover from a bad box.
+
+    The affine crop below is AlphaPose's own `get_affine_transform` convention
+    (centre/scale to a 256x192 input). Using a plain resize instead would shift
+    every keypoint by the aspect-ratio difference, which looks plausible and is
+    wrong everywhere.
+    """
+    import numpy as _np
+    import torch
+    from alphapose.models import builder
+    from alphapose.utils.config import update_config
+    from alphapose.utils.transforms import get_affine_transform, get_func_heatmap_to_coord
+
+    import cv2
+
+    cfg = update_config(model_config)
+    model = builder.build_sppe(cfg.MODEL, preset_cfg=cfg.DATA_PRESET)
+    model.load_state_dict(torch.load(checkpoint, map_location="cpu",
+                                     weights_only=True), strict=True)
+    model.to(device).eval()
+    heatmap_to_coord = get_func_heatmap_to_coord(cfg)
+    input_h, input_w = cfg.DATA_PRESET.IMAGE_SIZE
+    aspect_ratio = float(input_w) / input_h
+
+    def run_row(row: PoseRow):
+        if frame_reader is None:
+            raise RuntimeError(
+                f"{config_id} needs a frame_reader mapping a PoseRow to a "
+                f"decoded frame; without one there is nothing to estimate on")
+        frame = frame_reader(row)
+        if frame is None:
+            return []
+
+        x1, y1, x2, y2 = row.box
+        centre = _np.array([(x1 + x2) / 2.0, (y1 + y2) / 2.0], dtype=_np.float32)
+        width, height = x2 - x1, y2 - y1
+        # Pad the box to the model's aspect ratio, as AlphaPose does, so the
+        # person is not squashed into the input.
+        if width > aspect_ratio * height:
+            height = width / aspect_ratio
+        else:
+            width = height * aspect_ratio
+        scale = _np.array([width, height], dtype=_np.float32) * 1.25
+
+        trans = get_affine_transform(centre, scale, 0, [input_w, input_h])
+        crop = cv2.warpAffine(frame, trans, (int(input_w), int(input_h)),
+                              flags=cv2.INTER_LINEAR)
+        blob = crop[:, :, ::-1].astype(_np.float32) / 255.0
+        blob = (blob - _np.array([0.406, 0.457, 0.480], dtype=_np.float32))
+        tensor = torch.from_numpy(blob.transpose(2, 0, 1)[None]).to(device)
+
+        with torch.no_grad():
+            heatmap = model(tensor).cpu().numpy()
+
+        # Project heatmap peaks back to source coordinates. A keypoint left in
+        # heatmap space is wrong by the affine transform and still draws a
+        # plausible overlay.
+        bbox = [float(centre[0] - scale[0] / 2), float(centre[1] - scale[1] / 2),
+                float(centre[0] + scale[0] / 2), float(centre[1] + scale[1] / 2)]
+        coords, scores = heatmap_to_coord(
+            heatmap[0], bbox, hm_shape=cfg.DATA_PRESET.HEATMAP_SIZE,
+            norm_type=None)
+        out = _np.zeros((17, 3), dtype=float)
+        out[:, :2] = _np.asarray(coords)[:17]
+        out[:, 2] = _np.asarray(scores).reshape(-1)[:17]
+        return [out] if float(out[:, 2].max()) >= 0.05 else []
+
+    return run_row
+
+
 def _overlap(a: tuple[float, float, float, float],
              b: tuple[float, float, float, float]) -> float:
     """IoU, used to decide whether a returned pose is the row's person."""
