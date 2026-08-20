@@ -7,8 +7,8 @@
 # depends on.
 /models/
 
-# Run outputs. A sealed run is reproducible from its RUN_MANIFEST.json.
-/artifacts/runs/
+
+# Legacy run outputs from the classroom driver.
 /runs/
 
 # Test media and fixtures, generated on demand.

@@ -32,6 +32,8 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 
+from pipeline.object_detection import TARGET_CLASSES
+
 # Coefficients. Persisted with every ranked event so a position can be
 # re-derived, and so a change in weighting is visible as a change in the
 # artifacts rather than as a silent reordering between runs.
@@ -73,6 +75,28 @@ NORMAL = "normal"
 LOW = "low"
 SUPPRESSED = "suppressed_from_auto_ranking"
 
+# ------------------------------------------------------------ dispositions --
+# `priority` says where an event sits in the ordering. `disposition` says what
+# a reviewer is being asked to do with it, which is a different question and
+# the one an investigator actually has.
+#
+# The band boundaries cannot be absolute score thresholds. Measured: the top
+# event on video 01 scores 85.63 and the top event on video 03 scores 9.92,
+# because the dominant component is a motion deviation in that seat's own
+# baseline units. A fixed cut would put every video-01 event above every
+# video-03 event regardless of what is in them. So the motion-only route into
+# the review queue is defined on **rank within the run**, and the corroborated
+# route is defined on evidence and ignores rank entirely.
+REJECTED = "rejected_not_offered"
+RETAINED = "retained_low_priority"
+FLAGGED = "flagged_for_review"
+HIGH_POTENTIAL = "high_potential_corroborated"
+DISPOSITIONS = (HIGH_POTENTIAL, FLAGGED, RETAINED, REJECTED)
+
+# Fraction of a run's gate-passing events that enter the queue on motion
+# strength alone. Everything corroborated enters regardless of where it falls.
+REVIEW_FRACTION = 0.25
+
 
 @dataclass
 class RankedEvent:
@@ -86,6 +110,9 @@ class RankedEvent:
     score: float
     rank: int = 0
     priority: str = NORMAL
+    disposition: str = RETAINED
+    disposition_reason: str = ""
+    corroboration: list = field(default_factory=list)
     components: dict = field(default_factory=dict)
     weights: dict = field(default_factory=dict)
     penalties: dict = field(default_factory=dict)
@@ -102,12 +129,22 @@ class RankedEvent:
 
 
 def _components(event: dict, pose_evidence=None, objects=None) -> dict:
-    """Every ranking component, from evidence that already exists."""
-    objects = objects or []
+    """Every ranking component, from evidence that already exists.
 
-    supported = sum(1 for o in objects
+    Only **target-class** object evidence scores. Temporal confirmation runs on
+    everything the detector emits, and on video 03 that is 334 confirmed
+    `unknown_object`, 103 `monitor_or_bezel` and 76 `keyboard` against 36
+    `phone`. A confirmed monitor is a confirmed monitor: it is real, it is
+    correctly labelled, and it corroborates nothing. Counting it would let the
+    furniture in the room carry an event into the top band, which is precisely
+    the false-event generation PS #2 names as a deployment risk.
+    """
+    objects = objects or []
+    targets = [o for o in objects if o.cls in TARGET_CLASSES]
+
+    supported = sum(1 for o in targets
                     if o.status == "temporally_supported_object_evidence")
-    singles = sum(1 for o in objects
+    singles = sum(1 for o in targets
                   if o.status == "single_frame_object_candidate")
 
     duration_s = max(event.get("end_pts_ms", 0) - event.get("start_pts_ms", 0),
@@ -211,7 +248,90 @@ def rank(events: list[dict], pose_by_event: dict | None = None,
     out.sort(key=lambda e: (e.priority == SUPPRESSED, e.priority == LOW, -e.score))
     for index, event in enumerate(out, start=1):
         event.rank = index
+    _assign_dispositions(out)
     return out
+
+
+def _assign_dispositions(ranked: list[RankedEvent],
+                         review_fraction: float = REVIEW_FRACTION) -> None:
+    """Decide what a reviewer is asked to do with each event.
+
+    Four bands, in the order they are tested:
+
+    **rejected_not_offered** -- a gate refused it. This means *not placed in
+    the queue*, never *judged innocent*: the evidence stays on disk with its
+    score intact and remains searchable. Calling it "rejected" and leaving it
+    retrievable is the only honest pair of properties; a band that meant
+    "cleared" would be a finding this pipeline is not entitled to make.
+
+    **high_potential_corroborated** -- a conjunction, not a high score. It
+    requires object evidence that survived temporal confirmation *and*
+    sustained pose context *and* a resolved seat *and* no active quality or
+    geometry penalty. Four independent things have to agree. A single loud
+    motion spike cannot reach this band no matter how large it is, which is the
+    point: PS #2 names false event generation and alert fatigue as risks, and
+    a top band reachable by one modality is how both happen.
+
+    **flagged_for_review** -- the working queue. Either partial corroboration
+    (object or pose, not both) or, on motion alone, the top `review_fraction`
+    of this run's gate-passing events.
+
+    **retained_low_priority** -- everything else that passed the gate. Kept and
+    searchable, at the bottom.
+    """
+    eligible = [e for e in ranked if e.priority != SUPPRESSED]
+    cutoff_rank = max(int(round(len(eligible) * review_fraction)), 1) \
+        if eligible else 0
+    motion_rank = {event.event_id: index
+                   for index, event in enumerate(eligible, start=1)}
+
+    for event in ranked:
+        if event.priority == SUPPRESSED:
+            event.disposition = REJECTED
+            event.disposition_reason = (
+                f"gate state {event.gate_state!r} withheld this from the review "
+                f"queue. The evidence is retained and searchable with its score "
+                f"intact; this is not a finding that nothing happened")
+            continue
+
+        components = event.components
+        corroboration = []
+        if components.get("object_supported", 0.0) >= 1.0:
+            corroboration.append("temporally_supported_object_evidence")
+        if components.get("pose_sustained", 0.0) >= 1.0:
+            corroboration.append("sustained_pose_context")
+        if components.get("repetition", 0.0) > 0.0:
+            corroboration.append("repeated_movement")
+        event.corroboration = corroboration
+
+        seat_resolved = event.seat_state not in (
+            "", None, "unattributed", "ambiguous_seat")
+        modalities = {"temporally_supported_object_evidence",
+                      "sustained_pose_context"} & set(corroboration)
+
+        if len(modalities) == 2 and seat_resolved and not event.penalties:
+            event.disposition = HIGH_POTENTIAL
+            event.disposition_reason = (
+                f"object evidence confirmed across frames and sustained pose "
+                f"context agree at seat {event.seat_state}, with no quality or "
+                f"geometry penalty applied. Corroboration across independent "
+                f"modalities, not score, put this here")
+        elif corroboration:
+            event.disposition = FLAGGED
+            event.disposition_reason = (
+                f"partial corroboration ({', '.join(corroboration)}); "
+                f"not enough independent agreement for the top band")
+        elif motion_rank.get(event.event_id, len(eligible) + 1) <= cutoff_rank:
+            event.disposition = FLAGGED
+            event.disposition_reason = (
+                f"rank {motion_rank[event.event_id]} of {len(eligible)} on "
+                f"motion alone, inside the top {review_fraction:.0%} of this "
+                f"run. No object or pose evidence corroborates it")
+        else:
+            event.disposition = RETAINED
+            event.disposition_reason = (
+                f"motion below this run's top {review_fraction:.0%} and no "
+                f"corroborating evidence; retained and searchable")
 
 
 def summarise(ranked: list[RankedEvent], analysed_ms: float = 0.0,
@@ -246,6 +366,22 @@ def summarise(ranked: list[RankedEvent], analysed_ms: float = 0.0,
         "weights": dict(WEIGHTS),
         "penalties": dict(PENALTIES),
         "top_events": [e.to_row() for e in normal[:10]],
+        # What a reviewer is actually asked to open, and what was withheld.
+        # `review_queue` is the number of events a human is being asked to
+        # look at; measuring reviewer effort saved needs that number, not the
+        # number of events the segmenter produced.
+        "dispositions": {name: sum(1 for e in ranked if e.disposition == name)
+                         for name in DISPOSITIONS},
+        "review_queue": sum(1 for e in ranked if e.disposition
+                            in (HIGH_POTENTIAL, FLAGGED)),
+        "review_fraction": REVIEW_FRACTION,
+        "disposition_note":
+            "high_potential_corroborated requires temporally supported object "
+            "evidence AND sustained pose context AND a resolved seat AND no "
+            "active penalty -- a conjunction across independent modalities, "
+            "never a score. rejected_not_offered means withheld from the queue "
+            "by a gate, never cleared: those events keep their score and stay "
+            "searchable.",
     }
 
     if not normal:

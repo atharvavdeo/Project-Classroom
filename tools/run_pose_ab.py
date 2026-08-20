@@ -140,6 +140,13 @@ def main() -> int:
                          "own weights on first use, so this needs network "
                          "access once.")
     ap.add_argument("--pose-device", default="cpu")
+    ap.add_argument("--pose-configs", nargs="*", default=None,
+                    help="restrict the A/B to these configurations. Omitted "
+                         "ones are recorded unavailable with the reason, never "
+                         "silently dropped (PRD 5). Use this once the A/B has "
+                         "been decided: running the two challengers again "
+                         "costs ~3x the pose time and produces evidence "
+                         "already on disk.")
     ap.add_argument("--limit-events", type=int, default=0,
                     help="process only the first N candidate events")
     ap.add_argument("--max-events", type=int, default=0,
@@ -268,7 +275,15 @@ def main() -> int:
 
     # ------------------------------------------------------ 6. the pose A/B --
     results = []
+    selected = set(args.pose_configs) if args.pose_configs else None
     for config_id in pose.POSE_CONFIGS:
+        if selected is not None and config_id not in selected:
+            results.append(pose.unavailable(
+                config_id, "not_selected",
+                f"excluded by --pose-configs {sorted(selected)}; the A/B for "
+                f"this configuration is recorded in earlier runs and was not "
+                f"repeated", manifest))
+            continue
         if config_id == pose.ALPHAPOSE:
             ckpt = ROOT / "models/alphapose/fast_421_res152_256x192.pth"
             mcfg = ROOT / "models/alphapose/256x192_res152_lr1e-3_1x-duc.yaml"

@@ -210,6 +210,14 @@ def open_run(root: str | Path, run_id: str) -> RunPaths:
         raise FileNotFoundError(f"no run directory at {paths.dir}")
     for name, _children in STAGES:
         stage_path = paths.dir / name
+        # Index declared stages whether or not the directory is already there.
+        # A run folder created before a stage existed would otherwise refuse
+        # that stage forever, which makes every existing run un-extendable the
+        # moment the layout grows. Sealed runs stay untouched: `assert_open`
+        # and the write helpers are what enforce immutability, not the absence
+        # of a directory.
+        if not stage_path.is_dir() and not paths.sealed:
+            stage_path.mkdir(parents=True, exist_ok=True)
         if stage_path.is_dir():
             paths._stage_index[name] = stage_path
     return paths

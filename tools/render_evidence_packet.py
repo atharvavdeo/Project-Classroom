@@ -25,7 +25,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from pipeline import artifacts, evidence as ev, gemma_review as gr, ranking  # noqa: E402
+from pipeline import artifacts, evidence as ev, gemma_review as gr  # noqa: E402
+from pipeline import pose as ps, ranking  # noqa: E402
 from pipeline.calibration import SEAT_CONTEXT, CalibrationProfile  # noqa: E402
 from pipeline.run_manifest import (COMPLETE, RESOURCE_UNAVAILABLE,  # noqa: E402
                                    RunManifest, RunStatus, SKIPPED_UNAVAILABLE)
@@ -147,13 +148,39 @@ def render_sheet(reader, packet: ev.EvidencePacket, out_path: Path,
     return True
 
 
+def pose_evidence_by_event(paths, config_id: str) -> dict:
+    """Summarise one pose configuration's observations per event (PRD 9).
+
+    `pose.evidence` decides `sustained`, and only sustained pose context is
+    permitted to weigh on rank. The join runs observation -> pose manifest row
+    -> event, because observations carry `pose_row_id` and the event id lives
+    on the manifest row that produced them.
+    """
+    manifest = {row["pose_row_id"]: row for row in
+                read_jsonl(paths.dir / "08_pose/pose_manifest.jsonl")}
+    rows = read_jsonl(paths.dir / f"08_pose/{config_id}/observations.jsonl")
+    if not rows:
+        return {}
+
+    grouped: dict[str, list] = {}
+    for row in rows:
+        event_id = manifest.get(row["pose_row_id"], {}).get("event_id")
+        if not event_id:
+            continue
+        grouped.setdefault(event_id, []).append(ps.PoseObservation.from_row(row))
+
+    return {event_id: ps.evidence(observations, event_id)
+            for event_id, observations in grouped.items()}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("video", type=Path)
     ap.add_argument("--run", type=Path, required=True)
     ap.add_argument("--calibration", type=Path, required=True)
-    ap.add_argument("--object-config", default="dfine_native")
+    ap.add_argument("--object-config", default="dfine_sahi")
+    ap.add_argument("--pose-config", default="alphapose_crowd_baseline")
     ap.add_argument("--gemma-url", default=None)
     ap.add_argument("--no-render", action="store_true")
     args = ap.parse_args()
@@ -167,7 +194,16 @@ def main() -> int:
     profile = CalibrationProfile.read(args.calibration)
     boxes = seat_boxes(profile)
 
-    events = read_jsonl(paths.dir / "06_segmentation/events.jsonl")
+    # Deduplicate by event id. `events.jsonl` is append-only, so a stage re-run
+    # over an existing run folder leaves two copies of every event -- measured:
+    # 46 rows carrying 23 distinct ids on corpus_03. Ranking them all reports
+    # each event twice at the same score, which reads as two findings.
+    events, seen = [], set()
+    for event in read_jsonl(paths.dir / "06_segmentation/events.jsonl"):
+        if event["event_id"] in seen:
+            continue
+        seen.add(event["event_id"])
+        events.append(event)
     candidates = {c["event_id"]: c for c in
                   read_jsonl(paths.dir / "05_motion_roi/candidate_manifest.jsonl")}
     groups = read_jsonl(paths.dir / "10_evidence/temporal_confirmation.jsonl")
@@ -277,7 +313,28 @@ def main() -> int:
     # ------------------------------------------------------------ ranking --
     reviews_by_event = {r.event_id: r for r in reviews}
     manifest = RunManifest.read(paths)
-    ranked = ranking.rank(events, reviews_by_event=reviews_by_event)
+
+    # Object and pose evidence reach the ranker here. Without this both
+    # `object_supported` (weight 2.0, the heaviest single component) and
+    # `pose_sustained` (weight 1.2) evaluate to zero on every event, and the
+    # ordering collapses onto motion -- which is exactly what the first corpus
+    # runs produced: 69 ranked events across two videos with those two
+    # components zero on all of them.
+    objects_by_event = {
+        event["event_id"]: objects_for(event["event_id"], groups,
+                                       args.object_config)
+        for event in events}
+    pose_by_event = pose_evidence_by_event(paths, args.pose_config)
+    with_objects = sum(1 for v in objects_by_event.values() if v)
+    sustained = sum(1 for v in pose_by_event.values() if v.sustained)
+    print(f"\nranking inputs: {with_objects} of {len(events)} events carry "
+          f"object evidence from {args.object_config}; {sustained} of "
+          f"{len(pose_by_event)} carry sustained pose context from "
+          f"{args.pose_config}")
+
+    ranked = ranking.rank(events, pose_by_event=pose_by_event,
+                          objects_by_event=objects_by_event,
+                          reviews_by_event=reviews_by_event)
     for row in ranked:
         paths.append_jsonl("10_evidence/ranked_events.jsonl", row.to_row())
 

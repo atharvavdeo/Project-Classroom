@@ -285,6 +285,30 @@ class PoseObservation:
             "note": self.note,
         }
 
+    @classmethod
+    def from_row(cls, row: dict) -> "PoseObservation":
+        """Rebuild an observation from its persisted row.
+
+        The inverse of `to_row`, so a later stage can weigh pose evidence
+        without re-running a pose model. `visible_joints` is deliberately not
+        restored: it is a derived property, and accepting a stored value would
+        let a hand-edited artifact claim visibility the joints do not show.
+        """
+        return cls(
+            pose_row_id=row["pose_row_id"],
+            config_id=row.get("config_id", ""),
+            pts_ms=float(row.get("pts_ms", 0.0)),
+            seat_state=row.get("seat_state", ""),
+            joints=[JointState(**joint) for joint in row.get("joints", [])],
+            head_pitch=row.get("head_pitch"),
+            wrist_in_desk_context=bool(row.get("wrist_in_desk_context", False)),
+            wrist_in_lap_context=bool(row.get("wrist_in_lap_context", False)),
+            torso_scale_px=row.get("torso_scale_px"),
+            person_height_px=float(row.get("person_height_px", 0.0)),
+            suspected_joint_swaps=list(row.get("suspected_joint_swaps", [])),
+            note=row.get("note", ""),
+        )
+
 
 def _observability(keypoints: np.ndarray, index: int, row: PoseRow,
                    desk_line_y: float | None, cfg: PoseConfig) -> str:
@@ -738,6 +762,18 @@ def alphapose_runner(config_id: str, model_config: str, checkpoint: str,
     model = builder.build_sppe(cfg.MODEL, preset_cfg=cfg.DATA_PRESET)
     model.load_state_dict(torch.load(checkpoint, map_location="cpu",
                                      weights_only=True), strict=True)
+
+    # Asking for CUDA on a CPU-only torch raises inside `.to()`, which would
+    # fail the whole pose stage rather than run it slowly. Degrade instead, and
+    # say so: a run that silently used the CPU when the operator asked for the
+    # GPU is a run whose timings mean something other than they appear to.
+    if device.startswith("cuda") and not torch.cuda.is_available():
+        print(f"    AlphaPose: {device!r} requested but torch reports no CUDA "
+              f"device (torch {torch.__version__}); running on CPU")
+        device = "cpu"
+    if device.startswith("cuda"):
+        print(f"    AlphaPose on {torch.cuda.get_device_name(0)} "
+              f"({torch.cuda.get_device_properties(0).total_memory / 2**20:.0f} MiB)")
     model.to(device).eval()
     heatmap_to_coord = get_func_heatmap_to_coord(cfg)
     input_h, input_w = cfg.DATA_PRESET.IMAGE_SIZE
