@@ -26,6 +26,7 @@ distribution so a reviewer sees what the models actually said.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import asdict, dataclass, field
 
 from .object_detection import INSUFFICIENT, ObjectDetection
@@ -34,7 +35,9 @@ SUPPORTED = "temporally_supported_object_evidence"
 SINGLE_FRAME = "single_frame_object_candidate"
 CONFLICTING = "conflicting_object_evidence"
 INSUFFICIENT_EVIDENCE = INSUFFICIENT
-STATUSES = (SUPPORTED, SINGLE_FRAME, CONFLICTING, INSUFFICIENT_EVIDENCE)
+RECURRENT_SCENE_OBJECT = "recurrent_scene_object"
+STATUSES = (SUPPORTED, SINGLE_FRAME, CONFLICTING, INSUFFICIENT_EVIDENCE,
+            RECURRENT_SCENE_OBJECT)
 
 
 @dataclass
@@ -56,6 +59,48 @@ class ConfirmConfig:
     # Share of a group that must agree on a class before it is that class.
     # Below this the group is conflicting, and stays conflicting.
     class_majority: float = 0.60
+
+    # --- Recurrence: persistence is not corroboration for a handheld object ---
+    #
+    # Measured on video 01: a monitor bezel at image (275, 650) produced **23**
+    # separate `temporally_supported` phone groups across 38.4 s, while the one
+    # genuine phone -- the highest-confidence detection in the recording, at
+    # 0.933 -- produced **2**. Grouping rewards persistence, and a partition
+    # edge, a bezel or a chair highlight is in every frame forever. So the
+    # mechanism built to suppress noise was ranking furniture an order of
+    # magnitude above the only true event.
+    #
+    # A class that keeps reappearing at the same image coordinates across many
+    # separate groups is part of the room. This does not delete it -- it is
+    # restated as `recurrent_scene_object`, which cannot corroborate an event.
+    # The grid is a FRACTION OF FRAME WIDTH, not a pixel count. An absolute
+    # 25 px cell on 1280x720 gives 1479 cells; the same 25 px on video 04's
+    # 640x480 gives 494 -- four times the relative area per cell. Measured
+    # before this fix: video 01 averaged 7.2 groups per cell and video 04
+    # averaged 73.5, so a fixed count threshold flagged 97% of video 04's
+    # groups (35,131 of 36,332) while behaving sensibly on video 01. This is
+    # the same failure the detector's own thresholds have: absolute pixels do
+    # not transfer between cameras.
+    recurrence_grid_fraction: float = 0.02        # 25.6 px at 1280 wide
+    frame_width_px: float = 1280.0                # set by the caller per video
+
+    # A cell is furniture when it holds far more groups of this class than a
+    # typical cell does, not when it passes a fixed count. The comparison is
+    # against the median occupied cell for the same class in the same
+    # configuration, so a busy recording and a quiet one are judged on their
+    # own terms.
+    recurrence_outlier_factor: float = 3.0
+    min_recurrent_groups: int = 4                 # floor, never the whole test
+    min_recurrent_span_ms: float = 5000.0
+
+    # --- Handheld plausibility -------------------------------------------
+    # A phone in use is in a hand. Distance from the nearest wrist, in torso
+    # widths so it transfers between a near and a far seat. Beyond this the
+    # object is somewhere else in the frame and is not being held.
+    max_wrist_distance_torso: float = 2.0
+    # Below this fraction of a group's frames having a resolvable nearby wrist,
+    # no judgement is made: absent pose is not evidence of absent hand.
+    min_wrist_coverage: float = 0.5
 
 
 def iou(a: tuple[float, float, float, float],
@@ -95,6 +140,15 @@ class ConfirmedObject:
     crop_ids: list[str] = field(default_factory=list)
     box: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 0.0)
     reason: str = ""
+    # How many separate groups of this class recur at this image location, and
+    # over what span. Set by `flag_recurrent`.
+    recurrence_count: int = 1
+    recurrence_span_ms: float = 0.0
+    # Median distance from the group's centre to the nearest wrist, in torso
+    # widths, and whether that is close enough to be held. None where pose did
+    # not resolve a wrist often enough to say. Set by `flag_handheld`.
+    wrist_distance_torso: float | None = None
+    handheld_plausible: bool | None = None
 
     @property
     def supported(self) -> bool:
@@ -217,6 +271,122 @@ def _confirmed(group: list[ObjectDetection], cfg: ConfirmConfig
         reason=reason)
 
 
+def _centre(box) -> tuple[float, float]:
+    return ((box[0] + box[2]) / 2.0, (box[1] + box[3]) / 2.0)
+
+
+def flag_recurrent(groups: list[ConfirmedObject],
+                   cfg: ConfirmConfig | None = None) -> list[ConfirmedObject]:
+    """Restate groups that keep reappearing at one place as scene objects.
+
+    Runs after grouping, over all groups of one configuration at once, because
+    recurrence is a property of the *set* of groups and is invisible from
+    inside any one of them.
+
+    Nothing is deleted. The group keeps its frames, its confidence and its
+    crops; only its status changes, and the reason records the count and span
+    that caused it, so a reviewer can disagree.
+    """
+    cfg = cfg or ConfirmConfig()
+    grid = max(cfg.recurrence_grid_fraction * cfg.frame_width_px, 4.0)
+    buckets: dict[tuple, list[ConfirmedObject]] = {}
+    for group in groups:
+        cx, cy = _centre(group.box)
+        key = (group.config_id, group.cls,
+               round(cx / grid), round(cy / grid))
+        buckets.setdefault(key, []).append(group)
+
+    # Per (config, class), what does a typical occupied cell hold? Furniture is
+    # an outlier against that, not against a number chosen in advance.
+    occupancy: dict[tuple, list[int]] = {}
+    for key, members in buckets.items():
+        occupancy.setdefault((key[0], key[1]), []).append(len(members))
+    typical: dict[tuple, float] = {}
+    for key, counts in occupancy.items():
+        counts.sort()
+        typical[key] = counts[len(counts) // 2]
+
+    for key, members in buckets.items():
+        starts = [g.start_pts_ms for g in members]
+        ends = [g.end_pts_ms for g in members]
+        span = max(ends) - min(starts)
+        median_cell = typical.get((key[0], key[1]), 1)
+        floor = max(cfg.min_recurrent_groups,
+                    cfg.recurrence_outlier_factor * median_cell)
+        for group in members:
+            group.recurrence_count = len(members)
+            group.recurrence_span_ms = round(span, 1)
+        if (len(members) >= floor
+                and span >= cfg.min_recurrent_span_ms):
+            for group in members:
+                if group.status in (SUPPORTED, SINGLE_FRAME):
+                    group.status = RECURRENT_SCENE_OBJECT
+                    group.reason = (
+                        f"{len(members)} separate groups of {group.cls!r} recur "
+                        f"within {grid:.0f} px of this location across "
+                        f"{span / 1000:.1f}s, against a median of "
+                        f"{median_cell:.0f} for this class elsewhere in the "
+                        f"frame. A handheld object does not hold one image "
+                        f"position for that long; this is part of the room. "
+                        f"Evidence retained, but it cannot corroborate an "
+                        f"event.")
+    return groups
+
+
+def flag_handheld(groups: list[ConfirmedObject], wrists: dict,
+                  cfg: ConfirmConfig | None = None) -> list[ConfirmedObject]:
+    """Measure how far each group sits from the nearest wrist.
+
+    `wrists` maps rounded pts_ms to a list of `(x, y, torso_scale_px)` for every
+    wrist resolved in that frame.
+
+    A phone in use is in a hand. Distance is normalised by torso width so a far
+    seat is not penalised for being small. Where pose resolved no wrist for most
+    of a group's life the verdict is `None`, not False: absent pose is not
+    evidence of an absent hand, and this test may only ever demote on evidence.
+    """
+    cfg = cfg or ConfirmConfig()
+    if not wrists:
+        return groups
+    times = sorted(wrists)
+
+    def nearest_frame(pts_ms: float):
+        if not times:
+            return None
+        best = min(times, key=lambda t: abs(t - pts_ms))
+        return wrists[best] if abs(best - pts_ms) <= 1000.0 else None
+
+    for group in groups:
+        cx, cy = _centre(group.box)
+        distances = []
+        for pts_ms in (group.start_pts_ms, group.end_pts_ms):
+            frame = nearest_frame(pts_ms)
+            if not frame:
+                continue
+            best = None
+            for wx, wy, scale in frame:
+                if not scale:
+                    continue
+                d = math.hypot(cx - wx, cy - wy) / scale
+                best = d if best is None else min(best, d)
+            if best is not None:
+                distances.append(best)
+        if len(distances) < 1:
+            continue
+        distances.sort()
+        median = distances[len(distances) // 2]
+        group.wrist_distance_torso = round(median, 3)
+        group.handheld_plausible = median <= cfg.max_wrist_distance_torso
+        if not group.handheld_plausible and group.status == SUPPORTED:
+            group.status = RECURRENT_SCENE_OBJECT
+            group.reason = (
+                f"nearest wrist is {median:.1f} torso widths away, beyond the "
+                f"{cfg.max_wrist_distance_torso:.1f} floor. A phone in use is "
+                f"in a hand; this is elsewhere in the frame. Evidence retained, "
+                f"but it cannot corroborate an event.")
+    return groups
+
+
 def summarise(groups: list[ConfirmedObject]) -> dict:
     """Confirmation outcomes, with singleton retention made visible."""
     if not groups:
@@ -236,6 +406,11 @@ def summarise(groups: list[ConfirmedObject]) -> dict:
         "by_status": by_status,
         "by_class": dict(sorted(by_class.items())),
         "retained_singletons": by_status[SINGLE_FRAME],
+        "recurrent_scene_objects": by_status.get(RECURRENT_SCENE_OBJECT, 0),
+        "handheld_implausible": sum(
+            1 for g in groups if g.handheld_plausible is False),
+        "handheld_unjudged": sum(
+            1 for g in groups if g.handheld_plausible is None),
         "deleted": 0,
         "supported_duration_ms": round(
             sum(g.duration_ms for g in groups if g.supported), 1),

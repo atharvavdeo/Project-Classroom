@@ -234,12 +234,48 @@ def main() -> int:
 
     # ------------------------------------------- temporal confirmation --
     status.begin("10_evidence")
-    confirm_cfg = tc.ConfirmConfig()
+    # The recurrence grid is a fraction of frame width, so tell it the
+    # width. Without this every camera is judged on 1280-pixel cells.
+    import av as _av
+    with _av.open(str(args.video)) as _c:
+        _frame_w = float(_c.streams.video[0].codec_context.width)
+    confirm_cfg = tc.ConfirmConfig(frame_width_px=_frame_w)
+    print(f"  recurrence grid: {confirm_cfg.recurrence_grid_fraction * _frame_w:.1f} px "
+          f"({_frame_w:.0f} px frame)")
+
+    # Wrist positions per frame, for the handheld-plausibility test. Read from
+    # the same pose observations the crops were built from, so the two stages
+    # cannot disagree about where the hands were.
+    wrists: dict = {}
+    for row in read_jsonl(observation_path):
+        scale = row.get("torso_scale_px")
+        if not scale:
+            continue
+        frame = wrists.setdefault(round(float(row["pts_ms"]), 1), [])
+        for joint in row.get("joints", []):
+            if joint.get("name") in ("left_wrist", "right_wrist") \
+                    and joint.get("observability") == "visible":
+                frame.append((float(joint["x"]), float(joint["y"]),
+                              float(scale)))
+    print(f"  wrist positions available on {len(wrists)} frame(s) from "
+          f"{args.pose_source}")
+
     all_groups = []
     for result in results:
         if not result.available:
             continue
         groups = tc.confirm(result.merged, confirm_cfg)
+        # Two post-passes, in this order. Recurrence is a property of the whole
+        # set of groups and is invisible from inside any one of them, so it can
+        # only run once grouping is finished. Handheld plausibility then demotes
+        # what survives but is nowhere near a hand.
+        groups = tc.flag_recurrent(groups, confirm_cfg)
+        groups = tc.flag_handheld(groups, wrists, confirm_cfg)
+        recurrent = sum(1 for g in groups
+                        if g.status == tc.RECURRENT_SCENE_OBJECT)
+        if recurrent:
+            print(f"  {result.config_id}: {recurrent} group(s) restated as "
+                  f"recurrent_scene_object")
         all_groups += groups
         for group in groups:
             paths.append_jsonl("10_evidence/temporal_confirmation.jsonl",

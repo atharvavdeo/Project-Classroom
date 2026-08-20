@@ -164,7 +164,12 @@ def main() -> int:
         run("Phase 5  detector comparison report",
             ["tools/render_detector_comparison.py", "--run", str(run_dir)],
             log, env)
-        for cls in ("phone", "secondary_paper_chit", "stationery"):
+        # book_or_notebook_like_object is included because on the paper video it
+        # is the class that actually fires: COCO has no chit class, so real
+        # paper being handled surfaces here and nowhere else. Rendering only
+        # phone and chit would leave that video with no frames at all.
+        for cls in ("phone", "secondary_paper_chit", "stationery",
+                    "book_or_notebook_like_object"):
             run(f"Phase 5  render {cls} detections",
                 ["tools/render_detections.py", str(video), "--run", str(run_dir),
                  "--config", "dfine_sahi", "--class", cls, "--top", "12"],
@@ -178,6 +183,8 @@ def main() -> int:
             ["tools/evaluate_run.py", "--run", str(run_dir)], log, env)
         run("Final report", ["tools/generate_final_report.py", "--run",
                              str(run_dir)], log, env)
+        run("Findings report (FINDINGS.md beside the artifacts)",
+            ["tools/write_findings.py", "--run", str(run_dir)], log, env)
 
         summary.append({"video": label, "source": filename,
                         "run_dir": str(run_dir.relative_to(ROOT)),

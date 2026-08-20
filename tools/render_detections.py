@@ -69,11 +69,35 @@ def main() -> int:
     ap.add_argument("--top", type=int, default=12,
                     help="highest-confidence N detections of that class")
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--from-confirmed", action="store_true",
+                    help="draw the groups that SURVIVED temporal confirmation, "
+                         "recurrence and the handheld test, instead of the raw "
+                         "merged detections. Without this the contact sheet "
+                         "shows exactly what the filters rejected: measured on "
+                         "the paper video, the top 12 raw book/notebook "
+                         "detections were desk and partition edges, one of "
+                         "which recurred 122 times across 86 s and was already "
+                         "restated as a scene object.")
     args = ap.parse_args()
 
     paths = artifacts.open_run(args.run.parent, args.run.name)
-    rows = read_jsonl(
-        paths.dir / f"09_object/{args.config}/merged_detections.jsonl")
+    if args.from_confirmed:
+        groups = read_jsonl(paths.dir / "10_evidence/temporal_confirmation.jsonl")
+        rows = []
+        for g in groups:
+            if g.get("config_id") != args.config:
+                continue
+            if g.get("status") != "temporally_supported_object_evidence":
+                continue
+            box = g.get("box") or [0, 0, 0, 0]
+            rows.append({"cls": g["cls"], "confidence": g.get("max_confidence", 0.0),
+                         "pts_ms": g["start_pts_ms"], "abstained": False,
+                         "x1": box[0], "y1": box[1], "x2": box[2], "y2": box[3]})
+        print(f"drawing surviving groups only "
+              f"({len(rows)} of {len(groups)} groups passed every filter)")
+    else:
+        rows = read_jsonl(
+            paths.dir / f"09_object/{args.config}/merged_detections.jsonl")
     hits = [r for r in rows if r["cls"] == args.cls and not r.get("abstained")]
     if not hits:
         print(f"no {args.cls!r} detections in {args.config}", file=sys.stderr)
@@ -88,7 +112,9 @@ def main() -> int:
     import numpy as np
 
     frames = decode_at(args.video, [r["pts_ms"] for r in hits])
-    out_dir = args.out or (paths.dir / f"09_object/{args.config}/rendered_{args.cls}")
+    suffix = "_confirmed" if args.from_confirmed else ""
+    out_dir = args.out or (
+        paths.dir / f"09_object/{args.config}/rendered_{args.cls}{suffix}")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     panels = []

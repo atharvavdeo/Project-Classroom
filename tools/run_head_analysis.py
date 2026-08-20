@@ -158,6 +158,13 @@ def main() -> int:
         frames = decode_at(args.video, wanted)
         overlay_dir = out_dir / "overlays"
         overlay_dir.mkdir(parents=True, exist_ok=True)
+        # Clear first. Overlays are drawn from the current strongest
+        # excursions, so a file left from a previous pass points at an event
+        # that no longer exists -- and the findings report lists whatever is in
+        # this directory. A stale frame beside a live count is worse than no
+        # frame at all.
+        for stale in overlay_dir.glob("*_head.jpg"):
+            stale.unlink()
         joints_by_row = {r["pose_row_id"]: r for r in rows}
         drawn = 0
 

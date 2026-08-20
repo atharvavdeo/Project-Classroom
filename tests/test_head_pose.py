@@ -137,6 +137,36 @@ def test_summary_states_what_is_not_measurable():
     assert "gaze" in report["not_measurable"].lower()
 
 
+
+
+
+def test_permanently_turned_subject_raises_no_event():
+    """The regression that mattered most: candidates face their monitors while
+    the camera sits at an angle, so a permanently turned head is the resting
+    posture, not a behaviour. Measured on video 04 before the departure rule:
+    9 excursions had a baseline exactly equal to their peak."""
+    poses = [hp.HeadPose(pose_row_id=f"r{i}", config_id="t",
+                         pts_ms=i * 333.0, seat_state="unattributed",
+                         track_id=5, yaw=-1.5, pitch=0.0)
+             for i in range(30)]
+    events = [e for e in hp.excursions(poses) if e.kind.startswith("yaw")]
+    assert not events, f"a constant posture produced {len(events)} event(s)"
+
+
+def test_departure_from_a_turned_baseline_still_fires():
+    """A subject whose resting posture is already turned must still raise an
+    event when they turn *further*, or the departure rule would silence the
+    people it most matters for."""
+    poses = []
+    for i in range(30):
+        yaw = -1.4 if 10 <= i <= 22 else -0.6      # resting turned, then more
+        poses.append(hp.HeadPose(pose_row_id=f"r{i}", config_id="t",
+                                 pts_ms=i * 333.0, seat_state="s",
+                                 track_id=9, yaw=yaw, pitch=0.0))
+    events = [e for e in hp.excursions(poses) if e.kind == "yaw_right"]
+    assert events, "a real departure from a turned baseline must still fire"
+
+
 if __name__ == "__main__":
     import traceback
 

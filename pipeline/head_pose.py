@@ -75,6 +75,21 @@ class HeadPoseConfig:
     # under the spherical assumption in `approx_yaw_deg`.
     turned_threshold: float = 0.35
 
+    # How far past the subject's own resting orientation a value must sit
+    # before it counts as a departure, on top of clearing `turned_threshold`.
+    #
+    # Both conditions are required, and each fixes the other's failure. Using
+    # the absolute threshold alone flags normal posture: candidates face their
+    # monitors while the camera sits at an angle, so a permanently turned head
+    # is the resting state. Measured on video 04 before this rule: 45 of 53
+    # excursions were `yaw_right`, 9 had a baseline exactly equal to their peak
+    # -- tracks turned for their entire visible life -- and 18 peaked at
+    # saturation. Using the baseline alone fails the other way: yaw saturates
+    # at +/-1.0, so a bimodal distribution gives a huge MAD and a threshold
+    # beyond the achievable range, which produced zero events across 42
+    # subjects on video 01.
+    min_departure_from_baseline: float = 0.30
+
     # Median absolute deviations above the seat's own median before a frame
     # counts toward a sustained excursion. Matches `PoseConfig.head_dwell_mad`.
     excursion_mad: float = 3.0
@@ -374,8 +389,37 @@ def excursions(poses: list[HeadPose], cfg: HeadPoseConfig | None = None
             spread = mad if mad > 1e-6 else 0.10
             threshold = (baseline + cfg.excursion_mad * spread if above
                          else baseline - cfg.excursion_mad * spread)
+            # Cap the adaptive threshold at the absolute definition of the
+            # behaviour, so it can never demand more than the measure can give.
+            #
+            # Yaw saturates at +/-1.0: when a turn occludes the far ear the
+            # magnitude is reported saturated, because the geometry that would
+            # give a finer number is exactly what is hidden. That makes the
+            # distribution bimodal -- frontal near 0, turns at +/-1.0 -- and a
+            # median-absolute-deviation over a bimodal signal is huge. Measured
+            # on video 01 track 12: median -0.294, MAD 0.4621, so
+            # median + 3*MAD = +1.093, ABOVE the saturation point. The
+            # threshold was unreachable and zero events formed across 42
+            # subjects and 1076 observations, while the same rows classified
+            # 360 frames turned_left and 236 turned_right.
+            if attribute == "yaw":
+                limit = cfg.turned_threshold
+                threshold = (min(threshold, limit) if above
+                             else max(threshold, -limit))
 
-            for run in _runs(samples, threshold, above, cfg, gap):
+            # A frame must clear the absolute threshold *and* sit at least
+            # `min_departure_from_baseline` beyond this subject's own resting
+            # orientation. Filtering the samples before run-finding keeps the
+            # gap-bridging logic working on the qualifying frames only.
+            departure = cfg.min_departure_from_baseline
+            qualifying = [
+                (t, v) for t, v in samples
+                if (v - baseline >= departure if above
+                    else baseline - v >= departure)]
+            if len(qualifying) < 2:
+                continue
+
+            for run in _runs(qualifying, threshold, above, cfg, gap):
                 # A run of N samples at this interval covers (N-1)*interval of
                 # wall clock between its first and last sighting, plus the
                 # interval it continues to hold after the last one. Using only
