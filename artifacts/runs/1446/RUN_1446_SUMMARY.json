@@ -1,0 +1,56 @@
+[
+  {
+    "video": "01_phone",
+    "source": "01.Candidate was found using a mobile phone in the examination hall..mkv",
+    "run_dir": "artifacts\\runs\\1446\\01_phone",
+    "calibration": "calib/cam01_e1_v1.json",
+    "sample_hz": 3.0,
+    "state": "complete",
+    "seconds": {
+      "ingest": 24.0,
+      "preprocessing": 74.1,
+      "alignment": 23.3,
+      "motion": 27.0,
+      "pose": 307.2,
+      "head": 5.4,
+      "detector": 635.5,
+      "evidence": 329.9
+    }
+  },
+  {
+    "video": "04_talking",
+    "source": "04.CCTV Candidate Talking.mkv",
+    "run_dir": "artifacts\\runs\\1446\\04_talking",
+    "calibration": "calib/cam04_e1_v1.json",
+    "sample_hz": 3.0,
+    "state": "complete",
+    "seconds": {
+      "ingest": 21.9,
+      "preprocessing": 33.4,
+      "alignment": 18.6,
+      "motion": 34.0,
+      "pose": 495.5,
+      "head": 8.0,
+      "detector": 1658.4,
+      "evidence": 35.1
+    }
+  },
+  {
+    "video": "12_paper",
+    "source": "Seat No. 12 was seen taking a piece of paper from the desk.mkv",
+    "run_dir": "artifacts\\runs\\1446\\12_paper",
+    "calibration": "calib/campaper_e1_v1.json",
+    "sample_hz": 3.0,
+    "state": "complete",
+    "seconds": {
+      "ingest": 11.2,
+      "preprocessing": 15.9,
+      "alignment": 11.5,
+      "motion": 13.6,
+      "pose": 370.2,
+      "head": 13.1,
+      "detector": 2531.4,
+      "evidence": 35.2
+    }
+  }
+]

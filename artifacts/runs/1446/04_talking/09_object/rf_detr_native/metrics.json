@@ -1,0 +1,7 @@
+{
+  "config_id": "rf_detr_native",
+  "state": "resource_unavailable",
+  "reason": "skipped by --no-rfdetr; it stays in the comparison as unavailable and is never substituted by D-FINE (PRD 5).",
+  "crop_digest": "9a30aca9fbbd5aefea823befd5ffbf2cd64c3307dbb14b1cddf3effcac6d7754",
+  "note": "this configuration did not run. Its row is retained in the comparison and never filled from another."
+}

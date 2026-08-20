@@ -1,0 +1,29 @@
+{
+  "config_id": "rtmpose_baseline",
+  "state": "available",
+  "manifest_digest": "c1b2f98d2bb45bb56bf1724f3f6acdb5b33c51d1298a80a81308cbc8770b99fd",
+  "checkpoint_sha256": "",
+  "rows_seen": 1076,
+  "persons_proposed": 955,
+  "persons_returned": 955,
+  "row_coverage": 0.8875,
+  "joint_observability": {
+    "visible": 11488,
+    "occluded": 927,
+    "not_detected": 0,
+    "not_resolvable_at_source_scale": 0
+  },
+  "joint_visible_fraction": 0.9253,
+  "wrist_observability": {
+    "visible": 1464,
+    "occluded": 446,
+    "not_detected": 0,
+    "not_resolvable_at_source_scale": 0
+  },
+  "head_pitch_resolved": 920,
+  "suspected_joint_swaps": 44,
+  "wrist_in_lap_context": 0,
+  "seconds": 49.705,
+  "rows_per_second": 21.65,
+  "peak_vram_mb": null
+}

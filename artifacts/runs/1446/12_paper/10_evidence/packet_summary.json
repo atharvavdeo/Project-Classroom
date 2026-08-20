@@ -1,0 +1,10 @@
+{
+  "packets": 29,
+  "valid": 29,
+  "invalid": 0,
+  "invalid_reasons": {},
+  "with_objects": 20,
+  "with_subject_crop": 29,
+  "median_tiles": 13,
+  "note": "an invalid packet is never sent to a model. PRD 11 prohibits whole-frame-only packets because a frame showing thirty candidates and marking none invites a confident description of the wrong person."
+}

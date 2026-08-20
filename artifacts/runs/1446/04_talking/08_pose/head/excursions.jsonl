@@ -1,0 +1,5 @@
+{"seat_state": "unattributed", "track_id": 10, "kind": "look_down", "start_pts_ms": 9380.0, "end_pts_ms": 10713.333, "duration_ms": 1519.9995, "peak_value": 0.5546, "frames": 9, "baseline": -0.1757, "threshold": -0.0149}
+{"seat_state": "unattributed", "track_id": 12, "kind": "yaw_left", "start_pts_ms": 23780.0, "end_pts_ms": 25260.0, "duration_ms": 1626.667, "peak_value": -0.09, "frames": 10, "baseline": -0.5295, "threshold": -0.282}
+{"seat_state": "unattributed", "track_id": 85, "kind": "yaw_right", "start_pts_ms": 90780.0, "end_pts_ms": 94713.333, "duration_ms": 4119.999, "peak_value": -0.9899, "frames": 17, "baseline": -0.2172, "threshold": -0.35}
+{"seat_state": "unattributed", "track_id": 85, "kind": "yaw_left", "start_pts_ms": 98446.667, "end_pts_ms": 100713.333, "duration_ms": 2453.332, "peak_value": 1.0118, "frames": 16, "baseline": -0.2172, "threshold": 0.35}
+{"seat_state": "unattributed", "track_id": 85, "kind": "yaw_left", "start_pts_ms": 103926.667, "end_pts_ms": 106233.333, "duration_ms": 2493.332, "peak_value": 0.9048, "frames": 13, "baseline": -0.2172, "threshold": 0.35}

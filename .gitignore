@@ -19,3 +19,20 @@ __pycache__/
 
 # Run outputs and logs (see /artifacts/runs/ above).
 /artifacts/
+
+# Run outputs are excluded above, with one deliberate exception: the 1446
+# reference run is committed so the reports can be read against the artifacts
+# they cite. Only the reviewable part -- every JSON summary, comparison and
+# report, the rendered detection frames, the head overlays, and the per-row
+# JSONL small enough to diff.
+#
+# Excluded from it by the rules below: the 269 evidence contact sheets in
+# 11_gemma/ (350 MB of PNG built for a VLM stage that no longer exists) and
+# every file over 2 MB (raw_detections, merged_detections,
+# temporal_confirmation -- 582 MB of machine output regenerable with
+# `tools/reconfirm.py` from what is kept).
+!/artifacts/
+!/artifacts/runs/
+!/artifacts/runs/1446/
+!/artifacts/runs/1446/**
+/artifacts/runs/1446/**/11_gemma/**/*.png
