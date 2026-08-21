@@ -396,7 +396,7 @@ def unavailable(config_id: str, state: str, reason: str) -> DetectionResult:
 
 def onnx_runner(model_path: str | Path, providers: list[str] | None = None,
                 frame_reader=None, input_size: int = 640,
-                confidence: float = 0.25):
+                confidence: float = 0.25, object_sink=None):
     """Adapter over the measured `classroom.detect.ONNXDetector`.
 
     Built lazily so importing this module needs neither onnxruntime nor a
@@ -411,12 +411,26 @@ def onnx_runner(model_path: str | Path, providers: list[str] | None = None,
     Boxes come back in source-frame coordinates via `CropTransform.to_frame`,
     because a box left in letterboxed input space is wrong by the pad offset and
     every overlay drawn from it still looks plausible.
+
+    `object_sink` receives the detections this pass would otherwise throw away.
+    D-FINE returns all 80 COCO classes from one inference; filtering to `person`
+    and discarding the rest meant every frame paid for a phone detection and
+    then deleted it. When a sink is supplied it is called as
+    `object_sink(pts_ms, cls, box, confidence)` for each non-person detection,
+    so object evidence costs no additional model time.
     """
     from classroom.crops import extract
     from classroom.detect import ONNXDetector
 
+    # `class_map={}` keeps the RAW COCO names. The legacy default in
+    # classroom.detect remaps `cell phone` -> `phone_like` and `book` ->
+    # `paper_like`, and `COCO_TO_TAXONOMY` keys on the raw names -- so with the
+    # default every phone and every paper was silently lost to a dictionary
+    # miss, while `tv` and `backpack` (absent from the remap) came through.
+    # Measured on video 01 before this fix: 11,964 objects kept, 1,435 attached
+    # to hands, and ZERO of them a target class, on the phone video.
     detector = ONNXDetector(str(model_path), providers=providers,
-                            input_size=input_size)
+                            input_size=input_size, class_map={})
 
     def run(row: SampleRow):
         if frame_reader is None:
@@ -431,6 +445,9 @@ def onnx_runner(model_path: str | Path, providers: list[str] | None = None,
         out = []
         for detection in detector(canvas, transform, confidence, row.pts_ms):
             if detection.cls != "person":
+                if object_sink is not None:
+                    object_sink(row.pts_ms, detection.cls, detection.box,
+                                detection.confidence)
                 continue
             out.append((*detection.box, detection.confidence))
         return out

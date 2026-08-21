@@ -1,0 +1,301 @@
+{
+  "run_id": "1501/12_paper",
+  "created_utc": "2026-08-21T16:35:35Z",
+  "seed": 20260818,
+  "code_revision": "e0c8a04e1709eacfd482382cf304ce1eaf9fe027",
+  "code_dirty": true,
+  "parent_run_id": null,
+  "sources": [
+    {
+      "path": "C:\\DrishtiAI\\Seat No. 12 was seen taking a piece of paper from the desk.mkv",
+      "sha256": "87c8c1ff8fef393e11d289d3872d8c50cf98e67a9969e6c47b888221f2dfd673",
+      "size_bytes": 19305056
+    }
+  ],
+  "configs": [
+    {
+      "config_id": "product_zero",
+      "path": "configs\\experiments\\product_zero.yaml",
+      "sha256": "5b6434de46437ce7fa2151fb537f0182638d1dcadf8991d34970387fc87fd97e",
+      "family": "experiment"
+    },
+    {
+      "config_id": "person_detection_primary",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\person_detection_primary.yaml",
+      "sha256": "8058305891ffd39955a11aa2de3a7f87658b15efdbb6ec247aaf8551f93f0dd8",
+      "family": "person_detection"
+    },
+    {
+      "config_id": "tracker_primary",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\tracker_primary.yaml",
+      "sha256": "25edb6c76025450495a457e68eb48aa1c59b50602e12b6be6ebcbebdf2fb00d7",
+      "family": "tracker"
+    },
+    {
+      "config_id": "seat_only_no_track",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\seat_only_no_track.yaml",
+      "sha256": "758cafb0f5dc5d4b02420475ecbd0e6448b56d0b0291b203f1af543e268d7d12",
+      "family": "tracker"
+    },
+    {
+      "config_id": "rtmpose_baseline",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\rtmpose_baseline.yaml",
+      "sha256": "799fe4392f51b407941d93fc80417ae366bdf5988f4e5ddab4fc9603d0f4238a",
+      "family": "pose"
+    },
+    {
+      "config_id": "rtmo_baseline",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\rtmo_baseline.yaml",
+      "sha256": "f6a408f83fb3625628611c15ceeab8d318c34480176d235279534a1d3dd13b79",
+      "family": "pose"
+    },
+    {
+      "config_id": "rtmo_large",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\rtmo_large.yaml",
+      "sha256": "6498109be04b83268b74f49612684f8b84b7f982ddf8e276a853e2865a64b569",
+      "family": "pose"
+    },
+    {
+      "config_id": "alphapose_crowd_baseline",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\alphapose_crowd_baseline.yaml",
+      "sha256": "3e5a61ec05335d662e703d3613121ff52c19a9cd7f111c21423be0c98ad3d275",
+      "family": "pose"
+    },
+    {
+      "config_id": "dfine_native",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\dfine_native.yaml",
+      "sha256": "a36a10cae690ccd96f792c78e5cd75f5251e5cc6e88f27783852ea3951959f71",
+      "family": "object"
+    },
+    {
+      "config_id": "rf_detr_native",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\rf_detr_native.yaml",
+      "sha256": "e4d5f8236775ea7e1168787b18558e1be31d03613eb4fb232aaa4d3f01aec241",
+      "family": "object"
+    },
+    {
+      "config_id": "dfine_sahi",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\dfine_sahi.yaml",
+      "sha256": "5e81a0fe142579d921aa40e6ee3f52c2baae2d6d2b39c5bf4078dbcd2e1bfd18",
+      "family": "object"
+    },
+    {
+      "config_id": "rf_detr_sahi",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\rf_detr_sahi.yaml",
+      "sha256": "13f831bb6f7a39792a3f0e6e34240dec9e6aef17ceecba30c9037d16636e2583",
+      "family": "object"
+    },
+    {
+      "config_id": "gemma_marked_evidence",
+      "path": "C:\\DrishtiAI\\Project-Classroom\\configs\\models\\gemma_marked_evidence.yaml",
+      "sha256": "e91532c98ebe18fa824ae8bc769e4df75d681e5e1d9730cb32441d665b12d644",
+      "family": "vlm"
+    }
+  ],
+  "models": [
+    {
+      "config_id": "person_detection_primary",
+      "family": "person_detection",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cuda",
+      "device_reason": null
+    },
+    {
+      "config_id": "tracker_primary",
+      "family": "tracker",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "MIT",
+      "licence_url": "https://github.com/roboflow/supervision/blob/develop/LICENSE.md",
+      "reason": null,
+      "launch_probe": "import supervision",
+      "input_size": null,
+      "precision": null,
+      "device": "cuda",
+      "device_reason": null
+    },
+    {
+      "config_id": "seat_only_no_track",
+      "family": "tracker",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "n/a-internal",
+      "licence_url": null,
+      "reason": null,
+      "launch_probe": "none required",
+      "input_size": null,
+      "precision": null,
+      "device": "cuda",
+      "device_reason": null
+    },
+    {
+      "config_id": "rtmpose_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "256x192",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rtmo_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rtmo_large",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "5.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "alphapose_crowd_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\alphapose\\fast_421_res152_256x192.pth",
+      "checkpoint_sha256": "f0f15b3b1c1c04fc81999e4ffdeaf0c7b9a542e271b5cc40422fe94c7cfa9b41",
+      "licence": "SJTU-NonCommercial-Research",
+      "licence_url": "https://github.com/MVIG-SJTU/AlphaPose/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "import alphapose.models.builder",
+      "input_size": "256x192",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "4.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "dfine_native",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\dfine\\onnx\\model.onnx",
+      "checkpoint_sha256": "76e521ed66874590456f9eeb89c2adf33f0599778cd33b1b614f3090f95845b9",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Peterande/D-FINE/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "onnxruntime session created (inputs: pixel_values)",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "4.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rf_detr_native",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/roboflow/rf-detr/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rfdetr",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "dfine_sahi",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\dfine\\onnx\\model.onnx",
+      "checkpoint_sha256": "76e521ed66874590456f9eeb89c2adf33f0599778cd33b1b614f3090f95845b9",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Peterande/D-FINE/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "onnxruntime session created (inputs: pixel_values)",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "4.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rf_detr_sahi",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/roboflow/rf-detr/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rfdetr",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "gemma_marked_evidence",
+      "family": "vlm",
+      "state": "missing_weights",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\gemma\\gemma-4-E4B_q4_0-it.gguf",
+      "checkpoint_sha256": null,
+      "licence": "Gemma-Terms-of-Use",
+      "licence_url": "https://ai.google.dev/gemma/terms",
+      "reason": "checkpoint not found: C:\\DrishtiAI\\Project-Classroom\\models\\gemma\\gemma-4-E4B_q4_0-it.gguf",
+      "launch_probe": null,
+      "input_size": null,
+      "precision": "q4_0",
+      "device": null,
+      "device_reason": null
+    }
+  ],
+  "environment": {
+    "python": "3.13.9",
+    "platform": "Windows 11",
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "gpu_vram_total_gb": 4.3,
+    "driver_version": "592.27",
+    "cuda_runtime": "12.8",
+    "torch_version": "2.11.0+cu128",
+    "torch_cuda_available": true,
+    "onnxruntime_providers": [
+      "TensorrtExecutionProvider",
+      "CUDAExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "free_disk_gb": 66.7,
+    "host_ram_gb": 16.8
+  },
+  "calibration_version": null,
+  "reference_manifest_sha256": null,
+  "notes": [
+    "No reference manifest configured. Per PRD 3 the run proceeds and object evaluation is marked incomplete; no quality claim may be made. Stages 09 selection and 12 evaluation are blocked.",
+    "No approved taxonomy configured. PRD 3 blocks detector selection and evaluation until the product owner approves the class list.",
+    "Working tree has uncommitted changes; this run is not exactly reproducible from its recorded revision."
+  ]
+}

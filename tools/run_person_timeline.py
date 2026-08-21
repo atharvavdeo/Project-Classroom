@@ -31,15 +31,16 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from pipeline import (artifacts, head_pose as hp, person_detection as pd,  # noqa: E402
-                      person_timeline as pt, pose as ps, seat_association as sa,
-                      tracking)
+from pipeline import (artifacts, head_pose as hp, object_detection as od,  # noqa: E402
+                      person_detection as pd, person_timeline as pt, pose as ps,
+                      seat_association as sa, tracking)
 from pipeline.calibration import CalibrationProfile  # noqa: E402
 from pipeline.run_manifest import COMPLETE, RunManifest, RunStatus  # noqa: E402
 
@@ -74,6 +75,16 @@ def main() -> int:
                          "given a gaze arrow. 0 none, -1 all.")
     ap.add_argument("--max-rows", type=int, default=0,
                     help="cap the grid for a quick pass; 0 = no cap")
+    ap.add_argument("--hand-crops", action="store_true", default=True,
+                    help="run the detector again on a crop around each "
+                         "resolved wrist. The full-frame pass resizes to 640 "
+                         "and loses a 30x20 px phone entirely; measured on "
+                         "video 12 it attached 3790 monitors and ZERO phones. "
+                         "This is the only path on which small objects are "
+                         "resolvable.")
+    ap.add_argument("--no-hand-crops", dest="hand_crops", action="store_false")
+    ap.add_argument("--hand-crop-torso", type=float, default=1.0,
+                    help="crop radius around a wrist, in torso widths")
     args = ap.parse_args()
 
     import av
@@ -114,9 +125,27 @@ def main() -> int:
         json.dumps(notes, indent=2), encoding="utf-8")
 
     # --------------------------------------------- detection + tracking --
+    # D-FINE returns all 80 COCO classes from one inference. The person pass
+    # used to filter to `person` and discard the rest, so every frame paid for
+    # a phone detection and then deleted it. The sink keeps them at no extra
+    # model cost.
+    objects_at: dict = {}
+
+    def keep_object(pts_ms, cls, box, confidence):
+        taxonomy = od.COCO_TO_TAXONOMY.get(cls)
+        if taxonomy is None:
+            return
+        objects_at.setdefault(round(float(pts_ms), 1), []).append(
+            {"cls": taxonomy, "coco": cls, "box": [round(float(v), 1) for v in box],
+             "confidence": round(float(confidence), 4)})
+
     reader = SequentialFrameReader(args.video)
-    runner = pd.onnx_runner(args.person_model, frame_reader=reader)
+    runner = pd.onnx_runner(args.person_model, frame_reader=reader,
+                            object_sink=keep_object)
     detection = pd.detect(rows, runner, "person_detection_continuous", cfg)
+    total_objects = sum(len(v) for v in objects_at.values())
+    print(f"  objects kept from the same inference: {total_objects} across "
+          f"{len(objects_at)} frame(s)")
     print(f"  person detection: {detection.state} "
           f"({detection.returned} boxes over {detection.rows_seen} rows)")
     if not detection.boxes:
@@ -196,14 +225,111 @@ def main() -> int:
             yaw=head.yaw, pitch=head.pitch, roll=head.roll,
             facing=head.facing, head_scale_px=head.head_scale_px,
             left_wrist=wrist("left_wrist"), right_wrist=wrist("right_wrist"),
-            wrist_below_desk=bool(row.get("wrist_in_lap_context"))))
+            wrist_below_desk=bool(row.get("wrist_in_lap_context")),
+            joints={j["name"]: [round(float(j["x"]), 1), round(float(j["y"]), 1),
+                                round(float(j.get("confidence", 0.0)), 3)]
+                    for j in row.get("joints", [])
+                    if j.get("observability") == "visible"}))
+
+    # Attach each object to the person whose hand is nearest, in torso widths
+    # so a far seat is not penalised for being small. An object nearer to no
+    # one than the floor allows is left unattached rather than forced onto the
+    # closest person -- a phone on an empty desk belongs to nobody.
+    tcfg_attach = pt.TimelineConfig()
+    attached = unattached = 0
+    by_time: dict = {}
+    for sample in samples:
+        by_time.setdefault(round(sample.pts_ms, 1), []).append(sample)
+    for pts_ms, found in objects_at.items():
+        here = by_time.get(pts_ms) or []
+        for item in found:
+            box = item["box"]
+            cx, cy = (box[0] + box[2]) / 2.0, (box[1] + box[3]) / 2.0
+            best, best_distance = None, None
+            for sample in here:
+                scale = sample.torso_scale_px
+                if not scale:
+                    continue
+                for wrist in (sample.left_wrist, sample.right_wrist):
+                    if not wrist:
+                        continue
+                    distance = math.hypot(cx - wrist[0], cy - wrist[1]) / scale
+                    if best_distance is None or distance < best_distance:
+                        best, best_distance = sample, distance
+            if best is not None and best_distance <= tcfg_attach.near_hand_torso:
+                best.near_hand_objects.append(item["cls"])
+                attached += 1
+            else:
+                unattached += 1
+    print(f"  objects attached to a person's hands: {attached}; "
+          f"unattached (no wrist within "
+          f"{tcfg_attach.near_hand_torso:.0f} torso widths): {unattached}")
+
+    # ------------------------------------------- wrist-anchored crops --
+    if args.hand_crops:
+        from classroom.crops import extract
+        from classroom.detect import ONNXDetector
+
+        # class_map={} for the same reason as the person runner: the
+        # legacy default renames `cell phone` to `phone_like`, which
+        # COCO_TO_TAXONOMY does not know.
+        crop_detector = ONNXDetector(str(args.person_model),
+                                     input_size=640, class_map={})
+        crop_reader = SequentialFrameReader(args.video)
+        by_row_for_crop = {}
+        for sample in samples:
+            by_row_for_crop.setdefault(round(sample.pts_ms, 1), []).append(sample)
+
+        found = looked = 0
+        for pose_row in sorted(pose_rows, key=lambda r: r.pts_ms):
+            frame = crop_reader(pose_row)
+            if frame is None:
+                continue
+            height, width = frame.shape[:2]
+            for sample in by_row_for_crop.get(round(pose_row.pts_ms, 1), []):
+                if sample.track_id != pose_row.track_id:
+                    continue
+                scale = sample.torso_scale_px
+                if not scale:
+                    continue
+                radius = max(scale * args.hand_crop_torso, 24.0)
+                for wrist in (sample.left_wrist, sample.right_wrist):
+                    if not wrist:
+                        continue
+                    x1 = max(int(wrist[0] - radius), 0)
+                    y1 = max(int(wrist[1] - radius), 0)
+                    x2 = min(int(wrist[0] + radius), width)
+                    y2 = min(int(wrist[1] + radius), height)
+                    if x2 - x1 < 16 or y2 - y1 < 16:
+                        continue
+                    canvas, transform = extract(frame, (x1, y1, x2, y2), 640)
+                    looked += 1
+                    for det in crop_detector(canvas, transform, 0.25,
+                                             pose_row.pts_ms):
+                        taxonomy = od.COCO_TO_TAXONOMY.get(det.cls)
+                        if taxonomy is None or det.cls == "person":
+                            continue
+                        sample.near_hand_objects.append(taxonomy)
+                        found += 1
+            if looked and looked % 500 == 0:
+                print(f"    hand crops: {looked} looked, {found} objects",
+                      flush=True)
+        print(f"  wrist-anchored crops: {looked} crop(s) -> {found} object(s) "
+              f"the full-frame pass could not resolve")
 
     timelines = pt.build_timelines(samples)
     tcfg = pt.TimelineConfig()
     profiles = [pt.profile(t, duration_ms, cfg.interval_ms(), tcfg)
                 for t in timelines.values()]
+    for person in profiles:
+        person.flags = pt.flag(person, tcfg)
     profiles.sort(key=lambda p: -p.samples)
     report = pt.summarise(profiles, duration_ms, len(rows), tcfg)
+    report["flags"] = {}
+    for person in profiles:
+        for item in person.flags:
+            report["flags"][item["flag"]] = \
+                report["flags"].get(item["flag"], 0) + 1
 
     with (out_dir / "samples.jsonl").open("w", encoding="utf-8") as handle:
         for sample in samples:
@@ -226,6 +352,20 @@ def main() -> int:
               f"{p.fraction_away_from_baseline:7.1%}"
               f"{p.samples_looking_down:6}{len(p.absences):5}  "
               f"{', '.join(f'{k[:9]}:{v}' for k, v in top)}")
+
+    flagged = [p for p in profiles
+               if any(f["severity"] in ("high", "medium") for f in p.flags)]
+    if flagged:
+        print(f"\n{len(flagged)} person(s) carry a medium or high flag:")
+        for person in sorted(flagged,
+                             key=lambda p: -p.fraction_away_from_baseline)[:12]:
+            for item in person.flags:
+                if item["severity"] in ("high", "medium"):
+                    print(f"  track {person.track_id:<4} "
+                          f"[{item['severity']:6}] {item['flag']:32} "
+                          f"{item['evidence'][:78]}")
+    else:
+        print("\nno person carries a medium or high flag")
 
     # ----------------------------------------------------- annotation --
     if args.annotate != 0 and samples:

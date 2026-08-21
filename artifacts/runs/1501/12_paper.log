@@ -1,0 +1,239 @@
+
+========================================================================
+Phase 0  preflight + run manifest
+========================================================================
+experiment   product_zero  (5b6434de4643)
+residency    sequential, 2.0 GB safety margin
+python       3.13.9 on Windows 11
+gpu          NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB, driver 592.27
+torch        2.11.0+cu128, cuda available
+onnxruntime  TensorrtExecutionProvider, CUDAExecutionProvider, CPUExecutionProvider
+free disk    66.7 GB at C:\DrishtiAI\Project-Classroom\artifacts\runs
+
+configurations
+  OK  person_detection_primary  person_detection  available             import rtmlib
+  OK  tracker_primary           tracker           available             import supervision
+  OK  seat_only_no_track        tracker           available             none required
+  OK  rtmpose_baseline          pose              available             import rtmlib
+  OK  rtmo_baseline             pose              available             import rtmlib
+  OK  rtmo_large                pose              available             import rtmlib
+  OK  alphapose_crowd_baseline  pose              available             import alphapose.models.builder
+  OK  dfine_native              object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_native            object            available             import rfdetr
+  OK  dfine_sahi                object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_sahi              object            available             import rfdetr
+  --  gemma_marked_evidence     vlm               missing_weights       checkpoint not found: C:\DrishtiAI\Project-Classroom\models\gemma\gemma-4-E4B_q4_0-it.gguf
+
+run folder   C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper
+manifest     11/12 configurations available
+  note: No reference manifest configured. Per PRD 3 the run proceeds and object evaluation is marked incomplete; no quality claim may be made. Stages 09 selection and 12 evaluation are blocked.
+  note: No approved taxonomy configured. PRD 3 blocks detector selection and evaluation until the product owner approves the class list.
+  note: Working tree has uncommitted changes; this run is not exactly reproducible from its recorded revision.
+
+1 configuration(s) unavailable. They remain in the comparison table as unavailable and are never substituted (PRD 5).
+
+========================================================================
+Phase 1  ingest inventory
+========================================================================
+
+Seat No. 12 was seen taking a piece of paper from the desk.mkv
+    decoded    60.0 s (1317 frames)
+  matroska,webm / mpeg4 / yuv420p  1280x720
+  declared 25.000 fps, measured 21.900 fps  (DOES NOT MATCH)
+  1936 frames, 88.40 s, 77 keyframes, VFR (cv 0.3131)
+  decodable 88.40 s of 88.40 s, no gaps
+  health: {'blur': 1}
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper
+
+88.4 s decodable of 88.4 s (100.00%) across 1 source(s)
+
+========================================================================
+Phase 1  preprocessing A/B
+========================================================================
+12 frames sampled across Seat No. 12 was seen taking a piece of paper from the desk.mkv
+  identity_no_preprocessing  mean|diff|   0.000  sharpness     +0.00  blocking +0.0000    0.7s
+  clahe                      mean|diff|  16.134  sharpness   +439.35  blocking +0.0457    0.8s
+  denoise_nlmeans            mean|diff|   2.362  sharpness    -59.15  blocking -0.1185    6.4s
+  unsharp_mask               mean|diff|   4.839  sharpness  +2011.59  blocking +0.0330    0.6s
+
+No transform is recommended. These figures measure how much each transform CHANGED the image, not whether it helped. PRD 6 requires any transform to be evaluated enabled and disabled on known references, and no reference manifest exists for this corpus. A transform that raises sharpness while also raising blocking_ratio is amplifying compression structure, which at a 30x20 px object scale is indistinguishable from amplifying the object.
+
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper\01_ingest\preprocessing
+
+========================================================================
+Phase 2  alignment A/B
+========================================================================
+16 frames sampled; static background support covers 78.6% of the frame
+
+per configuration, over all sampled frames:
+  ecc                0/ 15 compensated  median residual   0.8725  confidence 0.487  translation   0.07 px
+  features_ransac    0/ 15 compensated  median residual   0.2881  confidence 0.731  translation   0.05 px
+  identity           0/ 15 compensated  median residual  10.8766  confidence 0.084  translation   0.00 px
+
+no sustained geometry change; the recording is one camera epoch
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper\03_alignment
+
+========================================================================
+Phases 2-3  health, motion, ROI, segmentation
+========================================================================
+calibration  campaper/e1/v1  (draft)
+  NOTE: this profile is not approved, so seat attribution is blocked downstream (PRD 3). Motion and ROI still run.
+
+scanning Seat No. 12 was seen taking a piece of paper from the desk.mkv
+    scanned     60.0s
+  motion vectors present (3568/frame)
+  4032 zone-windows over 88.4 s in 1.9 s (47x realtime)
+
+baselines
+  campaper-P01 desk_work_surface    median 0.03237  spread 0.02248  n=168  typing regime
+  campaper-P01 upper_body           median 0.03320  spread 0.02340  n=168
+  campaper-P02 desk_work_surface    median 0.00000  spread 0.00000  n=168  typing regime
+  campaper-P02 upper_body           median 0.01234  spread 0.00902  n=168  typing regime
+  campaper-P03 desk_work_surface    median 0.09450  spread 0.06451  n=168  typing regime
+  campaper-P03 upper_body           median 0.06298  spread 0.05111  n=168
+  campaper-P04 desk_work_surface    median 0.00979  spread 0.00979  n=168  typing regime
+  campaper-P04 upper_body           median 0.05516  spread 0.04808  n=168  typing regime
+  campaper-P05 desk_work_surface    median 0.00556  spread 0.00556  n=168  typing regime
+  campaper-P05 upper_body           median 0.02562  spread 0.01772  n=168  typing regime
+  campaper-P06 desk_work_surface    median 0.01326  spread 0.00979  n=168  typing regime
+  campaper-P06 upper_body           median 0.02291  spread 0.01855  n=168  typing regime
+  campaper-P07 desk_work_surface    median 0.04461  spread 0.03386  n=168  typing regime
+  campaper-P07 upper_body           median 0.01815  spread 0.01549  n=168  typing regime
+  campaper-P08 desk_work_surface    median 0.01746  spread 0.01273  n=168
+  campaper-P08 upper_body           median 0.06317  spread 0.04021  n=168
+  campaper-P09 desk_work_surface    median 0.01742  spread 0.00975  n=168
+  campaper-P09 upper_body           median 0.00892  spread 0.00587  n=168  typing regime
+  campaper-P10 desk_work_surface    median 0.02556  spread 0.01753  n=168
+  campaper-P10 upper_body           median 0.03107  spread 0.02225  n=168
+  campaper-P11 desk_work_surface    median 0.00000  spread 0.00000  n=168  typing regime
+  campaper-P11 upper_body           median 0.01000  spread 0.00722  n=168  typing regime
+  campaper-P12 desk_work_surface    median 0.07808  spread 0.07371  n=168  typing regime
+  campaper-P12 upper_body           median 0.06618  spread 0.05801  n=168  typing regime
+
+segmentation
+  21 normal-priority events, 8 retained at low priority
+  96.54% of the recording flagged
+  close reasons: {'activity_ceased': 29}
+
+gates: {'deprioritise': 4289}
+  nothing discarded; 4289 records retained and searchable
+health observations: {'compression_noise': 15}
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper
+
+========================================================================
+Phase 14  continuous per-person timeline @4.0 Hz on cuda (+objects +flags)
+========================================================================
+Seat No. 12 was seen taking a piece of paper from the desk.mkv: 88.4s at 4.0 Hz
+  354 sampled frames covering the WHOLE recording (the candidate-gated plan covered 20-39%)
+ [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 0 5 7 3 6 7 6   [ W : o n n x r u n t i m e : ,   t r a n s f o r m e r _ m e m c p y . c c : 8 3   o n n x r u n t i m e : : M e m c p y T r a n s f o r m e r : : A p p l y I m p l ]   6   M e m c p y   n o d e s   a r e   a d d e d   t o   t h e   g r a p h   m a i n _ g r a p h   f o r   C U D A E x e c u t i o n P r o v i d e r .   I t   m i g h t   h a v e   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e   ( i n c l u d i n g   u n a b l e   t o   r u n   C U D A   g r a p h ) .   S e t   s e s s i o n _ o p t i o n s . l o g _ s e v e r i t y _ l e v e l = 1   t o   s e e   t h e   d e t a i l   l o g s   b e f o r e   t h i s   m e s s a g e .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 0 0 6 2 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 0 7 0 7 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 1 2 5 9 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 1 8 1 5 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 2 6 1 0 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 3 1 6 8 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 3 6 9 8 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 4 3 1 1 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 4 8 3 9 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 5 3 5 5 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 5 8 7 5 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 0 6 : 2 1 . 2 2 6 4 4 5 2   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+   objects kept from the same inference: 20803 across 350 frame(s)
+  person detection: available (6109 boxes over 354 rows)
+  tracking: 236 track(s) over 6150 box(es)
+Load SE Resnet...
+    AlphaPose on NVIDIA GeForce RTX 3050 Laptop GPU (4096 MiB)
+  pose: available (6109 observations)
+  objects attached to a person's hands: 10198; unattached (no wrist within 2 torso widths): 10605
+ [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 1 . 9 3 8 5 4 2 3   [ W : o n n x r u n t i m e : ,   t r a n s f o r m e r _ m e m c p y . c c : 8 3   o n n x r u n t i m e : : M e m c p y T r a n s f o r m e r : : A p p l y I m p l ]   6   M e m c p y   n o d e s   a r e   a d d e d   t o   t h e   g r a p h   m a i n _ g r a p h   f o r   C U D A E x e c u t i o n P r o v i d e r .   I t   m i g h t   h a v e   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e   ( i n c l u d i n g   u n a b l e   t o   r u n   C U D A   g r a p h ) .   S e t   s e s s i o n _ o p t i o n s . l o g _ s e v e r i t y _ l e v e l = 1   t o   s e e   t h e   d e t a i l   l o g s   b e f o r e   t h i s   m e s s a g e .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 6 9 4 7 4 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 0 1 7 7 0   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 0 7 6 8 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 1 3 6 9 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 1 9 0 6 5   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 2 4 4 8 0   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 2 9 7 4 7   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 3 5 1 5 5   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 4 0 2 6 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 4 5 5 5 2   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 5 0 5 8 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 1   2 2 : 1 0 : 3 2 . 0 7 5 5 4 7 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+     hand crops: 500 looked, 2160 objects
+    hand crops: 500 looked, 2160 objects
+    hand crops: 500 looked, 2160 objects
+    hand crops: 1000 looked, 4559 objects
+    hand crops: 1000 looked, 4559 objects
+    hand crops: 1000 looked, 4559 objects
+    hand crops: 1500 looked, 7300 objects
+    hand crops: 2000 looked, 9475 objects
+    hand crops: 3000 looked, 14255 objects
+    hand crops: 3500 looked, 16543 objects
+  wrist-anchored crops: 5111 crop(s) -> 25855 object(s) the full-frame pass could not resolve
+
+236 people profiled across the whole recording (43 with a yaw baseline)
+ track  samp   span s   cover  baseYaw   away  down  abs  facing
+----------------------------------------------------------------------------------------
+    16   351     87.5   99.0%   -1.000  53.2%     5    0  not_resol:274, turned_ri:41
+    12   350     87.5   99.0%       --   0.0%     0    0  not_resol:349, turned_ri:1
+    19   349     87.2   98.7%   -1.000  18.8%     1    0  not_resol:306, turned_ri:26
+    22   349     87.0   98.4%   -1.000   0.0%     1    0  not_resol:279, turned_ri:70
+   100   265     66.0   74.7%   +1.500   0.6%    10    0  turned_le:161, not_resol:104
+   106   259     64.5   73.0%   +1.500   0.4%     0    0  turned_le:249, not_resol:9
+   118   231     58.2   65.9%   +1.471   0.9%     0    0  turned_le:231
+   128   224     56.2   63.6%       --   0.0%     0    0  not_resol:224
+    25   172     43.0   48.6%   -1.000   3.4%     0    0  not_resol:113, turned_ri:57
+    31   161     40.0   45.2%   -1.500  30.0%     3    0  not_resol:151, turned_ri:10
+    92   160     41.8   47.2%   +0.410   0.0%     0    0  turned_le:143, not_resol:14
+   164   157     39.0   44.1%   -1.000  31.2%     1    0  not_resol:141, turned_ri:11
+    18   129     32.0   36.2%   -0.669  80.2%     9    0  turned_ri:62, turned_le:34
+    26   121     31.8   35.9%   -1.000   4.5%     0    0  not_resol:77, turned_ri:42
+   117   119     33.0   37.3%       --   0.0%     0    0  not_resol:119
+    35   118     29.5   33.4%       --   0.0%     0    0  not_resol:113, turned_ri:5
+   153   115     32.2   36.5%   -1.000   0.0%     0    0  not_resol:94, turned_ri:21
+   185    96     26.0   29.4%       --   0.0%     0    0  not_resol:96
+   184    93     28.8   32.5%       --   0.0%     0    0  not_resol:93
+    53    90     22.2   25.2%   +1.405   1.1%     0    0  turned_le:89, turned_ri:1
+
+32 person(s) carry a medium or high flag:
+  track 82   [high  ] sustained_attention_away         100% of 8 sightings departed from this person's own resting yaw of -0.41 (4 le
+  track 18   [high  ] sustained_attention_away         80% of 129 sightings departed from this person's own resting yaw of -0.67 (44 
+  track 18   [high  ] target_object_near_hands         book_or_notebook_like_object x39, phone x21 within 2 torso widths of a wrist o
+  track 16   [medium] sustained_attention_away         53% of 351 sightings departed from this person's own resting yaw of -1.00 (36 
+  track 16   [high  ] target_object_near_hands         book_or_notebook_like_object x148, phone x52 within 2 torso widths of a wrist 
+  track 61   [medium] sustained_attention_away         46% of 13 sightings departed from this person's own resting yaw of +0.23 (0 le
+  track 61   [medium] target_object_near_hands         book_or_notebook_like_object x2 within 2 torso widths of a wrist over 13 sight
+  track 164  [high  ] target_object_near_hands         phone x43, book_or_notebook_like_object x34 within 2 torso widths of a wrist o
+  track 31   [medium] target_object_near_hands         book_or_notebook_like_object x4 within 2 torso widths of a wrist over 161 sigh
+  track 114  [medium] target_object_near_hands         book_or_notebook_like_object x11, phone x2 within 2 torso widths of a wrist ov
+  track 19   [medium] target_object_near_hands         phone x1 within 2 torso widths of a wrist over 349 sighting(s)
+  track 26   [high  ] target_object_near_hands         phone x196 within 2 torso widths of a wrist over 121 sighting(s)
+  track 25   [medium] target_object_near_hands         book_or_notebook_like_object x5, phone x1 within 2 torso widths of a wrist ove
+  track 73   [high  ] target_object_near_hands         book_or_notebook_like_object x69, phone x10 within 2 torso widths of a wrist o
+  track 53   [high  ] target_object_near_hands         book_or_notebook_like_object x73, phone x59 within 2 torso widths of a wrist o
+
+60 annotated frame(s) in C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper\14_person_timeline\annotated
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper\14_person_timeline
+
+========================================================================
+Phase 14  render annotated video
+========================================================================
+6109 person-samples over 353 measured frames
+  200 frames written (9.1s)
+  400 frames written (18.2s)
+  600 frames written (27.3s)
+  800 frames written (36.4s)
+  1000 frames written (45.4s)
+  1200 frames written (54.6s)
+  1400 frames written (63.7s)
+  1600 frames written (72.8s)
+  1800 frames written (81.9s)
+
+1936 frames at 25.0 fps -> C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper\14_person_timeline\annotated_video.mp4  (70.4 MB)
+Dimmed skeletons are the most recent measurement being held on screen between samples, not a fresh one. A person drawn brightly was measured in that exact frame.
+
+========================================================================
+Findings report
+========================================================================
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1501\12_paper\FINDINGS.md  (2,552 chars)
