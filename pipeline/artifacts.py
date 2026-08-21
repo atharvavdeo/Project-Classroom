@@ -45,6 +45,10 @@ STAGES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("11_gemma", ()),
     ("12_evaluation", ("misses", "false_positives")),
     ("13_reports", ()),
+    # Continuous per-person records over the whole recording, as opposed
+    # to the candidate-gated stages above. Numbered after the reports
+    # because it was added later; it depends on nothing they produce.
+    ("14_person_timeline", ("annotated",)),
     ("logs", ()),
 )
 

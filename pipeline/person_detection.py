@@ -150,6 +150,69 @@ def row_id(video_sha: str, pts_ms: float) -> str:
     return hashlib.sha256(key.encode()).hexdigest()[:16]
 
 
+def plan_continuous(duration_ms: float, source_video: str = "",
+                    source_video_sha256: str = "",
+                    calibration_version: str = "", camera_epoch: str = "",
+                    cfg: SampleConfig | None = None
+                    ) -> tuple[list[SampleRow], list[dict]]:
+    """Sample the **whole recording**, not only the motion candidates.
+
+    `plan()` above builds its rows from the candidate manifest, so every stage
+    downstream inherits that gate. Measured on run 1446, the gate is severe:
+
+        01_phone    46 events ->  4 merged spans covering  26.5s of 131.3s (20.2%)
+        04_talking  38 events -> 16 merged spans covering  55.8s of 143.2s (39.0%)
+        12_paper    29 events ->  8 merged spans covering  33.2s of  88.4s (37.5%)
+
+    So **60-80% of every recording is never decoded for person detection**, and
+    video 01 is only looked at between 53.6s and 102.9s. A candidate sitting
+    still while using a phone under the desk produces little motion, raises no
+    candidate, and is therefore never sampled at all -- no later stage can
+    recover them, because the frames were never read.
+
+    This planner ignores candidates entirely and lays a uniform grid across the
+    full duration. Every person in every sampled frame gets detected, tracked,
+    posed and measured, whether or not anything "interesting" was happening.
+    That is what per-person metrics require: a baseline needs the ordinary
+    frames far more than the exceptional ones.
+
+    Rows carry `event_id="continuous"` and an empty `event_ids`, which is how a
+    consumer tells a continuous row from an event-gated one.
+    """
+    cfg = cfg or SampleConfig()
+    step = cfg.interval_ms()
+    rows: list[SampleRow] = []
+    pts = 0.0
+    while pts <= duration_ms:
+        rows.append(SampleRow(
+            row_id=row_id(source_video_sha256, pts),
+            event_id="continuous",
+            event_ids=[],
+            seat_id="",
+            source_video=source_video,
+            source_video_sha256=source_video_sha256,
+            pts_ms=round(pts, 3),
+            calibration_version=calibration_version,
+            camera_epoch=camera_epoch,
+            health_state=[],
+            gate_state="pass",
+            source_crop=None))
+        pts += step
+
+    notes = [{
+        "event_id": "continuous",
+        "planned_rows": len(rows),
+        "sample_hz": cfg.sample_hz,
+        "duration_ms": round(duration_ms, 1),
+        "coverage": 1.0,
+        "note": "uniform grid over the entire recording. Unlike the "
+                "candidate-gated plan, no interval of the video is excluded, "
+                "so a person who never triggers a motion candidate is still "
+                "observed.",
+    }]
+    return rows, notes
+
+
 def plan(candidates: list[dict], cfg: SampleConfig | None = None
          ) -> tuple[list[SampleRow], list[dict]]:
     """Build the frozen sample plan from the candidate manifest.

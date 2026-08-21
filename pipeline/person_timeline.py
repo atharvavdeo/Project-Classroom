@@ -1,0 +1,303 @@
+"""One continuous record per person, over the whole recording.
+
+### Why this exists
+
+Everything before this measured *events*. `person_detection.plan()` builds its
+rows from the motion candidate manifest, so pose, head orientation and object
+crops all inherit that gate. Measured on run 1446:
+
+    01_phone     26.5s of 131.3s sampled (20.2%)
+    04_talking   55.8s of 143.2s sampled (39.0%)
+    12_paper     33.2s of  88.4s sampled (37.5%)
+
+**60-80% of every recording was never decoded for person detection.** A
+candidate who sits still while using a phone under the desk generates little
+motion, raises no candidate, and is therefore never looked at -- and no later
+stage can recover them, because the frames were never read. For a three-hour
+recording that gap grows.
+
+It also made per-person metrics impossible. A metric like "this candidate turns
+right more than they usually do" needs the *ordinary* frames far more than the
+exceptional ones, and the ordinary frames were exactly what the gate discarded.
+
+This module builds the other half: a continuous, per-person timeline sampled
+uniformly across the entire video, for **every** person in **every** sampled
+frame, whether or not anything interesting is happening.
+
+### What it produces
+
+For each track, a `PersonTimeline` holding one `PersonSample` per sighting --
+box, pose keypoints, head yaw/pitch/roll, facing state, wrist positions, and
+any object detected near that person's hands. Then a `PersonProfile`
+aggregating the whole track: how long they were observed, their resting head
+orientation and its spread, how far they departed from it and when, how much
+time they spent facing away from their own workstation, and whether they left
+frame and returned.
+
+### What it deliberately does not do
+
+It does not decide that anyone cheated. A profile is a description of a
+person's observed behaviour over the recording, with the ordinary and the
+unusual measured on the same scale, so a reviewer can see which is which.
+"""
+from __future__ import annotations
+
+import math
+import statistics
+from dataclasses import asdict, dataclass, field
+
+
+@dataclass
+class TimelineConfig:
+    """Thresholds for describing a person's record. All relative."""
+
+    # Departure from this person's own resting yaw, in normalised units, past
+    # which a sample counts as "attention away from their workstation". Matches
+    # `HeadPoseConfig.min_departure_from_baseline` so the two stages agree.
+    departure: float = 0.30
+
+    # A gap longer than this in a person's sightings is an absence, not a
+    # missed frame. Expressed in multiples of the sampling interval so it
+    # transfers between sample rates.
+    absence_intervals: float = 4.0
+
+    # An absence shorter than this is a tracking dropout, not the person
+    # leaving. Distinguishing them matters: one is a data-quality fact about
+    # us, the other is an observation about them.
+    min_absence_ms: float = 2000.0
+
+    # Minimum sightings before a profile reports a baseline at all. A median
+    # over three samples is not a resting posture.
+    min_samples_for_baseline: int = 8
+
+    # Object centre within this many torso widths of a wrist counts as "near
+    # this person's hands". Same ruler as `flag_handheld`.
+    near_hand_torso: float = 2.0
+
+
+@dataclass
+class PersonSample:
+    """One sighting of one person at one timestamp."""
+
+    track_id: int
+    pts_ms: float
+    box: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 0.0)
+    seat_state: str = ""
+    torso_scale_px: float | None = None
+
+    yaw: float | None = None
+    pitch: float | None = None
+    roll: float | None = None
+    facing: str = ""
+    head_scale_px: float = 0.0
+
+    left_wrist: tuple[float, float] | None = None
+    right_wrist: tuple[float, float] | None = None
+    wrist_below_desk: bool = False
+
+    # Objects the detector reported near this person's hands at this instant.
+    near_hand_objects: list = field(default_factory=list)
+
+    def to_row(self) -> dict:
+        return {k: (round(v, 4) if isinstance(v, float) else v)
+                for k, v in asdict(self).items()}
+
+
+@dataclass
+class PersonProfile:
+    """Everything observed about one person across the whole recording."""
+
+    track_id: int
+    seat_state: str
+
+    samples: int = 0
+    first_seen_ms: float = 0.0
+    last_seen_ms: float = 0.0
+    observed_span_ms: float = 0.0
+    # Span divided by the recording's duration. A person seen for 12% of the
+    # video has a profile built on 12% of the evidence, and every number below
+    # must be read in that light.
+    coverage_of_recording: float = 0.0
+
+    resolvable_samples: int = 0
+    median_head_scale_px: float = 0.0
+
+    baseline_yaw: float | None = None
+    baseline_yaw_spread: float | None = None
+    baseline_pitch: float | None = None
+    baseline_pitch_spread: float | None = None
+
+    # Time spent departed from their own resting orientation, by direction.
+    samples_turned_left: int = 0
+    samples_turned_right: int = 0
+    samples_looking_down: int = 0
+    fraction_away_from_baseline: float = 0.0
+
+    # Absences: gaps in sightings long enough to be the person leaving rather
+    # than the tracker dropping them.
+    absences: list = field(default_factory=list)
+    longest_absence_ms: float = 0.0
+
+    wrist_below_desk_samples: int = 0
+    near_hand_object_counts: dict = field(default_factory=dict)
+
+    facing_counts: dict = field(default_factory=dict)
+    note: str = ""
+
+    def to_row(self) -> dict:
+        return {k: (round(v, 4) if isinstance(v, float) else v)
+                for k, v in asdict(self).items()}
+
+
+@dataclass
+class PersonTimeline:
+    track_id: int
+    samples: list = field(default_factory=list)
+
+
+def build_timelines(samples: list[PersonSample]) -> dict:
+    """Group samples into one timeline per track, ordered in time."""
+    out: dict[int, PersonTimeline] = {}
+    for sample in samples:
+        timeline = out.setdefault(sample.track_id,
+                                  PersonTimeline(track_id=sample.track_id))
+        timeline.samples.append(sample)
+    for timeline in out.values():
+        timeline.samples.sort(key=lambda s: s.pts_ms)
+    return out
+
+
+def _spread(values: list[float]) -> tuple[float, float]:
+    """Median and MAD, the pair every baseline in this project uses."""
+    median = statistics.median(values)
+    mad = statistics.median([abs(v - median) for v in values]) or 0.0
+    return median, mad
+
+
+def profile(timeline: PersonTimeline, duration_ms: float,
+            interval_ms: float, cfg: TimelineConfig | None = None
+            ) -> PersonProfile:
+    """Describe one person's whole observed record.
+
+    The profile is built for **every** person, not only those who did something
+    notable. That is the point: without the ordinary samples there is no
+    baseline to be unusual against, and a metric computed only on flagged
+    moments has already assumed its own conclusion.
+    """
+    cfg = cfg or TimelineConfig()
+    rows = timeline.samples
+    out = PersonProfile(track_id=timeline.track_id,
+                        seat_state=rows[0].seat_state if rows else "")
+    if not rows:
+        out.note = "no sightings"
+        return out
+
+    out.samples = len(rows)
+    out.first_seen_ms = rows[0].pts_ms
+    out.last_seen_ms = rows[-1].pts_ms
+    out.observed_span_ms = rows[-1].pts_ms - rows[0].pts_ms
+    out.coverage_of_recording = (out.observed_span_ms / duration_ms
+                                 if duration_ms else 0.0)
+
+    resolvable = [r for r in rows if r.yaw is not None or r.pitch is not None]
+    out.resolvable_samples = len(resolvable)
+    scales = [r.head_scale_px for r in rows if r.head_scale_px]
+    out.median_head_scale_px = round(statistics.median(scales), 1) if scales else 0.0
+
+    facing = {}
+    for row in rows:
+        if row.facing:
+            facing[row.facing] = facing.get(row.facing, 0) + 1
+    out.facing_counts = facing
+
+    yaws = [r.yaw for r in rows if r.yaw is not None]
+    pitches = [r.pitch for r in rows if r.pitch is not None]
+
+    if len(yaws) >= cfg.min_samples_for_baseline:
+        out.baseline_yaw, out.baseline_yaw_spread = _spread(yaws)
+        away = 0
+        for value in yaws:
+            if value - out.baseline_yaw >= cfg.departure:
+                out.samples_turned_left += 1
+                away += 1
+            elif out.baseline_yaw - value >= cfg.departure:
+                out.samples_turned_right += 1
+                away += 1
+        out.fraction_away_from_baseline = round(away / len(yaws), 4)
+    if len(pitches) >= cfg.min_samples_for_baseline:
+        out.baseline_pitch, out.baseline_pitch_spread = _spread(pitches)
+        out.samples_looking_down = sum(
+            1 for v in pitches if v - out.baseline_pitch >= cfg.departure)
+
+    # Absences: a gap larger than a few sample intervals AND long enough in
+    # wall-clock terms to be the person rather than the tracker.
+    gap_floor = max(cfg.absence_intervals * interval_ms, cfg.min_absence_ms)
+    for earlier, later in zip(rows, rows[1:]):
+        gap = later.pts_ms - earlier.pts_ms
+        if gap >= gap_floor:
+            out.absences.append({"from_ms": round(earlier.pts_ms, 1),
+                                 "to_ms": round(later.pts_ms, 1),
+                                 "duration_ms": round(gap, 1)})
+    out.longest_absence_ms = round(
+        max((a["duration_ms"] for a in out.absences), default=0.0), 1)
+
+    out.wrist_below_desk_samples = sum(1 for r in rows if r.wrist_below_desk)
+    counts: dict[str, int] = {}
+    for row in rows:
+        for name in row.near_hand_objects:
+            counts[name] = counts.get(name, 0) + 1
+    out.near_hand_object_counts = counts
+
+    if out.baseline_yaw is None:
+        out.note = (f"only {len(yaws)} resolvable yaw sample(s); under the "
+                    f"{cfg.min_samples_for_baseline} needed for a baseline, so "
+                    f"no departure figure is reported for this person")
+    elif out.coverage_of_recording < 0.1:
+        out.note = (f"observed for {out.coverage_of_recording:.1%} of the "
+                    f"recording; every figure here rests on that fraction")
+    return out
+
+
+def summarise(profiles: list[PersonProfile], duration_ms: float,
+              sampled_rows: int, cfg: TimelineConfig | None = None) -> dict:
+    """Cross-person view, with the coverage caveat stated in the artifact."""
+    cfg = cfg or TimelineConfig()
+    if not profiles:
+        return {"people": 0,
+                "note": "no person was tracked. With no detections this is a "
+                        "valid result, not a crash."}
+
+    covered = sorted(p.coverage_of_recording for p in profiles)
+    away = sorted(p.fraction_away_from_baseline for p in profiles
+                  if p.baseline_yaw is not None)
+    with_baseline = sum(1 for p in profiles if p.baseline_yaw is not None)
+
+    return {
+        "people": len(profiles),
+        "sampled_rows": sampled_rows,
+        "duration_ms": round(duration_ms, 1),
+        "people_with_a_yaw_baseline": with_baseline,
+        "coverage_of_recording": {
+            "min": round(covered[0], 4),
+            "median": round(covered[len(covered) // 2], 4),
+            "max": round(covered[-1], 4),
+        },
+        "fraction_away_from_baseline": {
+            "min": round(away[0], 4) if away else None,
+            "median": round(away[len(away) // 2], 4) if away else None,
+            "max": round(away[-1], 4) if away else None,
+        },
+        "people_with_absences": sum(1 for p in profiles if p.absences),
+        "config": asdict(cfg),
+        "note":
+            "Every person observed is profiled, whether or not anything "
+            "notable happened to them. A person's departure figures are "
+            "measured against their own resting orientation, so they are "
+            "comparable within that person over time and not between people.",
+        "coverage_caveat":
+            "coverage_of_recording is the span between a person's first and "
+            "last sighting divided by the recording length. It is NOT a "
+            "guarantee they were watched throughout that span -- tracking "
+            "breaks and re-identification does not exist, so one physical "
+            "person may appear as several tracks.",
+    }
