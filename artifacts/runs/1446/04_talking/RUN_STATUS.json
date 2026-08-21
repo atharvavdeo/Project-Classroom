@@ -1,6 +1,6 @@
 {
   "run_id": "1446/04_talking",
-  "updated_utc": "2026-08-20T16:22:26Z",
+  "updated_utc": "2026-08-21T12:27:59Z",
   "stages": [
     {
       "stage": "source",
@@ -176,6 +176,19 @@
       "total_ms": null,
       "counts": {
         "reports": 4
+      }
+    },
+    {
+      "stage": "14_person_timeline",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-21T12:27:59Z",
+      "reason": "continuous 8.0 Hz over the whole recording; 93 people profiled",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sampled_rows": 1146,
+        "people": 93
       }
     }
   ]

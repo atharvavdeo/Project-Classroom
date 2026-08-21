@@ -1,6 +1,6 @@
 {
   "run_id": "1446/01_phone",
-  "updated_utc": "2026-08-20T16:21:35Z",
+  "updated_utc": "2026-08-21T11:52:28Z",
   "stages": [
     {
       "stage": "source",
@@ -176,6 +176,19 @@
       "total_ms": null,
       "counts": {
         "reports": 4
+      }
+    },
+    {
+      "stage": "14_person_timeline",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-21T11:52:28Z",
+      "reason": "continuous 2.0 Hz over the whole recording; 74 people profiled",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sampled_rows": 263,
+        "people": 74
       }
     }
   ]

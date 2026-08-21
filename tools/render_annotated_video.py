@@ -41,6 +41,10 @@ BONES = (
     ("left_eye", "left_ear"), ("right_eye", "right_ear"),
 )
 
+# Only these can corroborate an event, so only these are drawn prominently.
+TARGET_CLASSES = ("phone", "secondary_paper_chit",
+                  "book_or_notebook_like_object")
+
 FACING_COLOUR = {
     hp.FRONTAL: (90, 220, 90),
     hp.TURNED_LEFT: (60, 190, 255),
@@ -177,6 +181,26 @@ def main() -> int:
                          int(ny + (sample.get("pitch") or 0.0) * length * 1.5)),
                         colour, thickness, tipLength=0.3)
 
+                # Objects the detector put near this person's hands. Target
+                # classes are drawn in red because they are the reportable
+                # ones; everything else is dimmed, so a reviewer can see what
+                # the detector is reacting to without the room's furniture
+                # competing with the finding.
+                for item in (sample.get("near_hand_objects") or []):
+                    if not isinstance(item, dict) or not item.get("box"):
+                        continue
+                    ox1, oy1, ox2, oy2 = (int(v) for v in item["box"])
+                    target = item["cls"] in TARGET_CLASSES
+                    ocolour = (60, 60, 235) if target else (110, 110, 110)
+                    cv2.rectangle(canvas, (ox1, oy1), (ox2, oy2), ocolour,
+                                  2 if target else 1)
+                    if target:
+                        cv2.putText(
+                            canvas,
+                            f"{item['cls']} {item.get('confidence', 0):.2f}",
+                            (ox1, max(oy1 - 3, 10)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.36, ocolour, 1)
+
                 # A person who has departed far from their own resting posture
                 # for much of the recording is worth the reviewer's eye.
                 profile = profiles.get(track_id)
@@ -189,7 +213,8 @@ def main() -> int:
                         cv2.FONT_HERSHEY_SIMPLEX, 0.36, (0, 165, 255), 1)
 
             banner = (f"{pts_ms / 1000:7.2f}s   {len(live)} tracked   "
-                      f"green frontal / blue turned / yellow down / grey unresolved")
+                      f"green frontal / blue turned / yellow down / grey "
+                      f"unresolved   RED = target object near hands")
             cv2.rectangle(canvas, (0, height - 22), (width, height), (0, 0, 0), -1)
             cv2.putText(canvas, banner, (6, height - 7),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.42, (255, 255, 255), 1)

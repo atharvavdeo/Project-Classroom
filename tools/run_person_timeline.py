@@ -257,7 +257,10 @@ def main() -> int:
                     if best_distance is None or distance < best_distance:
                         best, best_distance = sample, distance
             if best is not None and best_distance <= tcfg_attach.near_hand_torso:
-                best.near_hand_objects.append(item["cls"])
+                best.near_hand_objects.append({
+                    "cls": item["cls"], "confidence": item["confidence"],
+                    "box": box, "source": "full_frame",
+                    "wrist_distance_torso": round(best_distance, 3)})
                 attached += 1
             else:
                 unattached += 1
@@ -309,7 +312,11 @@ def main() -> int:
                         taxonomy = od.COCO_TO_TAXONOMY.get(det.cls)
                         if taxonomy is None or det.cls == "person":
                             continue
-                        sample.near_hand_objects.append(taxonomy)
+                        sample.near_hand_objects.append({
+                            "cls": taxonomy,
+                            "confidence": round(float(det.confidence), 4),
+                            "box": [round(float(v), 1) for v in det.box],
+                            "source": "wrist_crop"})
                         found += 1
             if looked and looked % 500 == 0:
                 print(f"    hand crops: {looked} looked, {found} objects",

@@ -74,6 +74,18 @@ class TimelineConfig:
     # this person's hands". Same ruler as `flag_handheld`.
     near_hand_torso: float = 2.0
 
+    # Minimum detector score before an attachment counts toward a flag.
+    #
+    # Left at 0.0 the pipeline reports everything, which is what produced the
+    # seat-placard false positives: D-FINE calls the numbered cards on the wall
+    # cell phones at 0.30-0.49, against 0.933 for the one phone verified by eye.
+    # Raising this to ~0.6 removes that whole class of error without touching
+    # the true positive. It is a decision about what to report, not a
+    # measurement, so it stays configurable and defaults to reporting
+    # everything -- and because confidence is now stored per attachment,
+    # changing it is a `tools/reprofile.py` run, not a re-detection.
+    min_object_confidence: float = 0.0
+
     # A class attached in more than this fraction of a person's sightings is
     # treated as a fixed object beside that seat rather than something they
     # picked up. Persistence is not corroboration for a handheld object -- the
@@ -111,7 +123,14 @@ class PersonSample:
     right_wrist: tuple[float, float] | None = None
     wrist_below_desk: bool = False
 
-    # Objects the detector reported near this person's hands at this instant.
+    # Objects the detector reported near this person's hands at this instant,
+    # as {"cls", "confidence", "box", "source"}.
+    #
+    # This used to hold bare class names, which made the attachments
+    # undrawable and unauditable: the annotated video had nothing to render,
+    # and checking why a flag fired meant re-running the detector to recover
+    # the boxes. Keeping the geometry and the score means a confidence floor
+    # can be applied later by reprofiling instead of by a GPU re-run.
     near_hand_objects: list = field(default_factory=list)
 
     # Every resolved keypoint, as {name: [x, y, confidence]}. Carried so a
@@ -275,7 +294,14 @@ def profile(timeline: PersonTimeline, duration_ms: float,
     out.wrist_below_desk_samples = sum(1 for r in rows if r.wrist_below_desk)
     counts: dict[str, int] = {}
     for row in rows:
-        for name in row.near_hand_objects:
+        for item in row.near_hand_objects:
+            # Tolerate the old bare-string form so profiles written before
+            # boxes were stored can still be re-read.
+            name = item["cls"] if isinstance(item, dict) else item
+            score = float(item.get("confidence", 1.0)) \
+                if isinstance(item, dict) else 1.0
+            if score < cfg.min_object_confidence:
+                continue
             counts[name] = counts.get(name, 0) + 1
     out.near_hand_object_counts = counts
     out.near_hand_object_rates = {
