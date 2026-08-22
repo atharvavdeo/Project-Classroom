@@ -47,3 +47,39 @@ __pycache__/
 /artifacts/runs/1501/**/03_alignment/**/raw.png
 /artifacts/runs/1501/**/03_alignment/**/compensated.png
 /artifacts/runs/1501/**/03_alignment/**/reference.png
+# Added by code-review-graph
+.code-review-graph/
+
+# Runs 1503 (news clip) and 1504 (04_talking), committed on the same terms as
+# 1446 and 1501: the reviewable summaries, so the reports can be read against
+# the artifacts they cite. Excluded below are the annotated videos (19-79 MB of
+# regenerable MP4) and the per-sample JSONL over 2 MB, both of which
+# `tools/render_annotated_video.py` and `tools/attach_chit_detections.py`
+# reproduce from what is kept.
+!/artifacts/runs/1503/
+!/artifacts/runs/1503/**
+!/artifacts/runs/1504/
+!/artifacts/runs/1504/**
+/artifacts/runs/**/*.mp4
+/artifacts/runs/1503/**/samples*.jsonl
+/artifacts/runs/1504/**/samples*.jsonl
+/artifacts/runs/1503/**/03_alignment/**/*.png
+/artifacts/runs/1504/**/03_alignment/**/*.png
+
+# Scratch output from this session's investigations: contact sheets, zoom crops
+# and stdout captures. Regenerable and not evidence of anything on their own.
+/artifacts/*.out
+/artifacts/*.jpg
+/artifacts/chit_candidates/
+/artifacts/trk118/
+
+# Other assistants' project files and IDE state.
+.claude/
+.codebuddy/
+.cursor/
+.gemini/
+.kiro/
+.qoder/
+.qodo/
+.windsurfrules
+.cursorrules

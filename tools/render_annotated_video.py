@@ -43,7 +43,11 @@ BONES = (
 
 # Only these can corroborate an event, so only these are drawn prominently.
 TARGET_CLASSES = ("phone", "secondary_paper_chit",
-                  "book_or_notebook_like_object")
+                  "book_or_notebook_like_object",
+                  # From `chit_detector`. Named for what was observed rather
+                  # than for what it would mean if illicit -- the model cannot
+                  # tell a chit from an answer sheet, so the label must not.
+                  "paper_like_object")
 
 FACING_COLOUR = {
     hp.FRONTAL: (90, 220, 90),
@@ -77,6 +81,10 @@ def main() -> int:
                     help="how long a sample stays on screen after its "
                          "timestamp, drawn dimmed, before it is dropped")
     ap.add_argument("--max-seconds", type=float, default=0.0)
+    ap.add_argument("--samples", default="samples.jsonl",
+                    help="which samples file in 14_person_timeline to draw; "
+                         "`attach_chit_detections.py` writes an enriched copy "
+                         "beside the original rather than overwriting it")
     args = ap.parse_args()
 
     import av
@@ -84,7 +92,7 @@ def main() -> int:
     import numpy as np
 
     paths = artifacts.open_run(args.run.parent, args.run.name)
-    samples = read_jsonl(paths.dir / "14_person_timeline/samples.jsonl")
+    samples = read_jsonl(paths.dir / "14_person_timeline" / args.samples)
     if not samples:
         print("no samples.jsonl; run tools/run_person_timeline.py first",
               file=sys.stderr)
@@ -104,6 +112,12 @@ def main() -> int:
 
     out_path = args.out or (paths.dir / "14_person_timeline/annotated_video.mp4")
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    if out_path.exists():
+        # Run 1501 silently produced `annotated_video_1.mp4` beside an older
+        # file, and the stale one was the one people opened. Refuse instead.
+        print(f"{out_path} already exists; pass --out or remove it",
+              file=sys.stderr)
+        return 2
 
     with av.open(str(args.video)) as probe:
         stream = probe.streams.video[0]
