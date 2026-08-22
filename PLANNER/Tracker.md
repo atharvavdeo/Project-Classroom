@@ -9,4 +9,4 @@
 | MODULES.md | ⏳ Pending | |
 | DesignDecisions.md | ⏳ Pending | |
 | AppFlow.md | ⏳ Pending | |
-| ImplementationPlan.md | ⏳ Pending | |
+| ImplementationPlan.md | 🟡 Drafted | Roboflow + SAM3 + AlphaPose resolution plan; awaiting approval. |
