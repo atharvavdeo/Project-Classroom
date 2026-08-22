@@ -3,6 +3,13 @@
 *Team DataDynamo — Drishti AI Hackathon 2026, Problem Statement 2*
 *Written 2026-08-22. No code in this document. It is a specification and a map of gaps.*
 
+> **Implementation-status warning:** the ladder in this document is the target
+> review policy, not a completed pipeline feature. Current code emits
+> observation-level flags and separate paper-handling rankings; it does not yet
+> create `incident_candidate` records, persist reviewer decisions, or combine
+> independent modalities. The released-code audit is
+> [`FINAL_LOCK_IN_AUDIT.md`](FINAL_LOCK_IN_AUDIT.md).
+
 ---
 
 ## 0. The problem in one paragraph

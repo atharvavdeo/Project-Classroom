@@ -3,6 +3,14 @@
 Offline analysis of a complete examination-hall CCTV recording into an auditable
 timeline of seat-linked motion, pose and object evidence, for **human review**.
 
+> **Current lock-in status (2026-08-22):** this README describes the Product
+> Zero foundation and the historical 1446 pipeline. It is not a claim that the
+> current COCO phone flags or the newer paper/chit prototype are reliable enough
+> to classify misconduct. The paper/chit prototype calls a hosted Roboflow
+> endpoint, so it is not part of the offline locked stack. Read
+> [`docs/FINAL_LOCK_IN_AUDIT.md`](docs/FINAL_LOCK_IN_AUDIT.md) before treating
+> any detector output as a review candidate.
+
 It is not a cheating classifier. It does not infer intent, issue verdicts, or use
 face, name or biometric identity. Its vocabulary is observational throughout:
 `phone-like object detected`, `hand entered lap zone`, `ambiguous_seat`,

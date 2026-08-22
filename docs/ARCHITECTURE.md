@@ -5,6 +5,17 @@
 
 **Locked stack:** AlphaPose (FastPose_DUC res152) for pose · D-FINE native + D-FINE+SAHI for objects · classical CV for motion, alignment and preprocessing · **no VLM anywhere in the decision path**.
 
+> **Historical-reference warning — 2026-08-22:** this document records the
+> 1446 architecture and its then-current decisions. Later runs 1501/1504 added
+> continuous person timelines and a hosted Roboflow paper prototype. They also
+> demonstrated COCO phone false positives on seat placards and paper-prototype
+> false positives on keyboards, mice and desk objects. Therefore statements
+> below that say phones “work”, chits are wholly out of scope, or a ranking is
+> wired must be read as historical claims about 1446, not release approval.
+> The current implementation and release assessment are in
+> [`FINAL_LOCK_IN_AUDIT.md`](FINAL_LOCK_IN_AUDIT.md) and
+> [`CLASSIFICATION_AND_OPEN_QUESTIONS.md`](CLASSIFICATION_AND_OPEN_QUESTIONS.md).
+
 ---
 
 ## 1. What this system is
