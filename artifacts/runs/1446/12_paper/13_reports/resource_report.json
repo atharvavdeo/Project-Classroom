@@ -1,0 +1,378 @@
+{
+  "run_id": "1446/12_paper",
+  "environment": {
+    "python": "3.13.9",
+    "platform": "Windows 11",
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "gpu_vram_total_gb": 4.3,
+    "driver_version": "592.27",
+    "cuda_runtime": "12.8",
+    "torch_version": "2.11.0+cu128",
+    "torch_cuda_available": true,
+    "onnxruntime_providers": [
+      "TensorrtExecutionProvider",
+      "CUDAExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "free_disk_gb": 66.1,
+    "host_ram_gb": 16.8
+  },
+  "models": [
+    {
+      "config_id": "person_detection_primary",
+      "family": "person_detection",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cuda",
+      "device_reason": null
+    },
+    {
+      "config_id": "tracker_primary",
+      "family": "tracker",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "MIT",
+      "licence_url": "https://github.com/roboflow/supervision/blob/develop/LICENSE.md",
+      "reason": null,
+      "launch_probe": "import supervision",
+      "input_size": null,
+      "precision": null,
+      "device": "cuda",
+      "device_reason": null
+    },
+    {
+      "config_id": "seat_only_no_track",
+      "family": "tracker",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "n/a-internal",
+      "licence_url": null,
+      "reason": null,
+      "launch_probe": "none required",
+      "input_size": null,
+      "precision": null,
+      "device": "cuda",
+      "device_reason": null
+    },
+    {
+      "config_id": "rtmpose_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "256x192",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rtmo_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rtmo_large",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "5.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "alphapose_crowd_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\alphapose\\fast_421_res152_256x192.pth",
+      "checkpoint_sha256": "f0f15b3b1c1c04fc81999e4ffdeaf0c7b9a542e271b5cc40422fe94c7cfa9b41",
+      "licence": "SJTU-NonCommercial-Research",
+      "licence_url": "https://github.com/MVIG-SJTU/AlphaPose/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "import alphapose.models.builder",
+      "input_size": "256x192",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "4.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "dfine_native",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\dfine\\onnx\\model.onnx",
+      "checkpoint_sha256": "76e521ed66874590456f9eeb89c2adf33f0599778cd33b1b614f3090f95845b9",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Peterande/D-FINE/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "onnxruntime session created (inputs: pixel_values)",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "4.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rf_detr_native",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/roboflow/rf-detr/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rfdetr",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "dfine_sahi",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\dfine\\onnx\\model.onnx",
+      "checkpoint_sha256": "76e521ed66874590456f9eeb89c2adf33f0599778cd33b1b614f3090f95845b9",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Peterande/D-FINE/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "onnxruntime session created (inputs: pixel_values)",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "4.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "rf_detr_sahi",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/roboflow/rf-detr/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rfdetr",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "3.0 GB needed, 2.3 GB available after the safety margin"
+    },
+    {
+      "config_id": "gemma_marked_evidence",
+      "family": "vlm",
+      "state": "missing_weights",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\gemma\\gemma-4-E4B_q4_0-it.gguf",
+      "checkpoint_sha256": null,
+      "licence": "Gemma-Terms-of-Use",
+      "licence_url": "https://ai.google.dev/gemma/terms",
+      "reason": "checkpoint not found: C:\\DrishtiAI\\Project-Classroom\\models\\gemma\\gemma-4-E4B_q4_0-it.gguf",
+      "launch_probe": null,
+      "input_size": null,
+      "precision": "q4_0",
+      "device": null,
+      "device_reason": null
+    }
+  ],
+  "stages": [
+    {
+      "stage": "source",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T15:25:51Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sources": 1
+      }
+    },
+    {
+      "stage": "01_ingest",
+      "state": "complete",
+      "started_utc": "2026-08-20T15:25:04Z",
+      "finished_utc": "2026-08-20T15:25:51Z",
+      "reason": "one complete forward decode pass; motion vectors present",
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "sources": 1,
+        "failed": 0,
+        "preprocessing_configs": 4
+      }
+    },
+    {
+      "stage": "02_health",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T15:25:51Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "observations": 15
+      }
+    },
+    {
+      "stage": "03_alignment",
+      "state": "skipped_unavailable",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T15:25:51Z",
+      "reason": "no camera_motion or camera_repositioned condition was observed, so no global transform was estimated. Identity is the named baseline, not a silent default (PRD 6.3.2)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "epoch_breaks": 0,
+        "observations": 0
+      }
+    },
+    {
+      "stage": "04_calibration",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T15:25:51Z",
+      "reason": "campaper/e1/v1 (draft)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "seats": 12
+      }
+    },
+    {
+      "stage": "05_motion_roi",
+      "state": "complete",
+      "started_utc": "2026-08-20T15:25:42Z",
+      "finished_utc": "2026-08-20T15:25:51Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "windows": 4032,
+        "gate_records": 4289
+      }
+    },
+    {
+      "stage": "06_segmentation",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T15:25:51Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "events": 29,
+        "normal_priority": 21,
+        "low_priority": 8
+      }
+    },
+    {
+      "stage": "07_tracking",
+      "state": "complete",
+      "started_utc": "2026-08-20T15:25:56Z",
+      "finished_utc": "2026-08-20T15:26:56Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sample_rows": 337,
+        "person_boxes": 5881
+      }
+    },
+    {
+      "stage": "08_pose",
+      "state": "complete",
+      "started_utc": "2026-08-20T15:26:56Z",
+      "finished_utc": "2026-08-20T15:32:01Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "manifest_rows": 5881,
+        "manifest_digest": "3df16113796accf0b0c4546385889c1c56441538ab131727231e9d5431bda72c"
+      }
+    },
+    {
+      "stage": "09_object",
+      "state": "complete",
+      "started_utc": "2026-08-20T15:32:45Z",
+      "finished_utc": "2026-08-20T16:14:50Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "crops": 5881,
+        "crop_digest": "654ca2ddec3aa28a63ccaf5c16cd8637adf61939dc42de13c0eff98406b10c64"
+      }
+    },
+    {
+      "stage": "10_evidence",
+      "state": "complete",
+      "started_utc": "2026-08-20T16:15:23Z",
+      "finished_utc": "2026-08-20T16:15:54Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "events": 29,
+        "valid_packets": 29
+      }
+    },
+    {
+      "stage": "11_gemma",
+      "state": "skipped_unavailable",
+      "started_utc": "2026-08-20T16:15:52Z",
+      "finished_utc": "2026-08-20T16:15:54Z",
+      "reason": "no VLM review was performed; every event needs human review",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "reviews": 29
+      }
+    },
+    {
+      "stage": "12_evaluation",
+      "state": "blocked",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T16:16:21Z",
+      "reason": "no reference manifest; evaluation incomplete and no quality claim may be made",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "13_reports",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    }
+  ]
+}

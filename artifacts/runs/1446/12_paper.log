@@ -1,0 +1,555 @@
+
+========================================================================
+Phase 0  preflight + run manifest
+========================================================================
+experiment   product_zero  (5b6434de4643)
+residency    sequential, 2.0 GB safety margin
+python       3.13.9 on Windows 11
+gpu          NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB, driver 592.27
+torch        2.11.0+cu128, cuda available
+onnxruntime  TensorrtExecutionProvider, CUDAExecutionProvider, CPUExecutionProvider
+free disk    66.1 GB at C:\DrishtiAI\Project-Classroom\artifacts\runs
+
+configurations
+  OK  person_detection_primary  person_detection  available             import rtmlib
+  OK  tracker_primary           tracker           available             import supervision
+  OK  seat_only_no_track        tracker           available             none required
+  OK  rtmpose_baseline          pose              available             import rtmlib
+  OK  rtmo_baseline             pose              available             import rtmlib
+  OK  rtmo_large                pose              available             import rtmlib
+  OK  alphapose_crowd_baseline  pose              available             import alphapose.models.builder
+  OK  dfine_native              object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_native            object            available             import rfdetr
+  OK  dfine_sahi                object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_sahi              object            available             import rfdetr
+  --  gemma_marked_evidence     vlm               missing_weights       checkpoint not found: C:\DrishtiAI\Project-Classroom\models\gemma\gemma-4-E4B_q4_0-it.gguf
+
+run folder   C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper
+manifest     11/12 configurations available
+  note: No reference manifest configured. Per PRD 3 the run proceeds and object evaluation is marked incomplete; no quality claim may be made. Stages 09 selection and 12 evaluation are blocked.
+  note: No approved taxonomy configured. PRD 3 blocks detector selection and evaluation until the product owner approves the class list.
+  note: Working tree has uncommitted changes; this run is not exactly reproducible from its recorded revision.
+
+1 configuration(s) unavailable. They remain in the comparison table as unavailable and are never substituted (PRD 5).
+
+========================================================================
+Phase 1  ingest inventory + contact sheets
+========================================================================
+
+Seat No. 12 was seen taking a piece of paper from the desk.mkv
+    decoded    60.0 s (1317 frames)
+  matroska,webm / mpeg4 / yuv420p  1280x720
+  declared 25.000 fps, measured 21.900 fps  (DOES NOT MATCH)
+  1936 frames, 88.40 s, 77 keyframes, VFR (cv 0.3131)
+  decodable 88.40 s of 88.40 s, no gaps
+  health: {'blur': 1}
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper
+
+88.4 s decodable of 88.4 s (100.00%) across 1 source(s)
+
+========================================================================
+Phase 1  preprocessing A/B (4 named transforms)
+========================================================================
+12 frames sampled across Seat No. 12 was seen taking a piece of paper from the desk.mkv
+  identity_no_preprocessing  mean|diff|   0.000  sharpness     +0.00  blocking +0.0000    0.8s
+  clahe                      mean|diff|  16.134  sharpness   +439.35  blocking +0.0457    1.0s
+  denoise_nlmeans            mean|diff|   2.362  sharpness    -59.15  blocking -0.1185    8.1s
+  unsharp_mask               mean|diff|   4.839  sharpness  +2011.59  blocking +0.0330    0.8s
+
+No transform is recommended. These figures measure how much each transform CHANGED the image, not whether it helped. PRD 6 requires any transform to be evaluated enabled and disabled on known references, and no reference manifest exists for this corpus. A transform that raises sharpness while also raising blocking_ratio is amplifying compression structure, which at a 30x20 px object scale is indistinguishable from amplifying the object.
+
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\01_ingest\preprocessing
+
+========================================================================
+Phase 2  alignment A/B (identity/features/ECC)
+========================================================================
+16 frames sampled; static background support covers 78.6% of the frame
+
+per configuration, over all sampled frames:
+  ecc                0/ 15 compensated  median residual   0.8725  confidence 0.487  translation   0.07 px
+  features_ransac    0/ 15 compensated  median residual   0.2881  confidence 0.731  translation   0.05 px
+  identity           0/ 15 compensated  median residual  10.8766  confidence 0.084  translation   0.00 px
+
+no sustained geometry change; the recording is one camera epoch
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\03_alignment
+
+========================================================================
+Phases 2-3  health, motion, ROI, segmentation
+========================================================================
+calibration  campaper/e1/v1  (draft)
+  NOTE: this profile is not approved, so seat attribution is blocked downstream (PRD 3). Motion and ROI still run.
+
+scanning Seat No. 12 was seen taking a piece of paper from the desk.mkv
+    scanned     60.0s
+  motion vectors present (3568/frame)
+  4032 zone-windows over 88.4 s in 2.7 s (32x realtime)
+
+baselines
+  campaper-P01 desk_work_surface    median 0.03237  spread 0.02248  n=168  typing regime
+  campaper-P01 upper_body           median 0.03320  spread 0.02340  n=168
+  campaper-P02 desk_work_surface    median 0.00000  spread 0.00000  n=168  typing regime
+  campaper-P02 upper_body           median 0.01234  spread 0.00902  n=168  typing regime
+  campaper-P03 desk_work_surface    median 0.09450  spread 0.06451  n=168  typing regime
+  campaper-P03 upper_body           median 0.06298  spread 0.05111  n=168
+  campaper-P04 desk_work_surface    median 0.00979  spread 0.00979  n=168  typing regime
+  campaper-P04 upper_body           median 0.05516  spread 0.04808  n=168  typing regime
+  campaper-P05 desk_work_surface    median 0.00556  spread 0.00556  n=168  typing regime
+  campaper-P05 upper_body           median 0.02562  spread 0.01772  n=168  typing regime
+  campaper-P06 desk_work_surface    median 0.01326  spread 0.00979  n=168  typing regime
+  campaper-P06 upper_body           median 0.02291  spread 0.01855  n=168  typing regime
+  campaper-P07 desk_work_surface    median 0.04461  spread 0.03386  n=168  typing regime
+  campaper-P07 upper_body           median 0.01815  spread 0.01549  n=168  typing regime
+  campaper-P08 desk_work_surface    median 0.01746  spread 0.01273  n=168
+  campaper-P08 upper_body           median 0.06317  spread 0.04021  n=168
+  campaper-P09 desk_work_surface    median 0.01742  spread 0.00975  n=168
+  campaper-P09 upper_body           median 0.00892  spread 0.00587  n=168  typing regime
+  campaper-P10 desk_work_surface    median 0.02556  spread 0.01753  n=168
+  campaper-P10 upper_body           median 0.03107  spread 0.02225  n=168
+  campaper-P11 desk_work_surface    median 0.00000  spread 0.00000  n=168  typing regime
+  campaper-P11 upper_body           median 0.01000  spread 0.00722  n=168  typing regime
+  campaper-P12 desk_work_surface    median 0.07808  spread 0.07371  n=168  typing regime
+  campaper-P12 upper_body           median 0.06618  spread 0.05801  n=168  typing regime
+
+segmentation
+  21 normal-priority events, 8 retained at low priority
+  96.54% of the recording flagged
+  close reasons: {'activity_ceased': 29}
+
+gates: {'deprioritise': 4289}
+  nothing discarded; 4289 records retained and searchable
+health observations: {'compression_noise': 15}
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper
+
+========================================================================
+Phase 4  tracking + pose A/B at 3.0 Hz on cuda
+========================================================================
+29 candidate events -> 337 sample rows at 3.0 Hz
+ [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 2 5 3 5 0 7 1   [ W : o n n x r u n t i m e : ,   t r a n s f o r m e r _ m e m c p y . c c : 8 3   o n n x r u n t i m e : : M e m c p y T r a n s f o r m e r : : A p p l y I m p l ]   6   M e m c p y   n o d e s   a r e   a d d e d   t o   t h e   g r a p h   m a i n _ g r a p h   f o r   C U D A E x e c u t i o n P r o v i d e r .   I t   m i g h t   h a v e   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e   ( i n c l u d i n g   u n a b l e   t o   r u n   C U D A   g r a p h ) .   S e t   s e s s i o n _ o p t i o n s . l o g _ s e v e r i t y _ l e v e l = 1   t o   s e e   t h e   d e t a i l   l o g s   b e f o r e   t h i s   m e s s a g e .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 2 1 3 7 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 2 9 9 9 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 3 7 7 3 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 4 5 6 5 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 5 2 8 0 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 6 0 1 3 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 6 7 5 1 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 8 7 7 6 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 6 9 5 5 1 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 7 0 2 7 2 5   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 7 0 9 7 0 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 5 : 5 9 . 4 7 2 0 3 0 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+ person detection: available (5881 boxes over 337 rows)
+  tracker_primary        available     253 tracks      0 seats resolved
+  tracker_challenger     available      68 tracks      0 seats resolved
+  seat_only_no_track     available       0 tracks      0 seats resolved
+
+pose manifest frozen: 5881 rows, digest 3df16113796accf0
+ [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 7 : 0 1 . 3 3 3 5 7 7 1   [ W : o n n x r u n t i m e : ,   s e s s i o n _ s t a t e . c c : 1 2 8 0   o n n x r u n t i m e : : V e r i f y E a c h N o d e I s A s s i g n e d T o A n E p ]   S o m e   n o d e s   w e r e   n o t   a s s i g n e d   t o   t h e   p r e f e r r e d   e x e c u t i o n   p r o v i d e r s   w h i c h   m a y   o r   m a y   n o t   h a v e   a n   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e .   e . g .   O R T   e x p l i c i t l y   a s s i g n s   s h a p e   r e l a t e d   o p s   t o   C P U   t o   i m p r o v e   p e r f .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 7 : 0 1 . 3 3 4 6 7 1 4   [ W : o n n x r u n t i m e : ,   s e s s i o n _ s t a t e . c c : 1 2 8 2   o n n x r u n t i m e : : V e r i f y E a c h N o d e I s A s s i g n e d T o A n E p ]   R e r u n n i n g   w i t h   v e r b o s e   o u t p u t   o n   a   n o n - m i n i m a l   b u i l d   w i l l   s h o w   n o d e   a s s i g n m e n t s .  [ m 
+ load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\yolox_m_8xb8-300e_humanart-c2c7a14a.onnx with onnxruntime backend
+ [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 7 : 0 1 . 5 6 4 1 8 2 0   [ W : o n n x r u n t i m e : ,   s e s s i o n _ s t a t e . c c : 1 2 8 0   o n n x r u n t i m e : : V e r i f y E a c h N o d e I s A s s i g n e d T o A n E p ]   S o m e   n o d e s   w e r e   n o t   a s s i g n e d   t o   t h e   p r e f e r r e d   e x e c u t i o n   p r o v i d e r s   w h i c h   m a y   o r   m a y   n o t   h a v e   a n   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e .   e . g .   O R T   e x p l i c i t l y   a s s i g n s   s h a p e   r e l a t e d   o p s   t o   C P U   t o   i m p r o v e   p e r f .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 7 : 0 1 . 5 6 5 4 9 9 5   [ W : o n n x r u n t i m e : ,   s e s s i o n _ s t a t e . c c : 1 2 8 2   o n n x r u n t i m e : : V e r i f y E a c h N o d e I s A s s i g n e d T o A n E p ]   R e r u n n i n g   w i t h   v e r b o s e   o u t p u t   o n   a   n o n - m i n i m a l   b u i l d   w i l l   s h o w   n o d e   a s s i g n m e n t s .  [ m 
+ load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\rtmpose-m_simcc-body7_pt-body7_420e-256x192-e48f03d0_20230504.onnx with onnxruntime backend
+ [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 7 : 5 9 . 5 1 7 2 6 7 3   [ W : o n n x r u n t i m e : ,   t r a n s f o r m e r _ m e m c p y . c c : 8 3   o n n x r u n t i m e : : M e m c p y T r a n s f o r m e r : : A p p l y I m p l ]   1 0   M e m c p y   n o d e s   a r e   a d d e d   t o   t h e   g r a p h   t o r c h _ j i t   f o r   C U D A E x e c u t i o n P r o v i d e r .   I t   m i g h t   h a v e   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e   ( i n c l u d i n g   u n a b l e   t o   r u n   C U D A   g r a p h ) .   S e t   s e s s i o n _ o p t i o n s . l o g _ s e v e r i t y _ l e v e l = 1   t o   s e e   t h e   d e t a i l   l o g s   b e f o r e   t h i s   m e s s a g e .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 7 : 5 9 . 5 2 6 6 6 6 1   [ W : o n n x r u n t i m e : ,   s e s s i o n _ s t a t e . c c : 1 2 8 0   o n n x r u n t i m e : : V e r i f y E a c h N o d e I s A s s i g n e d T o A n E p ]   S o m e   n o d e s   w e r e   n o t   a s s i g n e d   t o   t h e   p r e f e r r e d   e x e c u t i o n   p r o v i d e r s   w h i c h   m a y   o r   m a y   n o t   h a v e   a n   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e .   e . g .   O R T   e x p l i c i t l y   a s s i g n s   s h a p e   r e l a t e d   o p s   t o   C P U   t o   i m p r o v e   p e r f .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 0 : 5 7 : 5 9 . 5 2 9 7 4 9 7   [ W : o n n x r u n t i m e : ,   s e s s i o n _ s t a t e . c c : 1 2 8 2   o n n x r u n t i m e : : V e r i f y E a c h N o d e I s A s s i g n e d T o A n E p ]   R e r u n n i n g   w i t h   v e r b o s e   o u t p u t   o n   a   n o n - m i n i m a l   b u i l d   w i l l   s h o w   n o d e   a s s i g n m e n t s .  [ m 
+ load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\rtmo-m_16xb16-600e_body7-640x640-39e78cc4_20231211.onnx with onnxruntime backend
+Load SE Resnet...
+    AlphaPose on NVIDIA GeForce RTX 3050 Laptop GPU (4096 MiB)
+  rtmpose_baseline           available             4244 observations
+  rtmo_baseline              available             1775 observations
+  alphapose_crowd_baseline   available             5881 observations
+
+manifest equivalence: verified
+available: ['rtmpose_baseline', 'rtmo_baseline', 'alphapose_crowd_baseline']
+selection: none. PRD 5 forbids naming a configuration best until every runnable mandatory configuration has a matched report; selection happens in stage 12 against references.
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper
+
+========================================================================
+Phase 4  pose comparison report
+========================================================================
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\13_reports\pose_comparison.md
+
+========================================================================
+Phase 4b head/neck orientation + excursions + overlays
+========================================================================
+5881 observations from alphapose_crowd_baseline; 36.6% resolvable
+events: {'yaw_left': 2, 'yaw_right': 2, 'look_down': 0}
+
+seat            obs  resolv  headpx  yaw med  pitch med  down ev  longest  turn ev   nbr
+------------------------------------------------------------------------------------------------
+unattributed/t    2    0.0%     2.5   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   20   65.0%    10.5   -1.000     +0.553        0     0.0s        0     0
+unattributed/t    3  100.0%    31.2   +0.460     -0.078        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   44    2.3%     0.0   -0.938     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%    12.0   +1.500     -0.527        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t  140   70.7%     7.3   -1.000     +0.501        0     0.0s        0     0
+unattributed/t    9    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4  100.0%    30.7   +0.371     -0.091        0     0.0s        0     0
+unattributed/t    1  100.0%    19.7   +1.000     +0.335        0     0.0s        0     0
+unattributed/t   67    1.5%     0.0   -1.000     +0.547        0     0.0s        0     0
+unattributed/t  149   43.0%     5.3   +1.500     -0.237        0     0.0s        0     0
+unattributed/t    2  100.0%    33.6   +0.521     +0.251        0     0.0s        0     0
+unattributed/t    1    0.0%     1.3   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    3    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4    0.0%     1.8   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    7    0.0%     1.4   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4    0.0%     0.3   +0.000     +0.000        0     0.0s        0     0
+unattributed/t  135   93.3%    20.4   +1.500     -0.227        0     0.0s        0     0
+unattributed/t  134   27.6%     0.0   -1.000     +0.499        0     0.0s        0     0
+unattributed/t    1  100.0%    19.6   +1.000     +0.530        0     0.0s        0     0
+unattributed/t   18    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2  100.0%    21.9   +1.500     -0.288        0     0.0s        0     0
+unattributed/t    4    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   36   30.6%     2.1   -1.000     +0.441        0     0.0s        0     0
+unattributed/t    2  100.0%    37.2   +1.226     +0.335        0     0.0s        0     0
+unattributed/t   10   90.0%    44.5   +1.336     +0.160        0     0.0s        0     0
+unattributed/t    3    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   13   92.3%    40.6   +1.494     +0.119        0     0.0s        0     0
+unattributed/t    3    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%     9.0   -1.000     +0.500        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   39    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2   50.0%    34.8   +1.000     +0.417        0     0.0s        0     0
+unattributed/t   15   60.0%    48.3   +1.452     +0.062        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   58   37.9%     2.3   -1.000     +0.553        0     0.0s        0     0
+unattributed/t    7    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2  100.0%     9.6   -1.000     +0.747        0     0.0s        0     0
+unattributed/t   18    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   80   97.5%    38.1   +0.000     -0.135        0     0.0s        2     0
+unattributed/t   20    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   17    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4   25.0%     1.1   -1.000     +0.447        0     0.0s        0     0
+unattributed/t   20    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   75  100.0%    41.7   +1.405     +0.125        0     0.0s        0     0
+unattributed/t   47    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   17    0.0%     1.7   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   49    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4  100.0%    12.7   -1.000     +0.492        0     0.0s        0     0
+unattributed/t    4    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   79   21.5%     0.0   +1.000     -0.145        0     0.0s        0     0
+unattributed/t   48    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   38   28.9%     1.6   -1.000     +0.625        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   36    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   21    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   32    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4  100.0%    48.7   +1.487     -0.069        0     0.0s        0     0
+unattributed/t   20   20.0%     1.5   -1.000     +0.748        0     0.0s        0     0
+unattributed/t    4    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    5    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   39  100.0%    43.7   +1.471     +0.176        0     0.0s        0     0
+unattributed/t   39   17.9%     3.9   +1.500     -0.895        0     0.0s        0     0
+unattributed/t   39   10.3%     0.0   -0.431     -0.255        0     0.0s        0     0
+unattributed/t   39    5.1%     0.0   -1.000     -0.128        0     0.0s        0     0
+unattributed/t   39   87.2%    10.0   +1.500     -0.270        0     0.0s        0     0
+unattributed/t   39    0.0%     2.3   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   51   19.6%     3.6   +1.500     -0.456        0     0.0s        0     0
+unattributed/t   39  100.0%    20.1   +1.500     -0.247        0     0.0s        0     0
+unattributed/t   39    0.0%     1.5   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   39    0.0%     1.4   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   26   88.5%    29.0   +0.409     +0.000        0     0.0s        0     0
+unattributed/t    7    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   39    2.6%     1.6   -1.000     +0.555        0     0.0s        0     0
+unattributed/t   20   10.0%     1.7   -1.000     +0.526        0     0.0s        0     0
+unattributed/t   35    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4  100.0%    10.5   -1.000     +0.442        0     0.0s        0     0
+unattributed/t   34   73.5%     8.9   -1.000     +0.424        0     0.0s        0     0
+unattributed/t   79    6.3%     2.2   -1.000     +0.424        0     0.0s        0     0
+unattributed/t   26   26.9%     0.0   -1.000     +0.601        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   33    9.1%     0.0   +1.000     -0.215        0     0.0s        0     0
+unattributed/t    1    0.0%   130.7   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   24    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   26    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    6    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     1.1   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    3    0.0%   127.3   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   36   88.9%    23.0   +1.500     -0.228        0     0.0s        0     0
+unattributed/t    1    0.0%     1.3   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%     9.0   -1.000     +0.499        0     0.0s        0     0
+unattributed/t    1    0.0%     2.4   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   13    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   14   21.4%     0.8   -1.000     +0.749        0     0.0s        0     0
+unattributed/t    4    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   10   10.0%     0.0   +0.374     -0.062        0     0.0s        0     0
+unattributed/t    4    0.0%     1.2   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     4.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   79    0.0%     1.3   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    3    0.0%     1.4   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    5    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   13  100.0%    41.8   +1.444     +0.151        0     0.0s        0     0
+unattributed/t   13   46.2%     3.7   -0.026     +0.239        0     0.0s        0     0
+unattributed/t   13   15.4%     3.2   -1.000     +0.485        0     0.0s        0     0
+unattributed/t   13    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   13    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   13    0.0%     1.3   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   13   23.1%     2.4   +1.500     -0.495        0     0.0s        0     0
+unattributed/t   79    6.3%     1.8   -1.500     +0.224        0     0.0s        0     0
+unattributed/t   13  100.0%    21.1   +1.500     -0.136        0     0.0s        0     0
+unattributed/t   13   23.1%     1.4   +0.652     +0.131        0     0.0s        0     0
+unattributed/t   11    9.1%     1.4   -1.000     +0.559        0     0.0s        0     0
+unattributed/t   13    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    8    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   10    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   12    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   13    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   10   60.0%     6.3   -1.000     +0.573        0     0.0s        0     0
+unattributed/t    3    0.0%     1.8   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   68   11.8%     0.8   -1.000     +0.523        0     0.0s        0     0
+unattributed/t    5   20.0%     1.1   -1.000     +0.600        0     0.0s        0     0
+unattributed/t    1    0.0%     2.2   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    3    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    3    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%    10.4   -1.000     +0.539        0     0.0s        0     0
+unattributed/t   26  100.0%    45.2   +1.432     -0.015        0     0.0s        0     0
+unattributed/t   26   30.8%     3.9   -1.500     +3.002        0     0.0s        0     0
+unattributed/t   26    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   26   50.0%     5.5   +1.500     -0.246        0     0.0s        0     0
+unattributed/t   78   65.4%    12.0   -1.000     +0.545        0     0.0s        0     0
+unattributed/t   26    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   26   69.2%    17.6   +1.500     -0.151        0     0.0s        0     0
+unattributed/t   26    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   26    7.7%     1.8   -1.000     +0.436        0     0.0s        0     0
+unattributed/t   26    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   23   39.1%     2.2   -1.000     +0.693        0     0.0s        0     0
+unattributed/t   13    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   16    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   16    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   26    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   44    2.3%     0.0   +0.401     +0.029        0     0.0s        0     0
+unattributed/t   26   92.3%     7.6   -1.000     +0.539        0     0.0s        0     0
+unattributed/t    9    0.0%   127.1   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   20   30.0%     0.0   +0.431     +0.046        0     0.0s        0     0
+unattributed/t    4    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   14    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%    30.6   +0.451     +0.075        0     0.0s        0     0
+unattributed/t   15    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    3    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    5   20.0%     0.0   +1.000     +0.261        0     0.0s        0     0
+unattributed/t    8   25.0%     1.1   -1.000     +0.473        0     0.0s        0     0
+unattributed/t    1  100.0%    16.0   -1.000     +0.374        0     0.0s        0     0
+unattributed/t   11    0.0%     1.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    6    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%   127.6   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%    34.2   -0.816     +0.054        0     0.0s        0     0
+unattributed/t    7    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     3.2   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%     7.1   -1.000     +1.001        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   76    1.3%     0.0   -1.000     -0.177        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2  100.0%    21.8   -1.000     +0.426        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   74  100.0%    30.2   +0.453     -0.032        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4   50.0%    24.4   +1.500     -0.138        0     0.0s        0     0
+unattributed/t    1  100.0%    10.0   +1.000     -0.083        0     0.0s        0     0
+unattributed/t   17  100.0%    30.9   +0.416     -0.000        0     0.0s        0     0
+unattributed/t    8   75.0%    41.7   +1.500     -0.101        0     0.0s        0     0
+unattributed/t    1  100.0%   100.2   -1.355     -0.085        0     0.0s        0     0
+unattributed/t    2    0.0%     0.9   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   43   97.7%    30.1   +0.240     -0.004        0     0.0s        0     0
+unattributed/t    3    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%    15.9   -1.000     +0.500        0     0.0s        0     0
+unattributed/t    3   66.7%    36.2   +1.486     -0.049        0     0.0s        0     0
+unattributed/t    3  100.0%    33.2   +1.500     -0.038        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   69  100.0%    41.2   +1.353     +0.193        0     0.0s        0     0
+unattributed/t   38    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4  100.0%    14.3   -1.000     +0.571        0     0.0s        0     0
+unattributed/t    1  100.0%    17.1   -1.000     +0.292        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1  100.0%    11.7   -1.000     +0.666        0     0.0s        0     0
+unattributed/t    1  100.0%    10.6   -1.000     +0.699        0     0.0s        0     0
+unattributed/t    9   22.2%     0.0   -1.000     -0.111        0     0.0s        0     0
+unattributed/t    4    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4  100.0%    22.4   +1.450     -0.091        0     0.0s        0     0
+unattributed/t    1    0.0%     5.6   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    4   50.0%    14.4   +1.500     -0.145        0     0.0s        0     0
+unattributed/t    4   75.0%    16.5   +1.500     -0.031        0     0.0s        0     0
+unattributed/t   24  100.0%    22.5   -1.000     +0.412        0     0.0s        0     0
+unattributed/t    3   66.7%    23.1   +1.500     -0.209        0     0.0s        0     0
+unattributed/t    2  100.0%    15.7   -1.000     +0.341        0     0.0s        0     0
+unattributed/t   35  100.0%    21.7   +1.500     -0.208        0     0.0s        0     0
+unattributed/t   20   60.0%     8.8   -1.000     +0.549        0     0.0s        0     0
+unattributed/t   30    3.3%     0.0   -0.928     +0.000        0     0.0s        0     0
+unattributed/t   20    5.0%     0.7   -1.000     +0.400        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   18    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2   50.0%     7.3   +1.500     -0.686        0     0.0s        0     0
+unattributed/t    7   57.1%     6.6   +1.500     -0.319        0     0.0s        0     0
+unattributed/t   17    5.9%     0.0   -1.000     +0.667        0     0.0s        0     0
+unattributed/t   14    0.0%     2.7   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    3  100.0%    30.3   +0.438     -0.021        0     0.0s        0     0
+unattributed/t    1  100.0%    12.2   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    8   75.0%     8.5   -1.000     +0.499        0     0.0s        0     0
+unattributed/t    3   33.3%     0.0   -1.000     +0.417        0     0.0s        0     0
+unattributed/t   81    7.4%     2.7   +0.873     +0.036        0     0.0s        0     0
+unattributed/t    1    0.0%     1.7   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    2    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   72  100.0%    42.4   +1.430     +0.172        0     0.0s        0     0
+unattributed/t  133   96.2%    59.3   -0.688     +0.000        0     0.0s        2     0
+unattributed/t  176   13.6%     2.7   -1.000     +0.371        0     0.0s        0     0
+unattributed/t   17   94.1%    15.7   +1.500     -0.249        0     0.0s        0     0
+unattributed/t  116    3.4%     0.0   -1.000     +0.213        0     0.0s        0     0
+unattributed/t  176   48.3%     4.8   -1.000     +0.343        0     0.0s        0     0
+unattributed/t   34   85.3%    20.0   +1.500     -0.226        0     0.0s        0     0
+unattributed/t    2    0.0%     1.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t  176   31.8%     0.0   -1.000     -0.111        0     0.0s        0     0
+unattributed/t   97   27.8%     1.6   -1.000     +0.667        0     0.0s        0     0
+unattributed/t  176    0.0%     1.2   +0.000     +0.000        0     0.0s        0     0
+unattributed/t  160    6.2%     1.8   -1.500     +0.423        0     0.0s        0     0
+unattributed/t   33   51.5%     6.1   -1.000     +0.637        0     0.0s        0     0
+unattributed/t   41   65.9%     7.0   -1.000     +0.539        0     0.0s        0     0
+unattributed/t  170  100.0%    28.4   +0.431     -0.015        0     0.0s        0     0
+unattributed/t   62  100.0%    22.2   -1.000     +0.395        0     0.0s        0     0
+unattributed/t    1    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+unattributed/t   51    0.0%     0.0   +0.000     +0.000        0     0.0s        0     0
+
+4 overlay frame(s) in C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\08_pose\head\overlays
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\08_pose\head
+
+========================================================================
+Phase 5  crops + D-FINE native/SAHI
+========================================================================
+5881 pose rows, 4244 observations from rtmpose_baseline
+
+crop manifest frozen: 5881 crops, digest 654ca2ddec3aa28a
+  native_source_context_fallback      3499
+  pose_hand_context                   2382
+  fallback reasons: {'no_pose_observation': 1637, 'wrist_confidence_below_floor': 1588, 'wrist_not_resolvable_at_source_scale': 274}
+  233 crops under the native-resolution floor (4.0%)
+  median magnification 7.34x, max 21.46x
+ [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 3 4 5 2 5 9 2   [ W : o n n x r u n t i m e : ,   t r a n s f o r m e r _ m e m c p y . c c : 8 3   o n n x r u n t i m e : : M e m c p y T r a n s f o r m e r : : A p p l y I m p l ]   6   M e m c p y   n o d e s   a r e   a d d e d   t o   t h e   g r a p h   m a i n _ g r a p h   f o r   C U D A E x e c u t i o n P r o v i d e r .   I t   m i g h t   h a v e   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e   ( i n c l u d i n g   u n a b l e   t o   r u n   C U D A   g r a p h ) .   S e t   s e s s i o n _ o p t i o n s . l o g _ s e v e r i t y _ l e v e l = 1   t o   s e e   t h e   d e t a i l   l o g s   b e f o r e   t h i s   m e s s a g e .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 7 7 8 4 8 8   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 7 8 7 6 2 8   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 7 9 5 3 6 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 0 3 1 1 2   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 1 2 6 1 5   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 2 0 2 7 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 2 7 4 3 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 3 4 6 8 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 4 2 1 5 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 4 9 2 9 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 5 6 2 5 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 2 : 5 3 . 5 8 6 3 2 4 0   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 7 6 3 1 8 7 5   [ W : o n n x r u n t i m e : ,   t r a n s f o r m e r _ m e m c p y . c c : 8 3   o n n x r u n t i m e : : M e m c p y T r a n s f o r m e r : : A p p l y I m p l ]   6   M e m c p y   n o d e s   a r e   a d d e d   t o   t h e   g r a p h   m a i n _ g r a p h   f o r   C U D A E x e c u t i o n P r o v i d e r .   I t   m i g h t   h a v e   n e g a t i v e   i m p a c t   o n   p e r f o r m a n c e   ( i n c l u d i n g   u n a b l e   t o   r u n   C U D A   g r a p h ) .   S e t   s e s s i o n _ o p t i o n s . l o g _ s e v e r i t y _ l e v e l = 1   t o   s e e   t h e   d e t a i l   l o g s   b e f o r e   t h i s   m e s s a g e .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 4 5 2 9 1 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 4 6 1 6 5 5   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 4 7 0 2 9 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 4 7 9 1 4 6   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 4 8 8 7 7 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 4 9 6 6 8 3   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 5 0 4 2 8 1   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 5 1 1 8 6 4   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 5 2 0 1 0 0   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 5 3 2 1 4 5   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 5 3 9 6 7 9   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+  [ 0 ; 9 3 m 2 0 2 6 - 0 8 - 2 0   2 1 : 0 8 : 3 1 . 9 5 4 7 7 2 5   [ W : o n n x r u n t i m e : D e f a u l t ,   s c a t t e r _ n d . h : 5 1   o n n x r u n t i m e : : c u d a : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n : : S c a t t e r N D W i t h A t o m i c R e d u c t i o n ]   S c a t t e r N D   w i t h   r e d u c t i o n = = ' n o n e '   o n l y   g u a r a n t e e s   t o   b e   c o r r e c t   i f   i n d i c e s   a r e   n o t   d u p l i c a t e d .  [ m 
+   rf_detr_native   resource_unavailable       0 merged     0 abstained
+  dfine_native     available              32203 merged   233 abstained
+  rf_detr_sahi     resource_unavailable       0 merged     0 abstained
+  dfine_sahi       available              47888 merged   233 abstained
+  recurrence grid: 25.6 px (1280 px frame)
+  wrist positions available on 334 frame(s) from rtmpose_baseline
+  dfine_native: 9882 group(s) restated as recurrent_scene_object
+  dfine_sahi: 23535 group(s) restated as recurrent_scene_object
+
+crop equivalence: verified
+available: ['dfine_native', 'dfine_sahi']
+temporal confirmation: {'temporally_supported_object_evidence': 1601, 'single_frame_object_candidate': 4563, 'conflicting_object_evidence': 0, 'insufficient_visual_evidence': 38, 'recurrent_scene_object': 33417}
+  4563 singletons retained, 0 deleted
+selection: none. PRD 3 blocks detector selection and evaluation until the product owner approves the taxonomy, and PRD 15 places selection in stage 12 against the reference manifest.
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper
+
+========================================================================
+Phase 5  detector comparison report
+========================================================================
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\13_reports\detector_comparison.md
+
+========================================================================
+Phase 5  render phone detections
+========================================================================
+47888 rows, phone: showing top 12 by confidence (0.878 to 0.734)
+
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\09_object\dfine_sahi\rendered_phone\contact_sheet_phone.jpg
+        12 full frames + native crops in C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\09_object\dfine_sahi\rendered_phone
+
+Left panel is context with the box drawn; right panel is the native crop at its true source size, upscaled with nearest neighbour so no interpolation invents detail.
+
+========================================================================
+Phase 5  render secondary_paper_chit detections
+========================================================================
+no 'secondary_paper_chit' detections in dfine_sahi
+
+========================================================================
+Phase 5  render stationery detections
+========================================================================
+47888 rows, stationery: showing top 12 by confidence (0.819 to 0.617)
+
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\09_object\dfine_sahi\rendered_stationery\contact_sheet_stationery.jpg
+        12 full frames + native crops in C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\09_object\dfine_sahi\rendered_stationery
+
+Left panel is context with the box drawn; right panel is the native crop at its true source size, upscaled with nearest neighbour so no interpolation invents detail.
+
+========================================================================
+Phase 6  evidence packets + ranking + dispositions
+========================================================================
+29 packets composed: 29 valid, 0 invalid
+29 of 29 contact sheets rendered
+
+Gemma: 0 attempted (0 schema-valid, 0 invalid, 0 repaired), 29 not attempted
+  no --gemma-url was supplied, so no VLM review was performed. Every packet is recorded as needing human review rather than being treated as reviewed and clean.
+  29 of 29 need human review
+
+ranking inputs: 20 of 29 events carry object evidence from dfine_sahi; 0 of 20 carry sustained pose context from alphapose_crowd_baseline
+
+29 event(s) at normal priority over 88.4 s analysed; 0 retained at low priority and 0 excluded from automatic ordering. Priority is a reading order, not a probability that anything occurred.
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper
+
+========================================================================
+Phase 7  evaluation + configuration comparison
+========================================================================
+isolation verified across 7 stages
+
+no --reference supplied; evaluation marked incomplete (PRD 3)
+
+========================================================================
+Final report
+========================================================================
+measured result: (3)
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\1446\12_paper\13_reports
+  final_report.md
+  model_selection_report.md
+  quality_limitations.md
+  resource_report.json

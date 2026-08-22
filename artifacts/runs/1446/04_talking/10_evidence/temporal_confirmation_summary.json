@@ -1,0 +1,29 @@
+{
+  "groups": 36332,
+  "by_status": {
+    "temporally_supported_object_evidence": 1976,
+    "single_frame_object_candidate": 5654,
+    "conflicting_object_evidence": 0,
+    "insufficient_visual_evidence": 40,
+    "recurrent_scene_object": 28662
+  },
+  "by_class": {
+    "bag": 2477,
+    "book_or_notebook_like_object": 224,
+    "insufficient_visual_evidence": 40,
+    "keyboard": 5512,
+    "monitor_or_bezel": 6124,
+    "mouse": 3003,
+    "phone": 3969,
+    "stationery": 816,
+    "unknown_object": 14167
+  },
+  "retained_singletons": 5654,
+  "recurrent_scene_objects": 28662,
+  "handheld_implausible": 4564,
+  "handheld_unjudged": 0,
+  "deleted": 0,
+  "supported_duration_ms": 798666.6,
+  "median_support_frames": 1,
+  "note": "no group was deleted. A singleton is a status, not a reason to discard, and the count above is retained evidence (PRD 10)."
+}

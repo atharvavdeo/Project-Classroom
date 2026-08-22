@@ -1,0 +1,29 @@
+{
+  "config_id": "alphapose_crowd_baseline",
+  "state": "available",
+  "manifest_digest": "fd5679cc30d38d47268823a7f83b58eb2f0ebf4fc3f2d0cf513535d62ac16194",
+  "checkpoint_sha256": "",
+  "rows_seen": 3542,
+  "persons_proposed": 3542,
+  "persons_returned": 3542,
+  "row_coverage": 1.0,
+  "joint_observability": {
+    "visible": 33304,
+    "occluded": 11026,
+    "not_detected": 0,
+    "not_resolvable_at_source_scale": 1716
+  },
+  "joint_visible_fraction": 0.7233,
+  "wrist_observability": {
+    "visible": 4020,
+    "occluded": 2800,
+    "not_detected": 0,
+    "not_resolvable_at_source_scale": 264
+  },
+  "head_pitch_resolved": 2457,
+  "suspected_joint_swaps": 108,
+  "wrist_in_lap_context": 0,
+  "seconds": 166.848,
+  "rows_per_second": 21.23,
+  "peak_vram_mb": null
+}

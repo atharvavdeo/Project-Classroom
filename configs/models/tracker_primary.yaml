@@ -1,0 +1,10 @@
+config_id: tracker_primary
+vram_gb: 0.5
+family: tracker
+description: ByteTrack via Supervision, reconciled to seats.
+probe: python_import
+module: supervision
+licence: MIT
+licence_url: https://github.com/roboflow/supervision/blob/develop/LICENSE.md
+thresholds:
+  seat_confidence: 0.5

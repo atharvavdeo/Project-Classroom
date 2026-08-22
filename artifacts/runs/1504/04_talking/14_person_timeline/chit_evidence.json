@@ -1,0 +1,2353 @@
+[
+  {
+    "track_id": 6,
+    "sightings": 323,
+    "wrist_resolved_sightings": 23,
+    "raw_detections": 5,
+    "kept_detections": 4,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 1,
+    "handling_rate": 0.17391304347826086,
+    "episodes": [
+      [
+        26000.0,
+        26250.0
+      ],
+      [
+        75000.0,
+        76250.0
+      ]
+    ],
+    "longest_episode_ms": 1250.0,
+    "total_handling_ms": 1500.0,
+    "peak_confidence": 0.5126,
+    "median_size_ratio": 0.0417,
+    "dfine_paper_rate": 0.0,
+    "disposition": "brief_paper_handling",
+    "reasons": [
+      "4 of 5 detections survived, at the hands and small enough",
+      "handling in 17% of sightings where a wrist resolved",
+      "longest continuous handling 1.2s across 2 episode(s)"
+    ]
+  },
+  {
+    "track_id": 4,
+    "sightings": 573,
+    "wrist_resolved_sightings": 573,
+    "raw_detections": 445,
+    "kept_detections": 307,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 72,
+    "rejected_far_from_hands": 66,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.5026178010471204,
+    "episodes": [
+      [
+        0.0,
+        2500.0
+      ],
+      [
+        3250.0,
+        7500.0
+      ],
+      [
+        11750.0,
+        12000.0
+      ],
+      [
+        17250.0,
+        18000.0
+      ],
+      [
+        23250.0,
+        25000.0
+      ],
+      [
+        27250.0,
+        27750.0
+      ],
+      [
+        28500.0,
+        29000.0
+      ],
+      [
+        30750.0,
+        32000.0
+      ],
+      [
+        33500.0,
+        33750.0
+      ],
+      [
+        36000.0,
+        45000.0
+      ],
+      [
+        46250.0,
+        51000.0
+      ],
+      [
+        52250.0,
+        55750.0
+      ],
+      [
+        56500.0,
+        57500.0
+      ],
+      [
+        58750.0,
+        59000.0
+      ],
+      [
+        61000.0,
+        63000.0
+      ],
+      [
+        64000.0,
+        85750.0
+      ],
+      [
+        90000.0,
+        90250.0
+      ],
+      [
+        91000.0,
+        91250.0
+      ],
+      [
+        92000.0,
+        93250.0
+      ],
+      [
+        94000.0,
+        94250.0
+      ],
+      [
+        96250.0,
+        96500.0
+      ],
+      [
+        97250.0,
+        98750.0
+      ],
+      [
+        104000.0,
+        104750.0
+      ],
+      [
+        106500.0,
+        108000.0
+      ],
+      [
+        111500.0,
+        113000.0
+      ],
+      [
+        113750.0,
+        115250.0
+      ],
+      [
+        116250.0,
+        116500.0
+      ],
+      [
+        117250.0,
+        117500.0
+      ],
+      [
+        119250.0,
+        121500.0
+      ],
+      [
+        122250.0,
+        137000.0
+      ],
+      [
+        139000.0,
+        139250.0
+      ],
+      [
+        141000.0,
+        143250.0
+      ]
+    ],
+    "longest_episode_ms": 21750.0,
+    "total_handling_ms": 83250.0,
+    "peak_confidence": 0.7202,
+    "median_size_ratio": 0.0735,
+    "dfine_paper_rate": 0.9022687609075044,
+    "disposition": "sustained_paper_handling",
+    "reasons": [
+      "307 of 445 detections survived, at the hands and small enough",
+      "handling in 50% of sightings where a wrist resolved",
+      "longest continuous handling 21.8s across 32 episode(s)",
+      "D-FINE also reports notebook/paper in 90% of sightings -- there is real paperwork at this seat, which may be legitimate"
+    ]
+  },
+  {
+    "track_id": 1,
+    "sightings": 573,
+    "wrist_resolved_sightings": 555,
+    "raw_detections": 577,
+    "kept_detections": 3,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 556,
+    "rejected_far_from_hands": 18,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.005405405405405406,
+    "episodes": [
+      [
+        1000.0,
+        2000.0
+      ],
+      [
+        8000.0,
+        8250.0
+      ]
+    ],
+    "longest_episode_ms": 1000.0,
+    "total_handling_ms": 1250.0,
+    "peak_confidence": 0.626,
+    "median_size_ratio": 0.0537,
+    "dfine_paper_rate": 0.0017452006980802793,
+    "disposition": "brief_paper_handling",
+    "reasons": [
+      "3 of 577 detections survived, at the hands and small enough",
+      "handling in 1% of sightings where a wrist resolved",
+      "longest continuous handling 1.0s across 2 episode(s)"
+    ]
+  },
+  {
+    "track_id": 3,
+    "sightings": 573,
+    "wrist_resolved_sightings": 474,
+    "raw_detections": 603,
+    "kept_detections": 241,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 28,
+    "rejected_far_from_hands": 231,
+    "rejected_no_wrist": 103,
+    "handling_rate": 0.5,
+    "episodes": [
+      [
+        0.0,
+        13000.0
+      ],
+      [
+        13750.0,
+        20250.0
+      ],
+      [
+        21000.0,
+        24500.0
+      ],
+      [
+        48000.0,
+        62750.0
+      ],
+      [
+        63500.0,
+        64500.0
+      ],
+      [
+        66000.0,
+        67000.0
+      ],
+      [
+        68000.0,
+        69000.0
+      ],
+      [
+        70500.0,
+        71250.0
+      ],
+      [
+        72250.0,
+        72500.0
+      ],
+      [
+        73500.0,
+        73750.0
+      ],
+      [
+        75500.0,
+        76500.0
+      ],
+      [
+        84250.0,
+        88000.0
+      ],
+      [
+        91500.0,
+        92750.0
+      ],
+      [
+        93750.0,
+        94000.0
+      ],
+      [
+        95000.0,
+        100000.0
+      ],
+      [
+        128750.0,
+        129250.0
+      ],
+      [
+        131750.0,
+        132000.0
+      ],
+      [
+        132750.0,
+        143250.0
+      ]
+    ],
+    "longest_episode_ms": 14750.0,
+    "total_handling_ms": 64500.0,
+    "peak_confidence": 0.7691,
+    "median_size_ratio": 0.0752,
+    "dfine_paper_rate": 0.17452006980802792,
+    "disposition": "sustained_paper_handling",
+    "reasons": [
+      "241 of 603 detections survived, at the hands and small enough",
+      "handling in 50% of sightings where a wrist resolved",
+      "longest continuous handling 14.8s across 18 episode(s)"
+    ]
+  },
+  {
+    "track_id": 5,
+    "sightings": 573,
+    "wrist_resolved_sightings": 561,
+    "raw_detections": 521,
+    "kept_detections": 396,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 8,
+    "rejected_far_from_hands": 108,
+    "rejected_no_wrist": 9,
+    "handling_rate": 0.696969696969697,
+    "episodes": [
+      [
+        3000.0,
+        4000.0
+      ],
+      [
+        12000.0,
+        16000.0
+      ],
+      [
+        18000.0,
+        24000.0
+      ],
+      [
+        25250.0,
+        27000.0
+      ],
+      [
+        27750.0,
+        50750.0
+      ],
+      [
+        52250.0,
+        53750.0
+      ],
+      [
+        55000.0,
+        56500.0
+      ],
+      [
+        57500.0,
+        84750.0
+      ],
+      [
+        87250.0,
+        88500.0
+      ],
+      [
+        90500.0,
+        92750.0
+      ],
+      [
+        94250.0,
+        94500.0
+      ],
+      [
+        95500.0,
+        96500.0
+      ],
+      [
+        97500.0,
+        97750.0
+      ],
+      [
+        100500.0,
+        104000.0
+      ],
+      [
+        105250.0,
+        106000.0
+      ],
+      [
+        107000.0,
+        133750.0
+      ],
+      [
+        135250.0,
+        138000.0
+      ],
+      [
+        140250.0,
+        143250.0
+      ]
+    ],
+    "longest_episode_ms": 27250.0,
+    "total_handling_ms": 107750.0,
+    "peak_confidence": 0.7311,
+    "median_size_ratio": 0.0824,
+    "dfine_paper_rate": 0.041884816753926704,
+    "disposition": "sustained_paper_handling",
+    "reasons": [
+      "396 of 521 detections survived, at the hands and small enough",
+      "handling in 70% of sightings where a wrist resolved",
+      "longest continuous handling 27.2s across 18 episode(s)"
+    ]
+  },
+  {
+    "track_id": 2,
+    "sightings": 573,
+    "wrist_resolved_sightings": 573,
+    "raw_detections": 522,
+    "kept_detections": 510,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 10,
+    "rejected_far_from_hands": 2,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.8883071553228621,
+    "episodes": [
+      [
+        0.0,
+        10000.0
+      ],
+      [
+        11500.0,
+        21250.0
+      ],
+      [
+        22000.0,
+        84000.0
+      ],
+      [
+        85000.0,
+        88250.0
+      ],
+      [
+        90000.0,
+        91000.0
+      ],
+      [
+        92000.0,
+        99000.0
+      ],
+      [
+        100000.0,
+        100250.0
+      ],
+      [
+        102500.0,
+        127000.0
+      ],
+      [
+        128250.0,
+        137750.0
+      ],
+      [
+        138500.0,
+        143250.0
+      ]
+    ],
+    "longest_episode_ms": 62000.0,
+    "total_handling_ms": 132000.0,
+    "peak_confidence": 0.7577,
+    "median_size_ratio": 0.0756,
+    "dfine_paper_rate": 0.005235602094240838,
+    "disposition": "sustained_paper_handling",
+    "reasons": [
+      "510 of 522 detections survived, at the hands and small enough",
+      "handling in 89% of sightings where a wrist resolved",
+      "longest continuous handling 62.0s across 10 episode(s)"
+    ]
+  },
+  {
+    "track_id": 7,
+    "sightings": 68,
+    "wrist_resolved_sightings": 42,
+    "raw_detections": 3,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 2,
+    "rejected_far_from_hands": 1,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 1.4558823529411764,
+    "disposition": "no_handling_observed",
+    "reasons": [
+      "3 detections, all rejected (1 away from hands, 2 too large, 0 with no wrist resolved)"
+    ]
+  },
+  {
+    "track_id": 8,
+    "sightings": 3,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 9,
+    "sightings": 5,
+    "wrist_resolved_sightings": 2,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 5 sightings"
+    ]
+  },
+  {
+    "track_id": 10,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 11,
+    "sightings": 2,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 13,
+    "sightings": 7,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 7 sightings"
+    ]
+  },
+  {
+    "track_id": 12,
+    "sightings": 3,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 14,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 15,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 16,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 17,
+    "sightings": 21,
+    "wrist_resolved_sightings": 16,
+    "raw_detections": 3,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 3,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.047619047619047616,
+    "disposition": "no_handling_observed",
+    "reasons": [
+      "3 detections, all rejected (0 away from hands, 3 too large, 0 with no wrist resolved)"
+    ]
+  },
+  {
+    "track_id": 18,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 19,
+    "sightings": 3,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 21,
+    "sightings": 3,
+    "wrist_resolved_sightings": 2,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 20,
+    "sightings": 3,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 22,
+    "sightings": 4,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.5,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 4 sightings"
+    ]
+  },
+  {
+    "track_id": 23,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 24,
+    "sightings": 8,
+    "wrist_resolved_sightings": 6,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 2.75,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 25,
+    "sightings": 14,
+    "wrist_resolved_sightings": 10,
+    "raw_detections": 1,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 1,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.5,
+    "disposition": "no_handling_observed",
+    "reasons": [
+      "1 detections, all rejected (1 away from hands, 0 too large, 0 with no wrist resolved)"
+    ]
+  },
+  {
+    "track_id": 26,
+    "sightings": 1,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 27,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 28,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 30,
+    "sightings": 3,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 29,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 31,
+    "sightings": 8,
+    "wrist_resolved_sightings": 4,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 32,
+    "sightings": 1,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 33,
+    "sightings": 14,
+    "wrist_resolved_sightings": 12,
+    "raw_detections": 6,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 1,
+    "rejected_far_from_hands": 5,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.2857142857142857,
+    "disposition": "no_handling_observed",
+    "reasons": [
+      "6 detections, all rejected (5 away from hands, 1 too large, 0 with no wrist resolved)"
+    ]
+  },
+  {
+    "track_id": 34,
+    "sightings": 3,
+    "wrist_resolved_sightings": 2,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 35,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 36,
+    "sightings": 1,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 37,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 38,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 39,
+    "sightings": 1,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 40,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 41,
+    "sightings": 2,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 43,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 42,
+    "sightings": 6,
+    "wrist_resolved_sightings": 3,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 6 sightings"
+    ]
+  },
+  {
+    "track_id": 44,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 45,
+    "sightings": 1,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 46,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 47,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 48,
+    "sightings": 12,
+    "wrist_resolved_sightings": 6,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 49,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 50,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 51,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 52,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 53,
+    "sightings": 4,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 4 sightings"
+    ]
+  },
+  {
+    "track_id": 54,
+    "sightings": 29,
+    "wrist_resolved_sightings": 2,
+    "raw_detections": 1,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 1,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": [
+      "1 detections, all rejected (0 away from hands, 1 too large, 0 with no wrist resolved)"
+    ]
+  },
+  {
+    "track_id": 55,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 56,
+    "sightings": 3,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 1,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 1,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 57,
+    "sightings": 6,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 6 sightings"
+    ]
+  },
+  {
+    "track_id": 58,
+    "sightings": 12,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 59,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 60,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 61,
+    "sightings": 18,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 62,
+    "sightings": 121,
+    "wrist_resolved_sightings": 3,
+    "raw_detections": 1,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 1,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": [
+      "1 detections, all rejected (0 away from hands, 1 too large, 0 with no wrist resolved)"
+    ]
+  },
+  {
+    "track_id": 63,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 66,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 67,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 64,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 65,
+    "sightings": 1,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 68,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 69,
+    "sightings": 4,
+    "wrist_resolved_sightings": 3,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 4 sightings"
+    ]
+  },
+  {
+    "track_id": 70,
+    "sightings": 4,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 4 sightings"
+    ]
+  },
+  {
+    "track_id": 71,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 72,
+    "sightings": 17,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 73,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 74,
+    "sightings": 3,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 75,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 76,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 77,
+    "sightings": 3,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 78,
+    "sightings": 9,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 79,
+    "sightings": 14,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 80,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 81,
+    "sightings": 11,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 82,
+    "sightings": 7,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 7 sightings"
+    ]
+  },
+  {
+    "track_id": 83,
+    "sightings": 2,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 2 sightings"
+    ]
+  },
+  {
+    "track_id": 84,
+    "sightings": 5,
+    "wrist_resolved_sightings": 5,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 5 sightings"
+    ]
+  },
+  {
+    "track_id": 85,
+    "sightings": 16,
+    "wrist_resolved_sightings": 2,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "no_handling_observed",
+    "reasons": []
+  },
+  {
+    "track_id": 86,
+    "sightings": 5,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 5 sightings"
+    ]
+  },
+  {
+    "track_id": 87,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 88,
+    "sightings": 5,
+    "wrist_resolved_sightings": 5,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 5 sightings"
+    ]
+  },
+  {
+    "track_id": 89,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  },
+  {
+    "track_id": 90,
+    "sightings": 4,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 4 sightings"
+    ]
+  },
+  {
+    "track_id": 91,
+    "sightings": 3,
+    "wrist_resolved_sightings": 1,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 3 sightings"
+    ]
+  },
+  {
+    "track_id": 92,
+    "sightings": 1,
+    "wrist_resolved_sightings": 0,
+    "raw_detections": 0,
+    "kept_detections": 0,
+    "rejected_low_confidence": 0,
+    "rejected_too_large": 0,
+    "rejected_far_from_hands": 0,
+    "rejected_no_wrist": 0,
+    "handling_rate": 0.0,
+    "episodes": [],
+    "longest_episode_ms": 0.0,
+    "total_handling_ms": 0.0,
+    "peak_confidence": 0.0,
+    "median_size_ratio": 0.0,
+    "dfine_paper_rate": 0.0,
+    "disposition": "insufficient_observation",
+    "reasons": [
+      "only 1 sightings"
+    ]
+  }
+]

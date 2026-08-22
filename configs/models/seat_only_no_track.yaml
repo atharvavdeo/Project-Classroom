@@ -1,0 +1,9 @@
+# PRD 5 requires this as a named configuration, and it is the honest
+# control: seat context carrying all association, no tracker at all. If
+# tracking adds nothing measurable over it, that is a result worth having.
+config_id: seat_only_no_track
+vram_gb: 0.0
+family: tracker
+description: No tracker. Seat polygons carry all association.
+probe: none
+licence: n/a-internal

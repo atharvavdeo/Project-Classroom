@@ -1,0 +1,19 @@
+{
+  "condition": "exposure_change",
+  "start_pts_ms": 38133.333,
+  "end_pts_ms": 40133.333,
+  "duration_ms": 2000.0,
+  "action": "flag_recovery_no_baseline_update",
+  "validated_on": "source",
+  "excludes_from_baseline": true,
+  "blocks_bridging": false,
+  "region": null,
+  "evidence": {
+    "luma_delta": 98.645,
+    "from": 94.387,
+    "to": 193.032,
+    "recovery_ms": 2000.0,
+    "merged_observations": 1
+  },
+  "note": "baseline adaptation is paused through the recovery window"
+}

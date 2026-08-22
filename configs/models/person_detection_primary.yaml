@@ -1,0 +1,15 @@
+# PRD 9: heavy pose cannot run on every person in every frame, so person
+# detection runs at a configured low rate on candidates only.
+config_id: person_detection_primary
+vram_gb: 2.0
+family: person_detection
+description: YOLOX-m person detector, low-rate on candidate frames.
+probe: python_import
+module: rtmlib
+input_size: 640x640
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/Tau-J/rtmlib/blob/main/LICENSE
+thresholds:
+  confidence: 0.3
+  sample_hz: 2.0

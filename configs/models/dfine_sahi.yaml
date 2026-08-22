@@ -1,0 +1,23 @@
+# PRD 10: SAHI applies to the same candidate crop, never an unconditional
+# full-frame grid. The owner has confirmed SAHI is a required comparison and
+# not a mandated path, so the report is permitted to reject it.
+config_id: dfine_sahi
+vram_gb: 4.0
+family: object
+description: D-FINE-L with SAHI slicing over the candidate crop only.
+probe: onnx_session
+checkpoint: models/dfine/onnx/model.onnx
+input_size: 640x640
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/Peterande/D-FINE/blob/master/LICENSE
+thresholds:
+  confidence: 0.35
+  min_object_px_area: 300.0
+extra:
+  slice_height: 320
+  slice_width: 320
+  overlap_height_ratio: 0.25
+  overlap_width_ratio: 0.25
+  merge_nms_iou: 0.5
+  scope: candidate_crop_only

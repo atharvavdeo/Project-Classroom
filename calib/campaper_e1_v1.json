@@ -1,0 +1,1167 @@
+{
+  "camera_id": "campaper",
+  "epoch_id": "e1",
+  "version": 1,
+  "frame_w": 1280,
+  "frame_h": 720,
+  "source_sha256": "87c8c1ff8fef393e11d289d3872d8c50cf98e67a9969e6c47b888221f2dfd673",
+  "reference_pts_ms": 1120.0,
+  "operator": "tools/propose_calibration.py (automatic proposal)",
+  "reviewer": "",
+  "approval_state": "draft",
+  "approved_utc": null,
+  "parent_version": null,
+  "review_images": {},
+  "confidence_notes": "DRAFT. Proposed automatically from 517 person detections over 40 frames sampled across the whole recording. PRD 7 allows automatic proposal but never automatic approval, so this profile is unapproved and seat attribution is blocked downstream. A reviewer must confirm the zones, mark monitor and reflection exclusions, and resolve the ambiguous boundaries before any seat-attributed evidence may be produced.",
+  "proposal_source": "person_detection via D-FINE",
+  "seats": [
+    {
+      "seat_id": "campaper-P01",
+      "zones": {
+        "seat_context": [
+          [
+            785.2,
+            143.3
+          ],
+          [
+            940.0,
+            143.3
+          ],
+          [
+            940.0,
+            211.8
+          ],
+          [
+            785.2,
+            211.8
+          ]
+        ],
+        "upper_body": [
+          [
+            785.2,
+            143.3
+          ],
+          [
+            940.0,
+            143.3
+          ],
+          [
+            940.0,
+            188.5
+          ],
+          [
+            785.2,
+            188.5
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            785.2,
+            188.5
+          ],
+          [
+            940.0,
+            188.5
+          ],
+          [
+            940.0,
+            211.8
+          ],
+          [
+            785.2,
+            211.8
+          ]
+        ],
+        "lap_bag": [
+          [
+            785.2,
+            199.5
+          ],
+          [
+            940.0,
+            199.5
+          ],
+          [
+            940.0,
+            211.8
+          ],
+          [
+            785.2,
+            211.8
+          ]
+        ]
+      },
+      "desk_line_y": 188.5,
+      "adjacent": [
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 40 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P02",
+      "zones": {
+        "seat_context": [
+          [
+            596.2,
+            448.9
+          ],
+          [
+            763.4,
+            448.9
+          ],
+          [
+            763.4,
+            512.2
+          ],
+          [
+            596.2,
+            512.2
+          ]
+        ],
+        "upper_body": [
+          [
+            596.2,
+            448.9
+          ],
+          [
+            763.4,
+            448.9
+          ],
+          [
+            763.4,
+            490.7
+          ],
+          [
+            596.2,
+            490.7
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            596.2,
+            490.7
+          ],
+          [
+            763.4,
+            490.7
+          ],
+          [
+            763.4,
+            512.2
+          ],
+          [
+            596.2,
+            512.2
+          ]
+        ],
+        "lap_bag": [
+          [
+            596.2,
+            500.8
+          ],
+          [
+            763.4,
+            500.8
+          ],
+          [
+            763.4,
+            512.2
+          ],
+          [
+            596.2,
+            512.2
+          ]
+        ]
+      },
+      "desk_line_y": 490.7,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 40 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P03",
+      "zones": {
+        "seat_context": [
+          [
+            361.9,
+            619.9
+          ],
+          [
+            648.7,
+            619.9
+          ],
+          [
+            648.7,
+            719.2
+          ],
+          [
+            361.9,
+            719.2
+          ]
+        ],
+        "upper_body": [
+          [
+            361.9,
+            619.9
+          ],
+          [
+            648.7,
+            619.9
+          ],
+          [
+            648.7,
+            685.4
+          ],
+          [
+            361.9,
+            685.4
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            361.9,
+            685.4
+          ],
+          [
+            648.7,
+            685.4
+          ],
+          [
+            648.7,
+            719.2
+          ],
+          [
+            361.9,
+            719.2
+          ]
+        ],
+        "lap_bag": [
+          [
+            361.9,
+            701.3
+          ],
+          [
+            648.7,
+            701.3
+          ],
+          [
+            648.7,
+            719.2
+          ],
+          [
+            361.9,
+            719.2
+          ]
+        ]
+      },
+      "desk_line_y": 685.4,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 40 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P04",
+      "zones": {
+        "seat_context": [
+          [
+            574.6,
+            5.3
+          ],
+          [
+            677.3,
+            5.3
+          ],
+          [
+            677.3,
+            137.7
+          ],
+          [
+            574.6,
+            137.7
+          ]
+        ],
+        "upper_body": [
+          [
+            574.6,
+            5.3
+          ],
+          [
+            677.3,
+            5.3
+          ],
+          [
+            677.3,
+            92.7
+          ],
+          [
+            574.6,
+            92.7
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            574.6,
+            92.7
+          ],
+          [
+            677.3,
+            92.7
+          ],
+          [
+            677.3,
+            137.7
+          ],
+          [
+            574.6,
+            137.7
+          ]
+        ],
+        "lap_bag": [
+          [
+            574.6,
+            113.9
+          ],
+          [
+            677.3,
+            113.9
+          ],
+          [
+            677.3,
+            137.7
+          ],
+          [
+            574.6,
+            137.7
+          ]
+        ]
+      },
+      "desk_line_y": 92.7,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [
+        "campaper-P09"
+      ],
+      "notes": "proposed from 39 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P05",
+      "zones": {
+        "seat_context": [
+          [
+            746.6,
+            236.6
+          ],
+          [
+            898.5,
+            236.6
+          ],
+          [
+            898.5,
+            289.6
+          ],
+          [
+            746.6,
+            289.6
+          ]
+        ],
+        "upper_body": [
+          [
+            746.6,
+            236.6
+          ],
+          [
+            898.5,
+            236.6
+          ],
+          [
+            898.5,
+            271.6
+          ],
+          [
+            746.6,
+            271.6
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            746.6,
+            271.6
+          ],
+          [
+            898.5,
+            271.6
+          ],
+          [
+            898.5,
+            289.6
+          ],
+          [
+            746.6,
+            289.6
+          ]
+        ],
+        "lap_bag": [
+          [
+            746.6,
+            280.1
+          ],
+          [
+            898.5,
+            280.1
+          ],
+          [
+            898.5,
+            289.6
+          ],
+          [
+            746.6,
+            289.6
+          ]
+        ]
+      },
+      "desk_line_y": 271.6,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [
+        "campaper-P06"
+      ],
+      "notes": "proposed from 39 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P06",
+      "zones": {
+        "seat_context": [
+          [
+            698.3,
+            294.5
+          ],
+          [
+            834.0,
+            294.5
+          ],
+          [
+            834.0,
+            409.3
+          ],
+          [
+            698.3,
+            409.3
+          ]
+        ],
+        "upper_body": [
+          [
+            698.3,
+            294.5
+          ],
+          [
+            834.0,
+            294.5
+          ],
+          [
+            834.0,
+            370.3
+          ],
+          [
+            698.3,
+            370.3
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            698.3,
+            370.3
+          ],
+          [
+            834.0,
+            370.3
+          ],
+          [
+            834.0,
+            409.3
+          ],
+          [
+            698.3,
+            409.3
+          ]
+        ],
+        "lap_bag": [
+          [
+            698.3,
+            388.6
+          ],
+          [
+            834.0,
+            388.6
+          ],
+          [
+            834.0,
+            409.3
+          ],
+          [
+            698.3,
+            409.3
+          ]
+        ]
+      },
+      "desk_line_y": 370.3,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [
+        "campaper-P05"
+      ],
+      "notes": "proposed from 39 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P07",
+      "zones": {
+        "seat_context": [
+          [
+            38.9,
+            195.5
+          ],
+          [
+            237.9,
+            195.5
+          ],
+          [
+            237.9,
+            468.7
+          ],
+          [
+            38.9,
+            468.7
+          ]
+        ],
+        "upper_body": [
+          [
+            38.9,
+            195.5
+          ],
+          [
+            237.9,
+            195.5
+          ],
+          [
+            237.9,
+            375.8
+          ],
+          [
+            38.9,
+            375.8
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            38.9,
+            375.8
+          ],
+          [
+            237.9,
+            375.8
+          ],
+          [
+            237.9,
+            468.7
+          ],
+          [
+            38.9,
+            468.7
+          ]
+        ],
+        "lap_bag": [
+          [
+            38.9,
+            419.5
+          ],
+          [
+            237.9,
+            419.5
+          ],
+          [
+            237.9,
+            468.7
+          ],
+          [
+            38.9,
+            468.7
+          ]
+        ]
+      },
+      "desk_line_y": 375.8,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 39 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P08",
+      "zones": {
+        "seat_context": [
+          [
+            0.0,
+            546.2
+          ],
+          [
+            105.9,
+            546.2
+          ],
+          [
+            105.9,
+            636.6
+          ],
+          [
+            0.0,
+            636.6
+          ]
+        ],
+        "upper_body": [
+          [
+            0.0,
+            546.2
+          ],
+          [
+            105.9,
+            546.2
+          ],
+          [
+            105.9,
+            605.9
+          ],
+          [
+            0.0,
+            605.9
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            0.0,
+            605.9
+          ],
+          [
+            105.9,
+            605.9
+          ],
+          [
+            105.9,
+            636.6
+          ],
+          [
+            0.0,
+            636.6
+          ]
+        ],
+        "lap_bag": [
+          [
+            0.0,
+            620.3
+          ],
+          [
+            105.9,
+            620.3
+          ],
+          [
+            105.9,
+            636.6
+          ],
+          [
+            0.0,
+            636.6
+          ]
+        ]
+      },
+      "desk_line_y": 605.9,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 39 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P09",
+      "zones": {
+        "seat_context": [
+          [
+            428.7,
+            49.5
+          ],
+          [
+            568.3,
+            49.5
+          ],
+          [
+            568.3,
+            226.2
+          ],
+          [
+            428.7,
+            226.2
+          ]
+        ],
+        "upper_body": [
+          [
+            428.7,
+            49.5
+          ],
+          [
+            568.3,
+            49.5
+          ],
+          [
+            568.3,
+            166.1
+          ],
+          [
+            428.7,
+            166.1
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            428.7,
+            166.1
+          ],
+          [
+            568.3,
+            166.1
+          ],
+          [
+            568.3,
+            226.2
+          ],
+          [
+            428.7,
+            226.2
+          ]
+        ],
+        "lap_bag": [
+          [
+            428.7,
+            194.4
+          ],
+          [
+            568.3,
+            194.4
+          ],
+          [
+            568.3,
+            226.2
+          ],
+          [
+            428.7,
+            226.2
+          ]
+        ]
+      },
+      "desk_line_y": 166.1,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P10",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [
+        "campaper-P04"
+      ],
+      "notes": "proposed from 38 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P10",
+      "zones": {
+        "seat_context": [
+          [
+            875.6,
+            28.4
+          ],
+          [
+            950.8,
+            28.4
+          ],
+          [
+            950.8,
+            110.6
+          ],
+          [
+            875.6,
+            110.6
+          ]
+        ],
+        "upper_body": [
+          [
+            875.6,
+            28.4
+          ],
+          [
+            950.8,
+            28.4
+          ],
+          [
+            950.8,
+            82.7
+          ],
+          [
+            875.6,
+            82.7
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            875.6,
+            82.7
+          ],
+          [
+            950.8,
+            82.7
+          ],
+          [
+            950.8,
+            110.6
+          ],
+          [
+            875.6,
+            110.6
+          ]
+        ],
+        "lap_bag": [
+          [
+            875.6,
+            95.8
+          ],
+          [
+            950.8,
+            95.8
+          ],
+          [
+            950.8,
+            110.6
+          ],
+          [
+            875.6,
+            110.6
+          ]
+        ]
+      },
+      "desk_line_y": 82.7,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P11",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 34 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P11",
+      "zones": {
+        "seat_context": [
+          [
+            37.6,
+            59.7
+          ],
+          [
+            117.4,
+            59.7
+          ],
+          [
+            117.4,
+            147.8
+          ],
+          [
+            37.6,
+            147.8
+          ]
+        ],
+        "upper_body": [
+          [
+            37.6,
+            59.7
+          ],
+          [
+            117.4,
+            59.7
+          ],
+          [
+            117.4,
+            117.8
+          ],
+          [
+            37.6,
+            117.8
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            37.6,
+            117.8
+          ],
+          [
+            117.4,
+            117.8
+          ],
+          [
+            117.4,
+            147.8
+          ],
+          [
+            37.6,
+            147.8
+          ]
+        ],
+        "lap_bag": [
+          [
+            37.6,
+            131.9
+          ],
+          [
+            117.4,
+            131.9
+          ],
+          [
+            117.4,
+            147.8
+          ],
+          [
+            37.6,
+            147.8
+          ]
+        ]
+      },
+      "desk_line_y": 117.8,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P12"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 23 frames of person detections; unreviewed"
+    },
+    {
+      "seat_id": "campaper-P12",
+      "zones": {
+        "seat_context": [
+          [
+            0.0,
+            674.6
+          ],
+          [
+            125.5,
+            674.6
+          ],
+          [
+            125.5,
+            720.0
+          ],
+          [
+            0.0,
+            720.0
+          ]
+        ],
+        "upper_body": [
+          [
+            0.0,
+            674.6
+          ],
+          [
+            125.5,
+            674.6
+          ],
+          [
+            125.5,
+            704.5
+          ],
+          [
+            0.0,
+            704.5
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            0.0,
+            704.5
+          ],
+          [
+            125.5,
+            704.5
+          ],
+          [
+            125.5,
+            720.0
+          ],
+          [
+            0.0,
+            720.0
+          ]
+        ],
+        "lap_bag": [
+          [
+            0.0,
+            711.8
+          ],
+          [
+            125.5,
+            711.8
+          ],
+          [
+            125.5,
+            720.0
+          ],
+          [
+            0.0,
+            720.0
+          ]
+        ]
+      },
+      "desk_line_y": 704.5,
+      "adjacent": [
+        "campaper-P01",
+        "campaper-P02",
+        "campaper-P03",
+        "campaper-P04",
+        "campaper-P05",
+        "campaper-P06",
+        "campaper-P07",
+        "campaper-P08",
+        "campaper-P09",
+        "campaper-P10",
+        "campaper-P11"
+      ],
+      "ambiguous_with": [],
+      "notes": "proposed from 13 frames of person detections; unreviewed"
+    }
+  ],
+  "masks": [
+    {
+      "kind": "static_background",
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          1280.0,
+          0.0
+        ],
+        [
+          1280.0,
+          720.0
+        ],
+        [
+          0.0,
+          720.0
+        ]
+      ],
+      "note": "whole frame minus seats; seats are subtracted at use time by calibration.static_support()"
+    }
+  ]
+}

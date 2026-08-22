@@ -1,0 +1,34 @@
+# PRD 5, pose family, crowd challenger. PRD 19: AlphaPose is a reasonable
+# CrowdPose/PoseFlow challenger but unproven for dense far-hand accuracy on
+# this hall, so it is measured rather than assumed.
+#
+# Built from official MVIG-SJTU source (commit c60106d), not the PyPI wheel:
+# the PyPI `alphapose 1.1` distribution omits `alphapose/models/layers/`
+# entirely, so no model can be constructed from it.
+#
+# The res152-DUC variant is used rather than res50-DCN because DCN requires the
+# compiled CUDA deformable-conv extension, which needs nvcc and MSVC. This
+# machine has neither, and FastPose_DUC needs no deformable convolution.
+config_id: alphapose_crowd_baseline
+vram_gb: 4.0
+requires_gpu: false
+family: pose
+description: AlphaPose FastPose_DUC ResNet-152, COCO-17, 83.2M parameters.
+probe: python_import
+module: alphapose.models.builder
+checkpoint: models/alphapose/fast_421_res152_256x192.pth
+input_size: 256x192
+precision: fp32
+# ACADEMIC OR NON-PROFIT NONCOMMERCIAL RESEARCH USE ONLY (Shanghai Jiao Tong
+# University). This is the real licence text shipped with the source, not an
+# assumption. Any commercial deployment needs a separate licence from SJTU.
+licence: SJTU-NonCommercial-Research
+licence_url: https://github.com/MVIG-SJTU/AlphaPose/blob/master/LICENSE
+thresholds:
+  keypoint_confidence: 0.3
+extra:
+  model_type: FastPose_DUC
+  num_layers: 152
+  model_config: models/alphapose/256x192_res152_lr1e-3_1x-duc.yaml
+  checkpoint_source: https://huggingface.co/AlexZheng/alphapose
+  built_from: MVIG-SJTU/AlphaPose source, python setup.py build develop

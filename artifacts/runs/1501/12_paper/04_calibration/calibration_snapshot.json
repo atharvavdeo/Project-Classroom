@@ -1,0 +1,22 @@
+{
+  "version_id": "campaper/e1/v1",
+  "approval_state": "draft",
+  "operator": "tools/propose_calibration.py (automatic proposal)",
+  "reviewer": "",
+  "seats": [
+    "campaper-P01",
+    "campaper-P02",
+    "campaper-P03",
+    "campaper-P04",
+    "campaper-P05",
+    "campaper-P06",
+    "campaper-P07",
+    "campaper-P08",
+    "campaper-P09",
+    "campaper-P10",
+    "campaper-P11",
+    "campaper-P12"
+  ],
+  "frame_w": 1280,
+  "frame_h": 720
+}

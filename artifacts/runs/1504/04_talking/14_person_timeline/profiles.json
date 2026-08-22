@@ -1,0 +1,3805 @@
+[
+  {
+    "track_id": 4,
+    "seat_state": "unattributed",
+    "samples": 573,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 143000.0,
+    "observed_span_ms": 143000.0,
+    "coverage_of_recording": 0.9989,
+    "resolvable_samples": 511,
+    "median_head_scale_px": 43.5,
+    "baseline_yaw": -0.3648,
+    "baseline_yaw_spread": 0.209,
+    "baseline_pitch": 0.3409,
+    "baseline_pitch_spread": 0.0482,
+    "samples_turned_left": 123,
+    "samples_turned_right": 48,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.3346,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "mouse": 567,
+      "keyboard": 1078,
+      "bag": 834,
+      "book_or_notebook_like_object": 517,
+      "monitor_or_bezel": 670,
+      "phone": 1263,
+      "stationery": 258
+    },
+    "near_hand_object_rates": {
+      "mouse": 0.99,
+      "keyboard": 1.881,
+      "bag": 1.455,
+      "book_or_notebook_like_object": 0.902,
+      "monitor_or_bezel": 1.169,
+      "phone": 2.204,
+      "stationery": 0.45
+    },
+    "persistent_object_classes": [
+      "bag",
+      "book_or_notebook_like_object",
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse",
+      "phone"
+    ],
+    "facing_counts": {
+      "downward": 197,
+      "turned_right": 266,
+      "turned_left": 37,
+      "not_resolvable_at_source_scale": 62,
+      "frontal": 11
+    },
+    "flags": [
+      {
+        "flag": "frequent_orientation_change",
+        "severity": "low",
+        "evidence": "33% of 573 sightings away from a resting yaw of -0.36",
+        "why": "moves away from their resting orientation more than most, which is ordinary in itself and only matters alongside other evidence."
+      },
+      {
+        "flag": "persistent_object_beside_seat",
+        "severity": "info",
+        "evidence": "phone in 220% of sightings, book_or_notebook_like_object in 90% of sightings",
+        "why": "present near this person's hands for most of the recording, so it is a fixed feature of their workstation rather than something they picked up. Recorded, not flagged: persistence is not corroboration for a handheld object."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 1,
+    "seat_state": "unattributed",
+    "samples": 573,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 143000.0,
+    "observed_span_ms": 143000.0,
+    "coverage_of_recording": 0.9989,
+    "resolvable_samples": 126,
+    "median_head_scale_px": 3.1,
+    "baseline_yaw": 0.5963,
+    "baseline_yaw_spread": 0.3065,
+    "baseline_pitch": 0.2656,
+    "baseline_pitch_spread": 0.1115,
+    "samples_turned_left": 24,
+    "samples_turned_right": 40,
+    "samples_looking_down": 11,
+    "fraction_away_from_baseline": 0.5079,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "phone": 238,
+      "bag": 842,
+      "stationery": 93,
+      "monitor_or_bezel": 46,
+      "keyboard": 9,
+      "mouse": 16,
+      "book_or_notebook_like_object": 1
+    },
+    "near_hand_object_rates": {
+      "phone": 0.415,
+      "bag": 1.469,
+      "stationery": 0.162,
+      "monitor_or_bezel": 0.08,
+      "keyboard": 0.016,
+      "mouse": 0.028,
+      "book_or_notebook_like_object": 0.002
+    },
+    "persistent_object_classes": [
+      "bag"
+    ],
+    "facing_counts": {
+      "turned_left": 81,
+      "downward": 25,
+      "turned_right": 17,
+      "not_resolvable_at_source_scale": 447,
+      "frontal": 3
+    },
+    "flags": [
+      {
+        "flag": "sustained_attention_away",
+        "severity": "medium",
+        "evidence": "51% of 573 sightings departed from this person's own resting yaw of +0.60 (24 left, 40 right)",
+        "why": "head held away from their resting orientation for much of the time observed, more often to their right."
+      },
+      {
+        "flag": "target_object_near_hands",
+        "severity": "high",
+        "evidence": "phone in 42% of sightings (238 of 573)",
+        "why": "a prohibited-class object appeared near this person's hands for part of the time they were observed, which is the pattern of something picked up rather than something that sits on the desk. The detector is stock COCO and not fine-tuned on this corpus, so the crop must be looked at."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 3,
+    "seat_state": "unattributed",
+    "samples": 573,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 143000.0,
+    "observed_span_ms": 143000.0,
+    "coverage_of_recording": 0.9989,
+    "resolvable_samples": 406,
+    "median_head_scale_px": 34.2,
+    "baseline_yaw": -1.2878,
+    "baseline_yaw_spread": 0.0954,
+    "baseline_pitch": -0.1365,
+    "baseline_pitch_spread": 0.0854,
+    "samples_turned_left": 8,
+    "samples_turned_right": 0,
+    "samples_looking_down": 33,
+    "fraction_away_from_baseline": 0.0198,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "keyboard": 4152,
+      "monitor_or_bezel": 5868,
+      "mouse": 2867,
+      "phone": 307,
+      "bag": 131,
+      "stationery": 38,
+      "book_or_notebook_like_object": 100
+    },
+    "near_hand_object_rates": {
+      "keyboard": 7.246,
+      "monitor_or_bezel": 10.241,
+      "mouse": 5.003,
+      "phone": 0.536,
+      "bag": 0.229,
+      "stationery": 0.066,
+      "book_or_notebook_like_object": 0.175
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse",
+      "phone"
+    ],
+    "facing_counts": {
+      "turned_right": 398,
+      "not_resolvable_at_source_scale": 167,
+      "turned_left": 7,
+      "frontal": 1
+    },
+    "flags": [
+      {
+        "flag": "target_object_near_hands",
+        "severity": "medium",
+        "evidence": "book_or_notebook_like_object in 18% of sightings (100 of 573)",
+        "why": "a prohibited-class object appeared near this person's hands for part of the time they were observed, which is the pattern of something picked up rather than something that sits on the desk. The detector is stock COCO and not fine-tuned on this corpus, so the crop must be looked at."
+      },
+      {
+        "flag": "persistent_object_beside_seat",
+        "severity": "info",
+        "evidence": "phone in 54% of sightings",
+        "why": "present near this person's hands for most of the recording, so it is a fixed feature of their workstation rather than something they picked up. Recorded, not flagged: persistence is not corroboration for a handheld object."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 5,
+    "seat_state": "unattributed",
+    "samples": 573,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 143000.0,
+    "observed_span_ms": 143000.0,
+    "coverage_of_recording": 0.9989,
+    "resolvable_samples": 128,
+    "median_head_scale_px": 36.6,
+    "baseline_yaw": -1.1753,
+    "baseline_yaw_spread": 0.069,
+    "baseline_pitch": -0.0824,
+    "baseline_pitch_spread": 0.0824,
+    "samples_turned_left": 17,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.1441,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 2195,
+      "mouse": 2718,
+      "keyboard": 3556,
+      "bag": 41,
+      "phone": 261,
+      "book_or_notebook_like_object": 24,
+      "stationery": 139
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 3.831,
+      "mouse": 4.743,
+      "keyboard": 6.206,
+      "bag": 0.072,
+      "phone": 0.455,
+      "book_or_notebook_like_object": 0.042,
+      "stationery": 0.243
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 445,
+      "frontal": 10,
+      "turned_left": 15,
+      "turned_right": 103
+    },
+    "flags": [
+      {
+        "flag": "target_object_near_hands",
+        "severity": "high",
+        "evidence": "phone in 46% of sightings (261 of 573), book_or_notebook_like_object in 4% of sightings (24 of 573)",
+        "why": "a prohibited-class object appeared near this person's hands for part of the time they were observed, which is the pattern of something picked up rather than something that sits on the desk. The detector is stock COCO and not fine-tuned on this corpus, so the crop must be looked at."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 2,
+    "seat_state": "unattributed",
+    "samples": 573,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 143000.0,
+    "observed_span_ms": 143000.0,
+    "coverage_of_recording": 0.9989,
+    "resolvable_samples": 573,
+    "median_head_scale_px": 22.8,
+    "baseline_yaw": -1.4243,
+    "baseline_yaw_spread": 0.0757,
+    "baseline_pitch": -0.0376,
+    "baseline_pitch_spread": 0.1421,
+    "samples_turned_left": 120,
+    "samples_turned_right": 0,
+    "samples_looking_down": 69,
+    "fraction_away_from_baseline": 0.2094,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 3071,
+      "keyboard": 4043,
+      "mouse": 1167,
+      "phone": 941,
+      "stationery": 54,
+      "bag": 208,
+      "book_or_notebook_like_object": 3
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 5.36,
+      "keyboard": 7.056,
+      "mouse": 2.037,
+      "phone": 1.642,
+      "stationery": 0.094,
+      "bag": 0.363,
+      "book_or_notebook_like_object": 0.005
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse",
+      "phone"
+    ],
+    "facing_counts": {
+      "turned_right": 573
+    },
+    "flags": [
+      {
+        "flag": "persistent_object_beside_seat",
+        "severity": "info",
+        "evidence": "phone in 164% of sightings",
+        "why": "present near this person's hands for most of the recording, so it is a fixed feature of their workstation rather than something they picked up. Recorded, not flagged: persistence is not corroboration for a handheld object."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 6,
+    "seat_state": "unattributed",
+    "samples": 323,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 82500.0,
+    "observed_span_ms": 82500.0,
+    "coverage_of_recording": 0.5763,
+    "resolvable_samples": 300,
+    "median_head_scale_px": 49.2,
+    "baseline_yaw": -0.5109,
+    "baseline_yaw_spread": 0.0636,
+    "baseline_pitch": 0.1581,
+    "baseline_pitch_spread": 0.0186,
+    "samples_turned_left": 15,
+    "samples_turned_right": 6,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0702,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "bag": 4,
+      "stationery": 1
+    },
+    "near_hand_object_rates": {
+      "bag": 0.012,
+      "stationery": 0.003
+    },
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 23,
+      "turned_left": 8,
+      "downward": 2,
+      "frontal": 25,
+      "turned_right": 265
+    },
+    "flags": [],
+    "note": ""
+  },
+  {
+    "track_id": 62,
+    "seat_state": "unattributed",
+    "samples": 121,
+    "first_seen_ms": 92250.0,
+    "last_seen_ms": 123000.0,
+    "observed_span_ms": 30750.0,
+    "coverage_of_recording": 0.2148,
+    "resolvable_samples": 102,
+    "median_head_scale_px": 46.8,
+    "baseline_yaw": -1.0,
+    "baseline_yaw_spread": 0.0,
+    "baseline_pitch": 0.1689,
+    "baseline_pitch_spread": 0.0304,
+    "samples_turned_left": 12,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.129,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 19,
+      "turned_right": 93,
+      "frontal": 7,
+      "downward": 2
+    },
+    "flags": [],
+    "note": ""
+  },
+  {
+    "track_id": 7,
+    "seat_state": "unattributed",
+    "samples": 68,
+    "first_seen_ms": 250.0,
+    "last_seen_ms": 18000.0,
+    "observed_span_ms": 17750.0,
+    "coverage_of_recording": 0.124,
+    "resolvable_samples": 41,
+    "median_head_scale_px": 16.6,
+    "baseline_yaw": -1.0,
+    "baseline_yaw_spread": 0.5,
+    "baseline_pitch": 0.1681,
+    "baseline_pitch_spread": 0.1115,
+    "samples_turned_left": 18,
+    "samples_turned_right": 12,
+    "samples_looking_down": 1,
+    "fraction_away_from_baseline": 0.7692,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 87,
+      "keyboard": 68,
+      "bag": 20,
+      "book_or_notebook_like_object": 99,
+      "mouse": 7
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 1.279,
+      "keyboard": 1.0,
+      "bag": 0.294,
+      "book_or_notebook_like_object": 1.456,
+      "mouse": 0.103
+    },
+    "persistent_object_classes": [
+      "book_or_notebook_like_object",
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 27,
+      "frontal": 12,
+      "turned_right": 21,
+      "turned_left": 5,
+      "downward": 3
+    },
+    "flags": [
+      {
+        "flag": "sustained_attention_away",
+        "severity": "high",
+        "evidence": "77% of 68 sightings departed from this person's own resting yaw of -1.00 (18 left, 12 right)",
+        "why": "head held away from their resting orientation for much of the time observed, more often to their left."
+      },
+      {
+        "flag": "persistent_object_beside_seat",
+        "severity": "info",
+        "evidence": "book_or_notebook_like_object in 146% of sightings",
+        "why": "present near this person's hands for most of the recording, so it is a fixed feature of their workstation rather than something they picked up. Recorded, not flagged: persistence is not corroboration for a handheld object."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 54,
+    "seat_state": "unattributed",
+    "samples": 29,
+    "first_seen_ms": 76250.0,
+    "last_seen_ms": 83750.0,
+    "observed_span_ms": 7500.0,
+    "coverage_of_recording": 0.0524,
+    "resolvable_samples": 6,
+    "median_head_scale_px": 11.3,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 23,
+      "turned_right": 4,
+      "downward": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "6 resolvable of 29 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 4 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 17,
+    "seat_state": "unattributed",
+    "samples": 21,
+    "first_seen_ms": 16000.0,
+    "last_seen_ms": 22000.0,
+    "observed_span_ms": 6000.0,
+    "coverage_of_recording": 0.0419,
+    "resolvable_samples": 3,
+    "median_head_scale_px": 15.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 50,
+      "bag": 7,
+      "keyboard": 18,
+      "book_or_notebook_like_object": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 2.381,
+      "bag": 0.333,
+      "keyboard": 0.857,
+      "book_or_notebook_like_object": 0.048
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 18,
+      "turned_right": 3
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "3 resolvable of 21 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 3 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 61,
+    "seat_state": "unattributed",
+    "samples": 18,
+    "first_seen_ms": 91250.0,
+    "last_seen_ms": 96500.0,
+    "observed_span_ms": 5250.0,
+    "coverage_of_recording": 0.0367,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 18
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 18 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 72,
+    "seat_state": "unattributed",
+    "samples": 17,
+    "first_seen_ms": 108500.0,
+    "last_seen_ms": 114750.0,
+    "observed_span_ms": 6250.0,
+    "coverage_of_recording": 0.0437,
+    "resolvable_samples": 3,
+    "median_head_scale_px": 16.3,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 4,
+      "keyboard": 3,
+      "stationery": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 0.235,
+      "keyboard": 0.176,
+      "stationery": 0.059
+    },
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 14,
+      "turned_right": 1,
+      "frontal": 1,
+      "downward": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "3 resolvable of 17 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 2 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 85,
+    "seat_state": "unattributed",
+    "samples": 16,
+    "first_seen_ms": 136250.0,
+    "last_seen_ms": 141750.0,
+    "observed_span_ms": 5500.0,
+    "coverage_of_recording": 0.0384,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 14.4,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 15,
+      "downward": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 16 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 25,
+    "seat_state": "unattributed",
+    "samples": 14,
+    "first_seen_ms": 24000.0,
+    "last_seen_ms": 28250.0,
+    "observed_span_ms": 4250.0,
+    "coverage_of_recording": 0.0297,
+    "resolvable_samples": 4,
+    "median_head_scale_px": 16.1,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "bag": 11,
+      "monitor_or_bezel": 37,
+      "book_or_notebook_like_object": 7,
+      "keyboard": 9,
+      "stationery": 1,
+      "mouse": 3
+    },
+    "near_hand_object_rates": {
+      "bag": 0.786,
+      "monitor_or_bezel": 2.643,
+      "book_or_notebook_like_object": 0.5,
+      "keyboard": 0.643,
+      "stationery": 0.071,
+      "mouse": 0.214
+    },
+    "persistent_object_classes": [
+      "bag",
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 10,
+      "frontal": 2,
+      "turned_right": 1,
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "4 resolvable of 14 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 4 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 33,
+    "seat_state": "unattributed",
+    "samples": 14,
+    "first_seen_ms": 32000.0,
+    "last_seen_ms": 36250.0,
+    "observed_span_ms": 4250.0,
+    "coverage_of_recording": 0.0297,
+    "resolvable_samples": 8,
+    "median_head_scale_px": 16.5,
+    "baseline_yaw": -0.1414,
+    "baseline_yaw_spread": 0.114,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 2,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.25,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 59,
+      "book_or_notebook_like_object": 4,
+      "phone": 1,
+      "keyboard": 8,
+      "bag": 4
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 4.214,
+      "book_or_notebook_like_object": 0.286,
+      "phone": 0.071,
+      "keyboard": 0.571,
+      "bag": 0.286
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 6,
+      "frontal": 6,
+      "turned_right": 2
+    },
+    "flags": [
+      {
+        "flag": "frequent_orientation_change",
+        "severity": "low",
+        "evidence": "25% of 14 sightings away from a resting yaw of -0.14",
+        "why": "moves away from their resting orientation more than most, which is ordinary in itself and only matters alongside other evidence."
+      },
+      {
+        "flag": "target_object_near_hands",
+        "severity": "medium",
+        "evidence": "book_or_notebook_like_object in 29% of sightings (4 of 14), phone in 7% of sightings (1 of 14)",
+        "why": "a prohibited-class object appeared near this person's hands for part of the time they were observed, which is the pattern of something picked up rather than something that sits on the desk. The detector is stock COCO and not fine-tuned on this corpus, so the crop must be looked at."
+      },
+      {
+        "flag": "low_coverage",
+        "severity": "info",
+        "evidence": "observed across 3.0% of the recording",
+        "why": "every figure for this person rests on that fraction. Tracking breaks and there is no re-identification, so one physical person may appear as several tracks."
+      }
+    ],
+    "note": "observed for 3.0% of the recording; every figure here rests on that fraction"
+  },
+  {
+    "track_id": 79,
+    "seat_state": "unattributed",
+    "samples": 14,
+    "first_seen_ms": 127500.0,
+    "last_seen_ms": 131750.0,
+    "observed_span_ms": 4250.0,
+    "coverage_of_recording": 0.0297,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 14
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 14 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 48,
+    "seat_state": "unattributed",
+    "samples": 12,
+    "first_seen_ms": 70750.0,
+    "last_seen_ms": 73750.0,
+    "observed_span_ms": 3000.0,
+    "coverage_of_recording": 0.021,
+    "resolvable_samples": 3,
+    "median_head_scale_px": 7.1,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 21,
+      "keyboard": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 1.75,
+      "keyboard": 0.083
+    },
+    "persistent_object_classes": [
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 9,
+      "turned_right": 2,
+      "frontal": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "3 resolvable of 12 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 3 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 58,
+    "seat_state": "unattributed",
+    "samples": 12,
+    "first_seen_ms": 87750.0,
+    "last_seen_ms": 90500.0,
+    "observed_span_ms": 2750.0,
+    "coverage_of_recording": 0.0192,
+    "resolvable_samples": 10,
+    "median_head_scale_px": 42.1,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": 0.1398,
+    "baseline_pitch_spread": 0.0477,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "frontal": 2,
+      "turned_right": 7,
+      "downward": 1,
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "10 resolvable of 12 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 7 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 81,
+    "seat_state": "unattributed",
+    "samples": 11,
+    "first_seen_ms": 131000.0,
+    "last_seen_ms": 133750.0,
+    "observed_span_ms": 2750.0,
+    "coverage_of_recording": 0.0192,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 11
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 11 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 78,
+    "seat_state": "unattributed",
+    "samples": 9,
+    "first_seen_ms": 126250.0,
+    "last_seen_ms": 128750.0,
+    "observed_span_ms": 2500.0,
+    "coverage_of_recording": 0.0175,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 21.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 8,
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 9 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 24,
+    "seat_state": "unattributed",
+    "samples": 8,
+    "first_seen_ms": 22000.0,
+    "last_seen_ms": 24000.0,
+    "observed_span_ms": 2000.0,
+    "coverage_of_recording": 0.014,
+    "resolvable_samples": 2,
+    "median_head_scale_px": 16.1,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 17,
+      "keyboard": 7,
+      "book_or_notebook_like_object": 22,
+      "bag": 1,
+      "stationery": 1,
+      "mouse": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 2.125,
+      "keyboard": 0.875,
+      "book_or_notebook_like_object": 2.75,
+      "bag": 0.125,
+      "stationery": 0.125,
+      "mouse": 0.125
+    },
+    "persistent_object_classes": [
+      "book_or_notebook_like_object",
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 6,
+      "frontal": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "2 resolvable of 8 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 2 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 31,
+    "seat_state": "unattributed",
+    "samples": 8,
+    "first_seen_ms": 29250.0,
+    "last_seen_ms": 31250.0,
+    "observed_span_ms": 2000.0,
+    "coverage_of_recording": 0.014,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 2.3,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 12,
+      "keyboard": 2
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 1.5,
+      "keyboard": 0.25
+    },
+    "persistent_object_classes": [
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 8
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 8 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 13,
+    "seat_state": "unattributed",
+    "samples": 7,
+    "first_seen_ms": 14000.0,
+    "last_seen_ms": 17750.0,
+    "observed_span_ms": 3750.0,
+    "coverage_of_recording": 0.0262,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 7
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 7 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 82,
+    "seat_state": "unattributed",
+    "samples": 7,
+    "first_seen_ms": 131750.0,
+    "last_seen_ms": 133750.0,
+    "observed_span_ms": 2000.0,
+    "coverage_of_recording": 0.014,
+    "resolvable_samples": 6,
+    "median_head_scale_px": 40.2,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_right": 4,
+      "frontal": 2,
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "6 resolvable of 7 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 5 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 42,
+    "seat_state": "unattributed",
+    "samples": 6,
+    "first_seen_ms": 41000.0,
+    "last_seen_ms": 42250.0,
+    "observed_span_ms": 1250.0,
+    "coverage_of_recording": 0.0087,
+    "resolvable_samples": 4,
+    "median_head_scale_px": 14.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "bag": 1,
+      "monitor_or_bezel": 8
+    },
+    "near_hand_object_rates": {
+      "bag": 0.167,
+      "monitor_or_bezel": 1.333
+    },
+    "persistent_object_classes": [
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "turned_right": 4,
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "4 resolvable of 6 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 4 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 57,
+    "seat_state": "unattributed",
+    "samples": 6,
+    "first_seen_ms": 86250.0,
+    "last_seen_ms": 87750.0,
+    "observed_span_ms": 1500.0,
+    "coverage_of_recording": 0.0105,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 6
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 6 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 9,
+    "seat_state": "unattributed",
+    "samples": 5,
+    "first_seen_ms": 8250.0,
+    "last_seen_ms": 9250.0,
+    "observed_span_ms": 1000.0,
+    "coverage_of_recording": 0.007,
+    "resolvable_samples": 5,
+    "median_head_scale_px": 14.8,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "bag": 7,
+      "phone": 1
+    },
+    "near_hand_object_rates": {
+      "bag": 1.4,
+      "phone": 0.2
+    },
+    "persistent_object_classes": [
+      "bag"
+    ],
+    "facing_counts": {
+      "turned_left": 1,
+      "turned_right": 4
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "5 resolvable of 5 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 5 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 84,
+    "seat_state": "unattributed",
+    "samples": 5,
+    "first_seen_ms": 135500.0,
+    "last_seen_ms": 137000.0,
+    "observed_span_ms": 1500.0,
+    "coverage_of_recording": 0.0105,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 2.8,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 5
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 5 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 86,
+    "seat_state": "unattributed",
+    "samples": 5,
+    "first_seen_ms": 137000.0,
+    "last_seen_ms": 138750.0,
+    "observed_span_ms": 1750.0,
+    "coverage_of_recording": 0.0122,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 5
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 5 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 88,
+    "seat_state": "unattributed",
+    "samples": 5,
+    "first_seen_ms": 138500.0,
+    "last_seen_ms": 139750.0,
+    "observed_span_ms": 1250.0,
+    "coverage_of_recording": 0.0087,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 10.1,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "bag": 1
+    },
+    "near_hand_object_rates": {
+      "bag": 0.2
+    },
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 5
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 5 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 22,
+    "seat_state": "unattributed",
+    "samples": 4,
+    "first_seen_ms": 19500.0,
+    "last_seen_ms": 20750.0,
+    "observed_span_ms": 1250.0,
+    "coverage_of_recording": 0.0087,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 14.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 2,
+      "keyboard": 1,
+      "book_or_notebook_like_object": 2
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 0.5,
+      "keyboard": 0.25,
+      "book_or_notebook_like_object": 0.5
+    },
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3,
+      "turned_right": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 4 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 53,
+    "seat_state": "unattributed",
+    "samples": 4,
+    "first_seen_ms": 75250.0,
+    "last_seen_ms": 76250.0,
+    "observed_span_ms": 1000.0,
+    "coverage_of_recording": 0.007,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 15.6,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3,
+      "frontal": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 4 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 69,
+    "seat_state": "unattributed",
+    "samples": 4,
+    "first_seen_ms": 107250.0,
+    "last_seen_ms": 108000.0,
+    "observed_span_ms": 750.0,
+    "coverage_of_recording": 0.0052,
+    "resolvable_samples": 2,
+    "median_head_scale_px": 12.3,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 15,
+      "bag": 16
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 3.75,
+      "bag": 4.0
+    },
+    "persistent_object_classes": [
+      "bag",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "frontal": 2,
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "2 resolvable of 4 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 2 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 70,
+    "seat_state": "unattributed",
+    "samples": 4,
+    "first_seen_ms": 107500.0,
+    "last_seen_ms": 108500.0,
+    "observed_span_ms": 1000.0,
+    "coverage_of_recording": 0.007,
+    "resolvable_samples": 2,
+    "median_head_scale_px": 5.7,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2,
+      "downward": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "2 resolvable of 4 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 90,
+    "seat_state": "unattributed",
+    "samples": 4,
+    "first_seen_ms": 141750.0,
+    "last_seen_ms": 143000.0,
+    "observed_span_ms": 1250.0,
+    "coverage_of_recording": 0.0087,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 8.5,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3,
+      "downward": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 4 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 8,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 4000.0,
+    "last_seen_ms": 4500.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 61.8,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 12,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 14000.0,
+    "last_seen_ms": 14500.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 19,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 17250.0,
+    "last_seen_ms": 18250.0,
+    "observed_span_ms": 1000.0,
+    "coverage_of_recording": 0.007,
+    "resolvable_samples": 2,
+    "median_head_scale_px": 13.1,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_right": 1,
+      "frontal": 1,
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "2 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 2 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 21,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 18000.0,
+    "last_seen_ms": 19250.0,
+    "observed_span_ms": 1250.0,
+    "coverage_of_recording": 0.0087,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 13.8,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 3,
+      "phone": 2,
+      "bag": 3
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 1.0,
+      "phone": 0.667,
+      "bag": 1.0
+    },
+    "persistent_object_classes": [
+      "bag",
+      "monitor_or_bezel",
+      "phone"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2,
+      "turned_right": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 20,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 18000.0,
+    "last_seen_ms": 19000.0,
+    "observed_span_ms": 1000.0,
+    "coverage_of_recording": 0.007,
+    "resolvable_samples": 2,
+    "median_head_scale_px": 13.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 2,
+      "keyboard": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 0.667,
+      "keyboard": 0.333
+    },
+    "persistent_object_classes": [
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "turned_right": 1,
+      "frontal": 1,
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "2 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 2 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 30,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 26000.0,
+    "last_seen_ms": 26500.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 12.8,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 2,
+      "keyboard": 2
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 0.667,
+      "keyboard": 0.667
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2,
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 34,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 34000.0,
+    "last_seen_ms": 34500.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 56,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 83250.0,
+    "last_seen_ms": 84000.0,
+    "observed_span_ms": 750.0,
+    "coverage_of_recording": 0.0052,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 74,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 116250.0,
+    "last_seen_ms": 116750.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 3,
+    "median_head_scale_px": 15.9,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "frontal": 2,
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "3 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 3 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 77,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 124250.0,
+    "last_seen_ms": 124750.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 8.6,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2,
+      "downward": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 91,
+    "seat_state": "unattributed",
+    "samples": 3,
+    "first_seen_ms": 142250.0,
+    "last_seen_ms": 142750.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 3
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 3 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 11,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 12500.0,
+    "last_seen_ms": 12750.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 81.8,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "keyboard": 3,
+      "monitor_or_bezel": 7,
+      "bag": 5
+    },
+    "near_hand_object_rates": {
+      "keyboard": 1.5,
+      "monitor_or_bezel": 3.5,
+      "bag": 2.5
+    },
+    "persistent_object_classes": [
+      "bag",
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1,
+      "turned_right": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 16,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 16000.0,
+    "last_seen_ms": 16250.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 28,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 24500.0,
+    "last_seen_ms": 24750.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 17.3,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 35,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 36000.0,
+    "last_seen_ms": 36250.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 40,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 39500.0,
+    "last_seen_ms": 39750.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 41,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 40000.0,
+    "last_seen_ms": 40500.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 5.3,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "bag": 2
+    },
+    "near_hand_object_rates": {
+      "bag": 1.0
+    },
+    "persistent_object_classes": [
+      "bag"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 44,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 42000.0,
+    "last_seen_ms": 42250.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 8.5,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1,
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 49,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 72000.0,
+    "last_seen_ms": 72500.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 2,
+    "median_head_scale_px": 9.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_right": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "2 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 2 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 59,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 88500.0,
+    "last_seen_ms": 88750.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 63,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 103000.0,
+    "last_seen_ms": 103250.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 66,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 106000.0,
+    "last_seen_ms": 106250.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 64,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 106000.0,
+    "last_seen_ms": 106250.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 73,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 111750.0,
+    "last_seen_ms": 112000.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 7.5,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1,
+      "downward": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 75,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 116500.0,
+    "last_seen_ms": 116750.0,
+    "observed_span_ms": 250.0,
+    "coverage_of_recording": 0.0017,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 6.1,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1,
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 80,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 129250.0,
+    "last_seen_ms": 129750.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 83,
+    "seat_state": "unattributed",
+    "samples": 2,
+    "first_seen_ms": 133250.0,
+    "last_seen_ms": 133750.0,
+    "observed_span_ms": 500.0,
+    "coverage_of_recording": 0.0035,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 3.4,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 2
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 2 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 10,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 10000.0,
+    "last_seen_ms": 10000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 5.9,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 14,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 14000.0,
+    "last_seen_ms": 14000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 15,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 15000.0,
+    "last_seen_ms": 15000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 18,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 16750.0,
+    "last_seen_ms": 16750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 6.2,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 23,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 21500.0,
+    "last_seen_ms": 21500.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 26,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 24000.0,
+    "last_seen_ms": 24000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 27,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 24000.0,
+    "last_seen_ms": 24000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 16.6,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 29,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 26000.0,
+    "last_seen_ms": 26000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 32,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 30750.0,
+    "last_seen_ms": 30750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 3,
+      "phone": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 3.0,
+      "phone": 1.0
+    },
+    "persistent_object_classes": [
+      "monitor_or_bezel",
+      "phone"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 36,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 36250.0,
+    "last_seen_ms": 36250.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 37,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 36750.0,
+    "last_seen_ms": 36750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 12.5,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_right": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 38,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 37750.0,
+    "last_seen_ms": 37750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 39,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 38250.0,
+    "last_seen_ms": 38250.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 14.8,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_left": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 43,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 41000.0,
+    "last_seen_ms": 41000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 45,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 49250.0,
+    "last_seen_ms": 49250.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 1.0
+    },
+    "persistent_object_classes": [
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 46,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 69000.0,
+    "last_seen_ms": 69000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 47,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 70750.0,
+    "last_seen_ms": 70750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 4.5,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 50,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 72500.0,
+    "last_seen_ms": 72500.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 1,
+    "median_head_scale_px": 61.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "turned_right": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "1 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 1 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 51,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 74500.0,
+    "last_seen_ms": 74500.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 52,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 74500.0,
+    "last_seen_ms": 74500.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 55,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 81000.0,
+    "last_seen_ms": 81000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 60,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 91250.0,
+    "last_seen_ms": 91250.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 67,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 106000.0,
+    "last_seen_ms": 106000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 65,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 106000.0,
+    "last_seen_ms": 106000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 5.9,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 68,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 106750.0,
+    "last_seen_ms": 106750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 71,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 107500.0,
+    "last_seen_ms": 107500.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 76,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 121750.0,
+    "last_seen_ms": 121750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 87,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 137750.0,
+    "last_seen_ms": 137750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 89,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 139750.0,
+    "last_seen_ms": 139750.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 92,
+    "seat_state": "unattributed",
+    "samples": 1,
+    "first_seen_ms": 143000.0,
+    "last_seen_ms": 143000.0,
+    "observed_span_ms": 0.0,
+    "coverage_of_recording": 0.0,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 0.0,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 1
+    },
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 1 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  }
+]

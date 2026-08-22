@@ -1,2 +1,85 @@
-.DS_Store
-tmp/
+# Model weights. Multi-gigabyte binaries GitHub rejects above 100 MB, and which
+# preflight already records by checkpoint hash and licence. Fetch them per
+# requirements-rtx3090.lock and the declarations in configs/models/*.yaml.
+#
+# Anchored to the repository root: an unanchored `models/` also matches
+# `configs/models/`, which holds the configuration files the whole comparison
+# depends on.
+/models/
+
+
+# Legacy run outputs from the classroom driver.
+/runs/
+
+# Test media and fixtures, generated on demand.
+/data/
+
+__pycache__/
+*.pyc
+
+# Run outputs and logs (see /artifacts/runs/ above).
+/artifacts/
+
+# Run outputs are excluded above, with one deliberate exception: the 1446
+# reference run is committed so the reports can be read against the artifacts
+# they cite. Only the reviewable part -- every JSON summary, comparison and
+# report, the rendered detection frames, the head overlays, and the per-row
+# JSONL small enough to diff.
+#
+# Excluded from it by the rules below: the 269 evidence contact sheets in
+# 11_gemma/ (350 MB of PNG built for a VLM stage that no longer exists) and
+# every file over 2 MB (raw_detections, merged_detections,
+# temporal_confirmation -- 582 MB of machine output regenerable with
+# `tools/reconfirm.py` from what is kept).
+!/artifacts/
+!/artifacts/runs/
+!/artifacts/runs/1446/
+!/artifacts/runs/1446/**
+/artifacts/runs/1446/**/11_gemma/**/*.png
+
+# Run 1501 -- the current reference run, committed for the same reason as 1446:
+# the reports cite file paths inside it. Excludes the alignment raw/compensated
+# frames (1.3 MB each, regenerable from the source) and the 11_gemma contact
+# sheets (a VLM stage that no longer exists).
+!/artifacts/runs/1501/
+!/artifacts/runs/1501/**
+/artifacts/runs/1501/**/11_gemma/**/*.png
+/artifacts/runs/1501/**/03_alignment/**/raw.png
+/artifacts/runs/1501/**/03_alignment/**/compensated.png
+/artifacts/runs/1501/**/03_alignment/**/reference.png
+# Added by code-review-graph
+.code-review-graph/
+
+# Runs 1503 (news clip) and 1504 (04_talking), committed on the same terms as
+# 1446 and 1501: the reviewable summaries, so the reports can be read against
+# the artifacts they cite. Excluded below are the annotated videos (19-79 MB of
+# regenerable MP4) and the per-sample JSONL over 2 MB, both of which
+# `tools/render_annotated_video.py` and `tools/attach_chit_detections.py`
+# reproduce from what is kept.
+!/artifacts/runs/1503/
+!/artifacts/runs/1503/**
+!/artifacts/runs/1504/
+!/artifacts/runs/1504/**
+/artifacts/runs/**/*.mp4
+/artifacts/runs/1503/**/samples*.jsonl
+/artifacts/runs/1504/**/samples*.jsonl
+/artifacts/runs/1503/**/03_alignment/**/*.png
+/artifacts/runs/1504/**/03_alignment/**/*.png
+
+# Scratch output from this session's investigations: contact sheets, zoom crops
+# and stdout captures. Regenerable and not evidence of anything on their own.
+/artifacts/*.out
+/artifacts/*.jpg
+/artifacts/chit_candidates/
+/artifacts/trk118/
+
+# Other assistants' project files and IDE state.
+.claude/
+.codebuddy/
+.cursor/
+.gemini/
+.kiro/
+.qoder/
+.qodo/
+.windsurfrules
+.cursorrules

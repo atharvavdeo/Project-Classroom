@@ -1,0 +1,6 @@
+{
+  "complete": false,
+  "reason": "no reference manifest was supplied. Per PRD 3 the run proceeds and object evaluation is marked incomplete; no quality claim of any kind may be made from it.",
+  "isolation_verified": true,
+  "duration_ms": 88380.0
+}

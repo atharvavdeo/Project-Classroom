@@ -1,0 +1,30 @@
+{
+  "reference_pts_ms": 4520.0,
+  "frames_compared": 15,
+  "static_support_coverage": 0.65508,
+  "configurations": {
+    "ecc": {
+      "estimates": 15,
+      "passed_gate_and_compensated": 0,
+      "median_residual": 0.4027,
+      "median_confidence": 0.6842,
+      "median_translation_px": 0.112
+    },
+    "features_ransac": {
+      "estimates": 15,
+      "passed_gate_and_compensated": 0,
+      "median_residual": 0.2272,
+      "median_confidence": 0.765,
+      "median_translation_px": 0.025
+    },
+    "identity": {
+      "estimates": 15,
+      "passed_gate_and_compensated": 0,
+      "median_residual": 7.9846,
+      "median_confidence": 0.1113,
+      "median_translation_px": 0.0
+    }
+  },
+  "epoch_breaks": [],
+  "note": "identity is a named baseline, not the absence of a configuration (PRD 6.3.2). Compensation is applied only where the gate passes; elsewhere the span is camera_motion_uncertain and raw evidence is retained (PRD 6.3.4)."
+}

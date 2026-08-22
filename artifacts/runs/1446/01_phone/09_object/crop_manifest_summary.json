@@ -1,0 +1,18 @@
+{
+  "crops": 1076,
+  "digest": "5e2aea52b3c598b69b3361e3a79c7db81463f1498ddb0add74f2e36510250673",
+  "by_crop_config": {
+    "native_source_context_fallback": 315,
+    "pose_hand_context": 761
+  },
+  "fallback_reasons": {
+    "no_pose_observation": 121,
+    "wrist_confidence_below_floor": 194
+  },
+  "hand_context_share": 0.7072,
+  "insufficient_native_resolution": 7,
+  "insufficient_fraction": 0.0065,
+  "median_magnification": 3.73,
+  "max_magnification": 13.33,
+  "note": "magnification is interpolation, not detail. A crop at 20x is 640 px of upscaled evidence over a 32 px source footprint, and the abstention rule is judged on the footprint (PRD 10)."
+}

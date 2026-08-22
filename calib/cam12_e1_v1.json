@@ -1,0 +1,254 @@
+{
+  "camera_id": "cam12",
+  "epoch_id": "e1",
+  "version": 1,
+  "frame_w": 1280,
+  "frame_h": 720,
+  "source_sha256": null,
+  "reference_pts_ms": 0.0,
+  "operator": "hs",
+  "reviewer": "reviewer-a",
+  "approval_state": "approved",
+  "approved_utc": "2026-08-18T15:00:00Z",
+  "parent_version": null,
+  "review_images": {
+    "crowded": "docs/review_crowded.jpg",
+    "sparse": "docs/review_sparse.jpg",
+    "changed_light": "docs/review_changed_light.jpg",
+    "aisle_reflection": "docs/review_aisle_reflection.jpg"
+  },
+  "confidence_notes": "Traced from extracted frames; R-desk is an unoccupied row backed by an interior serving window.",
+  "proposal_source": "manual",
+  "seats": [
+    {
+      "seat_id": "S-61",
+      "zones": {
+        "seat_context": [
+          [
+            60,
+            280
+          ],
+          [
+            380,
+            280
+          ],
+          [
+            380,
+            700
+          ],
+          [
+            60,
+            700
+          ]
+        ],
+        "upper_body": [
+          [
+            60,
+            280
+          ],
+          [
+            380,
+            280
+          ],
+          [
+            380,
+            511.0
+          ],
+          [
+            60,
+            511.0
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            60,
+            511.0
+          ],
+          [
+            380,
+            511.0
+          ],
+          [
+            380,
+            700
+          ],
+          [
+            60,
+            700
+          ]
+        ],
+        "lap_bag": [
+          [
+            60,
+            616.0
+          ],
+          [
+            380,
+            616.0
+          ],
+          [
+            380,
+            700
+          ],
+          [
+            60,
+            700
+          ]
+        ]
+      },
+      "desk_line_y": 511.0,
+      "adjacent": [],
+      "ambiguous_with": [],
+      "notes": ""
+    },
+    {
+      "seat_id": "R-desk",
+      "zones": {
+        "seat_context": [
+          [
+            700,
+            120
+          ],
+          [
+            1180,
+            120
+          ],
+          [
+            1180,
+            480
+          ],
+          [
+            700,
+            480
+          ]
+        ],
+        "upper_body": [
+          [
+            700,
+            120
+          ],
+          [
+            1180,
+            120
+          ],
+          [
+            1180,
+            318.0
+          ],
+          [
+            700,
+            318.0
+          ]
+        ],
+        "desk_work_surface": [
+          [
+            700,
+            318.0
+          ],
+          [
+            1180,
+            318.0
+          ],
+          [
+            1180,
+            480
+          ],
+          [
+            700,
+            480
+          ]
+        ],
+        "lap_bag": [
+          [
+            700,
+            408.0
+          ],
+          [
+            1180,
+            408.0
+          ],
+          [
+            1180,
+            480
+          ],
+          [
+            700,
+            480
+          ]
+        ]
+      },
+      "desk_line_y": 318.0,
+      "adjacent": [],
+      "ambiguous_with": [],
+      "notes": ""
+    }
+  ],
+  "masks": [
+    {
+      "kind": "overlay",
+      "polygon": [
+        [
+          8,
+          30
+        ],
+        [
+          520,
+          30
+        ],
+        [
+          520,
+          92
+        ],
+        [
+          8,
+          92
+        ]
+      ],
+      "note": "burned-in date and time"
+    },
+    {
+      "kind": "environment",
+      "polygon": [
+        [
+          655,
+          0
+        ],
+        [
+          965,
+          0
+        ],
+        [
+          965,
+          232
+        ],
+        [
+          655,
+          232
+        ]
+      ],
+      "note": "interior serving window into an adjacent room"
+    },
+    {
+      "kind": "static_background",
+      "polygon": [
+        [
+          0,
+          240
+        ],
+        [
+          660,
+          240
+        ],
+        [
+          660,
+          700
+        ],
+        [
+          0,
+          700
+        ]
+      ],
+      "note": "floor and near wall"
+    }
+  ]
+}

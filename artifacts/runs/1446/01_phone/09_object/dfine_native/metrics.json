@@ -1,0 +1,30 @@
+{
+  "config_id": "dfine_native",
+  "state": "available",
+  "crop_digest": "5e2aea52b3c598b69b3361e3a79c7db81463f1498ddb0add74f2e36510250673",
+  "checkpoint_sha256": "",
+  "crops_seen": 1076,
+  "crops_abstained": 7,
+  "abstention_rate": 0.0065,
+  "slices_run": 0,
+  "raw_detections": 6529,
+  "merged_detections": 6529,
+  "usable_detections": 6497,
+  "by_class": {
+    "bag": 439,
+    "book_or_notebook_like_object": 75,
+    "insufficient_visual_evidence": 7,
+    "keyboard": 68,
+    "monitor_or_bezel": 272,
+    "mouse": 122,
+    "phone": 237,
+    "stationery": 135,
+    "unknown_object": 5174
+  },
+  "phone": 237,
+  "secondary_paper_chit": 0,
+  "hard_negative_detections": 597,
+  "seconds": 94.98,
+  "crops_per_second": 11.33,
+  "peak_vram_mb": null
+}

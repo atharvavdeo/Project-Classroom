@@ -1,0 +1,50 @@
+[
+  {
+    "video": "12_paper",
+    "source": "Seat No. 12 was seen taking a piece of paper from the desk.mkv",
+    "run_dir": "artifacts\\runs\\1501\\12_paper",
+    "sample_hz": 4.0,
+    "state": "complete",
+    "seconds": {
+      "ingest": 8.7,
+      "preprocessing": 12.5,
+      "alignment": 8.0,
+      "motion": 9.3,
+      "timeline": 544.9,
+      "video": 23.8
+    },
+    "people": 236,
+    "flags": {
+      "sustained_attention_away": 4,
+      "target_object_near_hands": 31,
+      "no_orientation_baseline": 193,
+      "frequent_orientation_change": 3,
+      "low_coverage": 22,
+      "prolonged_downward_orientation": 2
+    }
+  },
+  {
+    "video": "01_phone",
+    "source": "01.Candidate was found using a mobile phone in the examination hall..mkv",
+    "run_dir": "artifacts\\runs\\1501\\01_phone",
+    "sample_hz": 4.0,
+    "state": "complete",
+    "seconds": {
+      "ingest": 11.5,
+      "preprocessing": 14.6,
+      "alignment": 10.7,
+      "motion": 9.0,
+      "timeline": 197.5,
+      "video": 37.2
+    },
+    "people": 84,
+    "flags": {
+      "frequent_orientation_change": 3,
+      "target_object_near_hands": 14,
+      "sustained_attention_away": 4,
+      "low_coverage": 10,
+      "prolonged_downward_orientation": 1,
+      "no_orientation_baseline": 69
+    }
+  }
+]

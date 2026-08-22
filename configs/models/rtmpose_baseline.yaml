@@ -1,0 +1,18 @@
+# PRD 5, pose family. Top-down: detect people, then keypoints per person.
+# Measured 1.72x ahead of the strongest one-stage model on person recall on
+# this footage (8 frames, all six cameras, identical inputs).
+config_id: rtmpose_baseline
+vram_gb: 3.0
+family: pose
+description: YOLOX-m person detector into RTMPose-m, rtmlib balanced preset.
+probe: python_import
+module: rtmlib
+input_size: 256x192
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/Tau-J/rtmlib/blob/main/LICENSE
+thresholds:
+  keypoint_confidence: 0.3
+extra:
+  mode: balanced
+  backend: onnxruntime

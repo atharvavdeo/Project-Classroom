@@ -1,0 +1,15 @@
+{
+  "event_id": "evt_04-P07_desk_work_surface_0028",
+  "config_id": "gemma_marked_evidence",
+  "prompt_version": "product-zero-1",
+  "checkpoint_sha256": "",
+  "raw_response": "",
+  "parsed": null,
+  "validation": null,
+  "latency_ms": 0.0,
+  "contact_sheet": "",
+  "state": "resource_unavailable",
+  "reason": "no --gemma-url was supplied, so no VLM review was performed. Every packet is recorded as needing human review rather than being treated as reviewed and clean.",
+  "usable": false,
+  "needs_human_review": true
+}

@@ -1,0 +1,17 @@
+# PRD 5, pose family. One-stage: all keypoints in a single pass, cost does
+# not scale with crowd size. Retained as a challenger, never a fallback.
+config_id: rtmo_baseline
+vram_gb: 3.0
+family: pose
+description: RTMO-m one-stage multi-person pose at 640x640.
+probe: python_import
+module: rtmlib
+input_size: 640x640
+precision: fp32
+licence: Apache-2.0
+licence_url: https://github.com/Tau-J/rtmlib/blob/main/LICENSE
+thresholds:
+  keypoint_confidence: 0.3
+extra:
+  variant: rtmo-m
+  backend: onnxruntime
