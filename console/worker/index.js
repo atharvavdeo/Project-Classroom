@@ -172,6 +172,8 @@ const CACHE = {
   ".json": "public, max-age=300",
 };
 
+const PUBLIC_READ_METHODS = new Set(["GET", "HEAD"]);
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -196,6 +198,23 @@ export default {
       }
       // If the landing file is missing from the build, the console is a better
       // answer than a 404 on the front door.
+    }
+
+    // The public deployment is intentionally a viewer. Keep the existing
+    // D1/R2-backed evidence readable, but reject every state-changing API
+    // request before it can reach the upload handler or shared router.
+    if (pathname.startsWith("/api/") && !PUBLIC_READ_METHODS.has(request.method)) {
+      return Response.json(
+        {
+          error: "Public showcase mode",
+          detail:
+            "Uploads, reviewer changes, job processing, and AI requests are disabled. Existing project data remains available to view.",
+        },
+        {
+          status: 403,
+          headers: { "cache-control": "no-store", allow: "GET, HEAD" },
+        },
+      );
     }
 
     /* ---------------------------------------------------------- uploads */

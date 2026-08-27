@@ -22,6 +22,7 @@ const SCREENS: { id: Screen; label: string }[] = [
 ];
 
 export default function App() {
+  const [showReadOnlyNotice, setShowReadOnlyNotice] = useState(true);
   const [projects, setProjects] = useState<ProjectRef[]>([]);
   const [assets, setAssets] = useState<Assets | null>(null);
   const [videoId, setVideoId] = useState("");
@@ -297,6 +298,32 @@ export default function App() {
           )}
         </main>
       </div>
+      {showReadOnlyNotice && (
+        <div className="read-only-notice" role="presentation">
+          <section
+            className="read-only-notice__card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="read-only-title"
+          >
+            <div className="read-only-notice__mark" aria-hidden="true">
+              <span />
+              <span />
+              <i />
+            </div>
+            <p className="mono read-only-notice__eyebrow">Public review console</p>
+            <h2 id="read-only-title">Read-only public view</h2>
+            <p>
+              Existing evidence and the interface remain available to explore.
+              Uploads, review decisions, job processing, and AI requests are
+              disabled on this public deployment.
+            </p>
+            <button type="button" onClick={() => setShowReadOnlyNotice(false)}>
+              Continue to the console
+            </button>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
