@@ -1,0 +1,181 @@
+{
+  "run_id": "corpus_01",
+  "updated_utc": "2026-08-20T07:08:37Z",
+  "stages": [
+    {
+      "stage": "source",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sources": 1
+      }
+    },
+    {
+      "stage": "01_ingest",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:43:47Z",
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": "one complete forward decode pass; motion vectors present",
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "sources": 1,
+        "failed": 0,
+        "preprocessing_configs": 4
+      }
+    },
+    {
+      "stage": "02_health",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "observations": 17
+      }
+    },
+    {
+      "stage": "03_alignment",
+      "state": "skipped_unavailable",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": "no camera_motion or camera_repositioned condition was observed, so no global transform was estimated. Identity is the named baseline, not a silent default (PRD 6.3.2)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "observations": 0
+      }
+    },
+    {
+      "stage": "04_calibration",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": "01/e1/v1 (draft)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "seats": 6
+      }
+    },
+    {
+      "stage": "05_motion_roi",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:44:10Z",
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "windows": 3036,
+        "gate_records": 3546
+      }
+    },
+    {
+      "stage": "06_segmentation",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "events": 46,
+        "normal_priority": 27,
+        "low_priority": 19
+      }
+    },
+    {
+      "stage": "07_tracking",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:44:17Z",
+      "finished_utc": "2026-08-19T05:45:34Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sample_rows": 166,
+        "person_boxes": 379
+      }
+    },
+    {
+      "stage": "08_pose",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:45:34Z",
+      "finished_utc": "2026-08-19T05:57:00Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "manifest_rows": 379,
+        "manifest_digest": "67489132465ccb8bba616b8e893be00f2a4beb5f77937479e82cfd045280868d"
+      }
+    },
+    {
+      "stage": "09_object",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:57:01Z",
+      "finished_utc": "2026-08-19T06:41:52Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "crops": 379,
+        "crop_digest": "165261f983377ae1bb3f19b7dea337b697cb783ae44e3b5a35832238b19a7af5"
+      }
+    },
+    {
+      "stage": "10_evidence",
+      "state": "complete",
+      "started_utc": "2026-08-20T07:08:37Z",
+      "finished_utc": "2026-08-20T07:08:37Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "events": 46,
+        "valid_packets": 46
+      }
+    },
+    {
+      "stage": "11_gemma",
+      "state": "skipped_unavailable",
+      "started_utc": "2026-08-20T07:08:37Z",
+      "finished_utc": "2026-08-20T07:08:37Z",
+      "reason": "no VLM review was performed; every event needs human review",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "reviews": 46
+      }
+    },
+    {
+      "stage": "12_evaluation",
+      "state": "blocked",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:44:20Z",
+      "reason": "no reference manifest; evaluation incomplete and no quality claim may be made",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "13_reports",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:44:20Z",
+      "reason": "PRD 20 measured result (3)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "reports": 4
+      }
+    }
+  ]
+}

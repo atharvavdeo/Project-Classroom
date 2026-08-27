@@ -1,0 +1,29 @@
+{
+  "config_id": "rf_detr_sahi",
+  "state": "available",
+  "crop_digest": "165261f983377ae1bb3f19b7dea337b697cb783ae44e3b5a35832238b19a7af5",
+  "checkpoint_sha256": "",
+  "crops_seen": 379,
+  "crops_abstained": 4,
+  "abstention_rate": 0.0106,
+  "slices_run": 1663,
+  "raw_detections": 1285,
+  "merged_detections": 1285,
+  "usable_detections": 1269,
+  "by_class": {
+    "bag": 99,
+    "insufficient_visual_evidence": 4,
+    "keyboard": 15,
+    "monitor_or_bezel": 154,
+    "mouse": 28,
+    "phone": 34,
+    "stationery": 46,
+    "unknown_object": 905
+  },
+  "phone": 34,
+  "secondary_paper_chit": 0,
+  "hard_negative_detections": 243,
+  "seconds": 436.624,
+  "crops_per_second": 0.87,
+  "peak_vram_mb": null
+}

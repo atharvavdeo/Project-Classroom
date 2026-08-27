@@ -1,0 +1,17 @@
+{
+  "reviews": 46,
+  "attempted": 0,
+  "not_attempted": 46,
+  "not_attempted_reason": "no --gemma-url was supplied, so no VLM review was performed. Every packet is recorded as needing human review rather than being treated as reviewed and clean.",
+  "schema_valid": 0,
+  "schema_invalid": 0,
+  "repaired": 0,
+  "blocked_packets": 0,
+  "validation_errors": {},
+  "object_assessment": {},
+  "object_certainty": {},
+  "subject_marker_not_visible": 0,
+  "needs_human_review": 46,
+  "median_latency_ms": null,
+  "note": "no invalid response was repaired. A JSON object assembled by the pipeline from a malformed response is not the model's assessment, and nothing downstream could tell (PRD 11)."
+}

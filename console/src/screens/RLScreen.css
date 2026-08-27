@@ -1,0 +1,135 @@
+.rl {
+  padding: 1.4rem 1.6rem 3rem;
+  max-width: 78rem;
+}
+
+.rl h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.4rem;
+  font-size: 1.25rem;
+}
+
+.rl h2 .mono {
+  font-size: 0.76rem;
+  font-weight: 400;
+  color: var(--slate);
+}
+
+.rl__lede {
+  margin: 0 0 1.1rem;
+  max-width: 62ch;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--slate);
+}
+
+.rl__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+}
+
+.rl__chips button {
+  font: inherit;
+  font-size: 0.76rem;
+  padding: 0.24rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule, #d8d3ca);
+  background: transparent;
+  color: var(--slate);
+  cursor: pointer;
+}
+
+.rl__chips button.is-on {
+  background: var(--accent-2, #8acfe6);
+  border-color: var(--accent-2, #8acfe6);
+  color: #0b1013;
+}
+
+/* The table is wide by design -- eight columns is the point -- so it scrolls
+   inside its own box rather than making the page scroll sideways. */
+.rl__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--rule, #d8d3ca);
+  border-radius: 6px;
+}
+
+.rl table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.84rem;
+}
+
+.rl th,
+.rl td {
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--rule, #d8d3ca);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.rl th {
+  position: sticky;
+  top: 0;
+  background: var(--raised, #fff);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.rl tbody tr:last-child td { border-bottom: 0; }
+
+.rl__sub {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--slate);
+}
+
+.rl__na { color: var(--slate); opacity: 0.75; }
+
+.rl__empty,
+.rl__error {
+  max-width: 60ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--slate);
+}
+
+.rl__foot {
+  margin-top: 1.2rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule, #d8d3ca);
+  max-width: 66ch;
+}
+
+.rl__foot p {
+  margin: 0 0 0.7rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--slate);
+}
+
+/* Sits on the heading row, pushed right, so it is findable without competing
+   with the count beside the title. */
+.rl__export {
+  margin-left: auto;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  border: 1px solid var(--accent-2, #8acfe6);
+  color: var(--accent-2, #8acfe6);
+  white-space: nowrap;
+}
+
+.rl__export:hover {
+  background: var(--accent-2, #8acfe6);
+  color: #0b1013;
+}

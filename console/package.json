@@ -1,0 +1,32 @@
+{
+  "name": "drishti-console",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Review console for Project Classroom. Reads a run bundle produced by tools/build_console_bundle.py.",
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"node server/index.js\" \"vite\"",
+    "api": "node server/index.js",
+    "web": "vite",
+    "build": "tsc -b && vite build && node tools/copy-landing.mjs",
+    "start": "node server/index.js",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.2.1",
+    "pg": "^8.23.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^10.0.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "wrangler": "^4.125.0"
+  }
+}

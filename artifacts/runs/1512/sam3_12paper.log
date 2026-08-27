@@ -1,0 +1,17 @@
+6109 samples, 516 carry a proposal (327 chit, 291 phone at >=0.35)
+150 episode(s) from 618 proposals; crops 516 -> 213 (2.4x fewer calls)
+213 crops to adjudicate at 6 workers (~1 min)
+  100/213  4.6/s  {'suppressed_computer mouse': 3, 'unsupported_phone': 103, 'unsupported': 26, 'suppressed_monitor': 7, 'suppressed_keyboard': 9, 'phone_supported': 1}
+  200/213  5.1/s  {'suppressed_computer mouse': 5, 'unsupported_phone': 180, 'unsupported': 43, 'suppressed_monitor': 12, 'suppressed_keyboard': 24, 'phone_supported': 1, 'corroborated': 11, 'phone_was_paper': 4}
+
+adjudicated 213 crops in 43s
+  unsupported_phone            187
+  unsupported                  47
+  suppressed_keyboard          24
+  corroborated                 14
+  suppressed_monitor           13
+  suppressed_computer mouse    5
+  phone_was_paper              4
+  phone_supported              1
+-> artifacts\runs\1512\12_paper\14_person_timeline\samples_sam3_adjudicated.jsonl
+-> artifacts\runs\1512\12_paper\14_person_timeline\sam3_adjudication (8 annotated crops)

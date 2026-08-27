@@ -1,0 +1,19 @@
+{
+  "workflow": "Roboflow workflow kawaljeets-workspace/general-segmentation-api-6 (SAM 3, sam3/sam3_final)",
+  "prompt": "paper chit,mobile phone,keyboard,computer mouse,monitor,water bottle,hand",
+  "min_overlap": 0.3,
+  "crops_adjudicated": 353,
+  "api_calls": 353,
+  "api_errors": 0,
+  "verdicts": {
+    "unsupported": 241,
+    "unsupported_phone": 66,
+    "reclassified_as_phone": 16,
+    "phone_confirmed": 39,
+    "suppressed_computer mouse": 34,
+    "suppressed_monitor": 3,
+    "phone_was_paper": 2,
+    "corroborated": 17
+  },
+  "elapsed_s": 36.7
+}

@@ -1,0 +1,19 @@
+{
+  "run_id": "1512",
+  "updated_utc": "2026-08-22T19:39:14Z",
+  "stages": [
+    {
+      "stage": "14_person_timeline",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T19:39:14Z",
+      "reason": "continuous 4.0 Hz over the whole recording; 92 people profiled",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sampled_rows": 573,
+        "people": 92
+      }
+    }
+  ]
+}

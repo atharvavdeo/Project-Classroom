@@ -1,0 +1,16 @@
+{
+  "path": "refs\\cam12_demo_clean.jsonl",
+  "accepted_rows": 3,
+  "rejected_rows": 0,
+  "complete": true,
+  "by_class": {
+    "phone": 3
+  },
+  "by_visibility": {
+    "heavily_occluded": 1,
+    "partially_occluded": 1,
+    "too_small": 1
+  },
+  "localised_rows": 2,
+  "note": "every metric derived from this manifest is complete"
+}

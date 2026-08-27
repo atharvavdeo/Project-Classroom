@@ -1,0 +1,109 @@
+{
+  "manifest_digest": "79250e33df9ad4e57f036e7daf8529524afa68e4388b82165e20db7eb4d0003e",
+  "manifest_rows": 1242,
+  "manifest_equivalence": "verified",
+  "mismatched_configs": [],
+  "equivalence_note": "every configuration below was given byte-identical manifest rows; a difference in their metrics is therefore attributable to the model (PRD 4)",
+  "rows_by_seat_state": {
+    "unattributed": 1242
+  },
+  "rows_by_health_state": {
+    "none": 1242
+  },
+  "configurations": [
+    {
+      "config_id": "rtmpose_baseline",
+      "state": "available",
+      "manifest_digest": "79250e33df9ad4e57f036e7daf8529524afa68e4388b82165e20db7eb4d0003e",
+      "checkpoint_sha256": "",
+      "rows_seen": 1242,
+      "persons_proposed": 1008,
+      "persons_returned": 1008,
+      "row_coverage": 0.8116,
+      "joint_observability": {
+        "visible": 11236,
+        "occluded": 1816,
+        "not_detected": 0,
+        "not_resolvable_at_source_scale": 52
+      },
+      "joint_visible_fraction": 0.8574,
+      "wrist_observability": {
+        "visible": 1315,
+        "occluded": 693,
+        "not_detected": 0,
+        "not_resolvable_at_source_scale": 8
+      },
+      "head_pitch_resolved": 977,
+      "suspected_joint_swaps": 31,
+      "wrist_in_lap_context": 0,
+      "seconds": 396.759,
+      "rows_per_second": 3.13,
+      "peak_vram_mb": null
+    },
+    {
+      "config_id": "rtmo_baseline",
+      "state": "available",
+      "manifest_digest": "79250e33df9ad4e57f036e7daf8529524afa68e4388b82165e20db7eb4d0003e",
+      "checkpoint_sha256": "",
+      "rows_seen": 1242,
+      "persons_proposed": 165,
+      "persons_returned": 165,
+      "row_coverage": 0.1329,
+      "joint_observability": {
+        "visible": 1695,
+        "occluded": 450,
+        "not_detected": 0,
+        "not_resolvable_at_source_scale": 0
+      },
+      "joint_visible_fraction": 0.7902,
+      "wrist_observability": {
+        "visible": 257,
+        "occluded": 73,
+        "not_detected": 0,
+        "not_resolvable_at_source_scale": 0
+      },
+      "head_pitch_resolved": 128,
+      "suspected_joint_swaps": 3,
+      "wrist_in_lap_context": 0,
+      "seconds": 326.862,
+      "rows_per_second": 3.8,
+      "peak_vram_mb": null
+    },
+    {
+      "config_id": "alphapose_crowd_baseline",
+      "state": "available",
+      "manifest_digest": "79250e33df9ad4e57f036e7daf8529524afa68e4388b82165e20db7eb4d0003e",
+      "checkpoint_sha256": "",
+      "rows_seen": 1242,
+      "persons_proposed": 1242,
+      "persons_returned": 1242,
+      "row_coverage": 1.0,
+      "joint_observability": {
+        "visible": 11657,
+        "occluded": 3852,
+        "not_detected": 0,
+        "not_resolvable_at_source_scale": 637
+      },
+      "joint_visible_fraction": 0.722,
+      "wrist_observability": {
+        "visible": 1410,
+        "occluded": 976,
+        "not_detected": 0,
+        "not_resolvable_at_source_scale": 98
+      },
+      "head_pitch_resolved": 854,
+      "suspected_joint_swaps": 36,
+      "wrist_in_lap_context": 0,
+      "seconds": 365.442,
+      "rows_per_second": 3.4,
+      "peak_vram_mb": null
+    }
+  ],
+  "available": [
+    "rtmpose_baseline",
+    "rtmo_baseline",
+    "alphapose_crowd_baseline"
+  ],
+  "unavailable": [],
+  "selection": "none. PRD 5 forbids naming a configuration best until every runnable mandatory configuration has a matched report; selection happens in stage 12 against references."
+}

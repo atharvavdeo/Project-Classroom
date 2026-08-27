@@ -1,0 +1,595 @@
+[
+ {
+  "track_id": 1,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AWAY_FROM_WRIST",
+   "OBJECT_TOO_LARGE",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_STATIONARY_ON_DESK"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": false,
+    "detail": "0 of 16 proposals were at a wrist and small enough, across 0 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 11, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 92% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.0s, 0.0s in total across 0 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 16,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 11,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 2,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_TOO_LARGE",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_STATIONARY_ON_DESK"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": false,
+    "detail": "0 of 4 proposals were at a wrist and small enough, across 0 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 20, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.0s, 0.0s in total across 0 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 20,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 3,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_HANDLING_SUSTAINED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "40 of 40 proposals were at a wrist and small enough, across 1 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 72, called equipment 5"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": true,
+    "detail": "longest continuous handling 10.0s, 10.0s in total across 1 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "6% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 40,
+   "gated": 40,
+   "sam3_supported": 0,
+   "sam3_equipment": 5,
+   "sam3_not_confirmed": 72,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 5,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "16 of 16 proposals were at a wrist and small enough, across 1 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 16, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 4.0s, 4.0s in total across 1 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 16,
+   "gated": 16,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 16,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 6,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 7,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_TOO_LARGE",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "3 of 10 proposals were at a wrist and small enough, across 2 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 3, called equipment 5"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.5s, 0.8s in total across 2 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": false,
+    "detail": "62% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 10,
+   "gated": 3,
+   "sam3_supported": 0,
+   "sam3_equipment": 5,
+   "sam3_not_confirmed": 3,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 4,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "5 of 9 proposals were at a wrist and small enough, across 2 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 7, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 1.8s, 2.2s in total across 2 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 9,
+   "gated": 5,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 7,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 13,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "3 of 13 proposals were at a wrist and small enough, across 1 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 4, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.8s, 0.8s in total across 1 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 13,
+   "gated": 3,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 4,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 11,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "1 of 1 proposals were at a wrist and small enough, across 1 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 3, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 1.0s, 1.0s in total across 1 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 3,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 12,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_TOO_LARGE",
+   "SAM3_NOT_RUN"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": false,
+    "detail": "0 of 2 proposals were at a wrist and small enough, across 0 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": true,
+    "detail": "not adjudicated by SAM 3"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.0s, 0.0s in total across 0 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "no equipment adjudication available"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 8,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 9,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 10,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 14,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ }
+]

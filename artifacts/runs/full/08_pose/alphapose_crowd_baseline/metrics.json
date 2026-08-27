@@ -1,0 +1,7 @@
+{
+  "config_id": "alphapose_crowd_baseline",
+  "state": "licence_blocked",
+  "reason": "AlphaPose checkpoint and licence status are unconfirmed (doubt.md 4.2). It stays in the comparison as unavailable rather than being dropped from it.",
+  "manifest_digest": "e740670cced453b26aa22fa0081c2186f2ab7743ffcab6fd64e8a9d1b615361c",
+  "note": "this configuration did not run; its absence is recorded rather than filled in from another model"
+}

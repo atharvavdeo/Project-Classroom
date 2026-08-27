@@ -1,0 +1,199 @@
+{
+  "overall": {
+    "status": "audited",
+    "references": 23,
+    "correct_pass": 5,
+    "false_pass": 18,
+    "correct_suppression": 0,
+    "false_suppression": 0,
+    "false_suppression_rate": 0.0,
+    "false_pass_rate": 1.0,
+    "uncertain_retained": 0,
+    "failed_coverage_ms": 0.0,
+    "by_state": {
+      "pass": 0,
+      "deprioritise": 2892,
+      "uncertain": 0,
+      "suppress_from_auto_ranking": 0,
+      "failed": 0
+    },
+    "failed_coverage_fraction": 0.0
+  },
+  "by_source": {
+    "reference": {
+      "intervals": 3,
+      "relevant": 3,
+      "correct_pass": 3,
+      "false_suppression": 0,
+      "false_pass": 0,
+      "correct_suppression": 0,
+      "false_suppression_rate": 0.0
+    },
+    "sampled_disturbance": {
+      "intervals": 20,
+      "relevant": 2,
+      "correct_pass": 2,
+      "false_suppression": 0,
+      "false_pass": 18,
+      "correct_suppression": 0,
+      "false_suppression_rate": 0.0
+    }
+  },
+  "population": {
+    "sampled_disturbance": 20,
+    "reference": 3
+  },
+  "shortfall": {
+    "normal_requested": 40,
+    "normal_obtained": 0,
+    "attempts": 2000,
+    "reason": "only 0 of 40 normal intervals could be drawn in 2000 attempts. Disturbance spans and reference neighbourhoods cover most of this recording, so there is little undisturbed footage to sample. The gate's behaviour on quiet footage is therefore UNMEASURED here, not measured as good."
+  },
+  "failures": [
+    {
+      "reference_id": "compression_noise_1",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 39483.0,
+      "end_pts_ms": 70967.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_2",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 71483.0,
+      "end_pts_ms": 78967.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_3",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 79483.0,
+      "end_pts_ms": 101367.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_4",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 101883.0,
+      "end_pts_ms": 109367.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_5",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 109883.0,
+      "end_pts_ms": 110967.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_6",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 111483.0,
+      "end_pts_ms": 123767.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_8",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 133883.0,
+      "end_pts_ms": 136567.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_9",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 137083.0,
+      "end_pts_ms": 147767.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_10",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 148283.0,
+      "end_pts_ms": 154167.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_11",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 154683.0,
+      "end_pts_ms": 162167.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_12",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 162683.0,
+      "end_pts_ms": 166967.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_13",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 167483.0,
+      "end_pts_ms": 173367.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_14",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 173883.0,
+      "end_pts_ms": 192567.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_15",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 193083.0,
+      "end_pts_ms": 200567.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_16",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 201083.0,
+      "end_pts_ms": 219767.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_17",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 220283.0,
+      "end_pts_ms": 226167.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_18",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 226683.0,
+      "end_pts_ms": 235767.0,
+      "relevant": false,
+      "state": "deprioritise"
+    },
+    {
+      "reference_id": "compression_noise_19",
+      "source": "sampled_disturbance",
+      "start_pts_ms": 236283.0,
+      "end_pts_ms": 237367.0,
+      "relevant": false,
+      "state": "deprioritise"
+    }
+  ],
+  "note": "audited on references plus sampled normal and disturbance intervals (PRD 8). References alone cannot expose a gate that passes everything: on that population it scores a perfect false-suppression rate."
+}

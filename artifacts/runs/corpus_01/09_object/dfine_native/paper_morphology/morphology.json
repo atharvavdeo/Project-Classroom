@@ -1,0 +1,165 @@
+{
+  "config_id": "dfine_native",
+  "pose_config": "rtmpose_baseline",
+  "instances_measured": 387,
+  "scaled_instances": 294,
+  "by_class": {
+    "bag": {
+      "instances": 151,
+      "relative_extent": {
+        "n": 139,
+        "p10": 0.289,
+        "median": 0.835,
+        "p90": 2.288
+      },
+      "area_px": {
+        "n": 151,
+        "p10": 1206.0,
+        "median": 2883.0,
+        "p90": 10156.0
+      },
+      "aspect": {
+        "n": 151,
+        "p10": 0.305,
+        "median": 1.067,
+        "p90": 3.153
+      },
+      "saturation_median": {
+        "n": 151,
+        "p10": 30.0,
+        "median": 80.0,
+        "p90": 123.0
+      },
+      "paper_like_fraction": {
+        "n": 151,
+        "p10": 0.0,
+        "median": 0.004,
+        "p90": 0.068
+      },
+      "luma_over_surround": {
+        "n": 151,
+        "p10": -56.5,
+        "median": -35.0,
+        "p90": 5.9
+      }
+    },
+    "monitor_or_bezel": {
+      "instances": 107,
+      "relative_extent": {
+        "n": 72,
+        "p10": 0.621,
+        "median": 1.182,
+        "p90": 2.338
+      },
+      "area_px": {
+        "n": 107,
+        "p10": 2083.0,
+        "median": 4789.0,
+        "p90": 12630.0
+      },
+      "aspect": {
+        "n": 107,
+        "p10": 0.544,
+        "median": 0.876,
+        "p90": 1.25
+      },
+      "saturation_median": {
+        "n": 107,
+        "p10": 13.0,
+        "median": 33.0,
+        "p90": 73.0
+      },
+      "paper_like_fraction": {
+        "n": 107,
+        "p10": 0.032,
+        "median": 0.336,
+        "p90": 0.669
+      },
+      "luma_over_surround": {
+        "n": 107,
+        "p10": -63.5,
+        "median": 5.9,
+        "p90": 45.7
+      }
+    },
+    "phone": {
+      "instances": 92,
+      "relative_extent": {
+        "n": 54,
+        "p10": 0.114,
+        "median": 0.465,
+        "p90": 1.246
+      },
+      "area_px": {
+        "n": 92,
+        "p10": 188.0,
+        "median": 634.0,
+        "p90": 2725.0
+      },
+      "aspect": {
+        "n": 92,
+        "p10": 0.528,
+        "median": 0.768,
+        "p90": 2.206
+      },
+      "saturation_median": {
+        "n": 92,
+        "p10": 25.0,
+        "median": 67.8,
+        "p90": 138.0
+      },
+      "paper_like_fraction": {
+        "n": 92,
+        "p10": 0.0,
+        "median": 0.099,
+        "p90": 0.399
+      },
+      "luma_over_surround": {
+        "n": 92,
+        "p10": -61.5,
+        "median": -9.8,
+        "p90": 61.0
+      }
+    },
+    "stationery": {
+      "instances": 37,
+      "relative_extent": {
+        "n": 29,
+        "p10": 0.15,
+        "median": 0.358,
+        "p90": 0.735
+      },
+      "area_px": {
+        "n": 37,
+        "p10": 169.0,
+        "median": 1156.0,
+        "p90": 3902.0
+      },
+      "aspect": {
+        "n": 37,
+        "p10": 0.615,
+        "median": 1.178,
+        "p90": 2.44
+      },
+      "saturation_median": {
+        "n": 37,
+        "p10": 23.0,
+        "median": 54.5,
+        "p90": 159.0
+      },
+      "paper_like_fraction": {
+        "n": 37,
+        "p10": 0.0,
+        "median": 0.275,
+        "p90": 0.635
+      },
+      "luma_over_surround": {
+        "n": 37,
+        "p10": -15.9,
+        "median": 30.2,
+        "p90": 73.6
+      }
+    }
+  },
+  "note": "relative_extent is sqrt(area_px)/torso_scale_px -- the object's linear size in shoulder widths of the person it belongs to. It is comparable between cameras and distances; area_px is not. No threshold is applied here: this is the distribution a threshold would have to be drawn on."
+}

@@ -1,0 +1,267 @@
+/* Picture, transport and timeline are one object. The gap is zero on purpose:
+   a timeline separated from its video by a page section stops reading as that
+   video's timeline. */
+.wipe {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.wipe__stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+
+.wipe__stage video,
+.wipe__stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.wipe__stage video {
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* The canvas only ever paints to the right of the handle, so it must not
+   swallow clicks meant for the video beneath it. */
+.wipe__stage canvas {
+  pointer-events: none;
+  object-fit: contain;
+}
+
+.wipe__tag {
+  position: absolute;
+  top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 0.18em 0.45em;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.wipe__tag--l {
+  left: 0.5rem;
+}
+.wipe__tag--r {
+  right: 0.5rem;
+}
+
+.wipe__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent-2);
+  cursor: ew-resize;
+  /* A generous hit area without a wide visible line. */
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.45);
+  touch-action: none;
+}
+
+.wipe__handle::before {
+  content: "";
+  position: absolute;
+  inset: 0 -10px;
+}
+
+.wipe__handle i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2rem;
+  height: 2rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  transition: transform var(--fast) var(--spring);
+}
+
+.wipe__handle:active i {
+  transform: translate(-50%, -50%) scale(0.92);
+}
+
+/* On-picture transport. Dark and translucent regardless of theme, because it
+   sits on video, not on the page ground. */
+.wipe__transport {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0.65rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78),
+    rgba(0, 0, 0, 0.42) 62%,
+    rgba(0, 0, 0, 0)
+  );
+  color: #fff;
+  opacity: 0.25;
+  transition: opacity var(--base) var(--spring);
+}
+
+.wipe__stage:hover .wipe__transport,
+.wipe__transport:focus-within {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .wipe__transport {
+    opacity: 1;
+  }
+}
+
+.wipe__play {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex: none;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #101010;
+  cursor: pointer;
+  transition: transform var(--fast) var(--spring);
+}
+
+.wipe__play svg {
+  width: 0.72rem;
+  height: 0.85rem;
+  fill: currentColor;
+}
+
+.wipe__play:active {
+  transform: scale(0.92);
+}
+
+.wipe__steps {
+  display: flex;
+  gap: 0.12rem;
+  flex-wrap: wrap;
+}
+
+.wipe__steps button {
+  border: 0;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-variant-numeric: tabular-nums;
+  padding: 0.34em 0.42em;
+  cursor: pointer;
+  transition: background var(--fast) var(--spring);
+}
+
+.wipe__steps button:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.wipe__speed {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.wipe__speed select {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 0;
+  border-radius: 5px;
+  padding: 0.24em 0.3em;
+  cursor: pointer;
+}
+
+.wipe__speed option {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+/* The clock the reviewer reads against the timeline directly beneath it. */
+.wipe__clock {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ phone */
+
+@media (max-width: 40rem) {
+  /* The step buttons are the point of this player, so they keep their size
+     and the strip scrolls rather than shrinking them below a thumb. */
+  .wipe__transport {
+    gap: 0.45rem;
+    padding: 0.45rem 0.5rem calc(0.45rem + env(safe-area-inset-bottom));
+  }
+
+  .wipe__steps {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .wipe__steps::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wipe__steps button {
+    min-width: 2.6rem;
+    min-height: 2rem;
+    font-size: 0.64rem;
+  }
+
+  .wipe__play {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .wipe__clock {
+    font-size: 0.68rem;
+  }
+
+  .wipe__speed span {
+    display: none;
+  }
+
+  /* The wipe handle needs a bigger grab area with a finger than a pointer. */
+  .wipe__handle::before {
+    inset: 0 -18px;
+  }
+
+  .wipe__handle i {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+}

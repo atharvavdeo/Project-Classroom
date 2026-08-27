@@ -1,0 +1,32 @@
+{
+ "contract_version": "1.0.0",
+ "run": "1503/newsclip_12",
+ "records_written": 2213,
+ "gate_config": {
+  "max_size_ratio": 0.2,
+  "max_wrist_distance": 0.35,
+  "min_confidence": 0.4
+ },
+ "sam3_adjudicated": false,
+ "sam3_api_errors": 0,
+ "gate_self_check": "passed \u2014 recomputed kept-counts match the run",
+ "tracks": 515,
+ "states": {
+  "no_action": 0,
+  "context_observation": 27,
+  "needs_better_view": 488,
+  "review_candidate": 0,
+  "human_confirmed": 0,
+  "human_dismissed": 0
+ },
+ "proposals": {
+  "proposals": 326,
+  "gated": 51,
+  "sam3_supported": 0,
+  "sam3_equipment": 0,
+  "sam3_not_confirmed": 0,
+  "sam3_unavailable": 0,
+  "sam3_phone": 0
+ },
+ "note": "proposal counts are telemetry, not accuracy; no figure here is a count of confirmed cheating"
+}

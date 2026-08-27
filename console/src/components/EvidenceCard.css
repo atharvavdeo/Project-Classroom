@@ -1,0 +1,129 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: var(--sh);
+  padding: 1rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: box-shadow var(--base) var(--spring);
+}
+
+.card:hover {
+  box-shadow: var(--sh-lift);
+}
+
+.card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.card__id {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* "unattributed" is shown, never implied. Seat attribution is uncalibrated,
+   so a track id must not be mistaken for a seat number. */
+.card__qual {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--s-abstain);
+  background: var(--s-abstain-bg);
+  padding: 0.16em 0.45em;
+  border-radius: 3px;
+}
+
+.card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.1rem;
+  font-size: 0.7rem;
+  color: var(--slate);
+  letter-spacing: 0.02em;
+}
+
+.card__meta em {
+  font-style: normal;
+  color: var(--slate-2);
+  margin-left: 0.4em;
+}
+
+.card__obs {
+  font-size: 0.7rem;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border-radius: 5px;
+  padding: 0.35rem 0.55rem;
+}
+
+.card__obs em {
+  font-style: normal;
+  color: var(--s-abstain);
+}
+
+.card__codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card__codes li {
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.16em 0.42em;
+}
+
+.card__tl {
+  padding-top: 0.15rem;
+}
+
+.card__foot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.15rem;
+}
+
+.card__foot button {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-wash);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  /* Feedback on press, not on release. */
+  transition: transform var(--fast) var(--spring);
+}
+
+.card__foot button:active {
+  transform: scale(0.97);
+}
+
+.card__hint {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--slate-2);
+}

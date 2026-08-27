@@ -5,17 +5,6 @@
 
 **Locked stack:** AlphaPose (FastPose_DUC res152) for pose · D-FINE native + D-FINE+SAHI for objects · classical CV for motion, alignment and preprocessing · **no VLM anywhere in the decision path**.
 
-> **Historical-reference warning — 2026-08-22:** this document records the
-> 1446 architecture and its then-current decisions. Later runs 1501/1504 added
-> continuous person timelines and a hosted Roboflow paper prototype. They also
-> demonstrated COCO phone false positives on seat placards and paper-prototype
-> false positives on keyboards, mice and desk objects. Therefore statements
-> below that say phones “work”, chits are wholly out of scope, or a ranking is
-> wired must be read as historical claims about 1446, not release approval.
-> The current implementation and release assessment are in
-> [`FINAL_LOCK_IN_AUDIT.md`](FINAL_LOCK_IN_AUDIT.md) and
-> [`CLASSIFICATION_AND_OPEN_QUESTIONS.md`](CLASSIFICATION_AND_OPEN_QUESTIONS.md).
-
 ---
 
 ## 1. What this system is
@@ -164,9 +153,19 @@ All are **normalised projective proxies** — monotonic in the true angle, compa
 
 ---
 
-## 6. Objects: phones work, chits do not
+## 6. Objects: phones detect, chits do not
 
-**Phones are a detection problem and it works.** COCO has a `cell phone` class; D-FINE+SAHI finds 159 instances on video 03 and 158 on video 01 across identical crops, each with a source-frame box, PTS, crop provenance and confidence. Detections are grouped in time into four statuses — supported, single-frame, conflicting, insufficient — and **nothing is deleted**: a singleton is a status, not a reason to discard.
+> **Superseded for policy purposes by `docs/OUTPUT_CONTRACT.md` (v1.0.0).**
+> The measurements below still stand as measurements — D-FINE+SAHI really does
+> find those instances — but **COCO `cell phone` no longer routes anyone to
+> review**. It fired on mice, keyboards and paper edges, and across the four
+> completed runs it drove 40 flags, 27 of them at high severity. It is now
+> workstation context only (`DFINE_OBJECT_CONTEXT`). The phone policy route
+> requires SAM 3 to name the object *and* the object to be associated with the
+> candidate's hands (`SAM3_PHONE_NAMED`). An independent phone-specific
+> proposal model is specified but **not yet built**.
+
+**Phones are a detection problem, and detection works.** COCO has a `cell phone` class; D-FINE+SAHI finds 159 instances on video 03 and 158 on video 01 across identical crops, each with a source-frame box, PTS, crop provenance and confidence. Detections are grouped in time into four statuses — supported, single-frame, conflicting, insufficient — and **nothing is deleted**: a singleton is a status, not a reason to discard.
 
 **Chits are not a detection problem.** No COCO head has a chit class. Every "chit" this pipeline ever reported arrived as COCO `book` remapped by `COCO_TO_TAXONOMY`; rendering those frames showed answer sheets, question papers and printed packaging. A classical paper-region scanner was built and **withdrawn**: it fired on shirt collars, chair-back highlights and desk edges, and on a chit-negative video produced candidates that were all false. It is not in this architecture.
 

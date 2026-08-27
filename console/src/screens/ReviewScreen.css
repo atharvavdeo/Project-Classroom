@@ -1,0 +1,715 @@
+.rv {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rv__empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--slate);
+}
+
+.rv__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.rv__progress {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.rv__progress b {
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+.rv__progress span {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  color: var(--slate);
+  white-space: nowrap;
+}
+
+.rv__bar {
+  flex: 1;
+  height: 4px;
+  background: var(--surface-2);
+  border-radius: 2px;
+  overflow: hidden;
+  min-width: 4rem;
+}
+
+.rv__bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width var(--base) var(--spring);
+}
+
+.rv__nav {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.rv__nav button {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.38em 0.8em;
+  cursor: pointer;
+}
+
+.rv__nav button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* The picture is the argument; everything else annotates it. */
+.rv__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(17rem, 1fr);
+  gap: 1.1rem;
+  align-items: start;
+}
+
+@media (max-width: 60rem) {
+  .rv__body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rv__shot {
+  margin: 0;
+  background: var(--sunk);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.rv__shot img {
+  display: block;
+  width: 100%;
+  max-height: 26rem;
+  object-fit: contain;
+  background: #000;
+}
+
+.rv__shot figcaption {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.66rem;
+  color: var(--slate);
+  border-top: 1px solid var(--rule);
+  background: var(--surface);
+}
+
+.rv__side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.rv__who {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.rv__who h2 {
+  font-size: 1.3rem;
+}
+
+.rv__qual {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--s-abstain);
+  background: var(--s-abstain-bg);
+  padding: 0.16em 0.45em;
+  border-radius: 3px;
+}
+
+.rv__headline {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.45;
+  color: var(--ink);
+  padding: 0.7rem 0.85rem;
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+
+.rv__headline.is-strong {
+  background: var(--s-review-bg);
+  color: var(--s-review);
+  font-weight: 600;
+}
+
+.rv__facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.rv__facts li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.86rem;
+}
+
+.rv__facts li:last-child {
+  border-bottom: 0;
+}
+
+.rv__facts span {
+  color: var(--slate);
+}
+
+.rv__facts b {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink);
+  text-align: right;
+}
+
+/* Flags are a disclosure, never a wall of chips. */
+.rv__flags summary {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+  cursor: pointer;
+  padding: 0.35rem 0;
+}
+
+.rv__flags ul {
+  list-style: none;
+  margin: 0.2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.rv__flags li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.5rem 0.6rem;
+  background: var(--surface-2);
+  border-radius: 6px;
+}
+
+.rv__flags b {
+  font-size: 0.86rem;
+}
+
+.rv__flags span {
+  font-size: 0.78rem;
+  color: var(--slate);
+  line-height: 1.4;
+}
+
+.rv__gemma button {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: var(--accent-wash);
+  border: 1px solid transparent;
+  border-radius: 7px;
+  padding: 0.6em 0.9em;
+  cursor: pointer;
+  transition: transform var(--fast) var(--spring);
+}
+
+.rv__gemma button:active {
+  transform: scale(0.985);
+}
+
+.rv__gemma button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.rv__answer {
+  margin-top: 0.55rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+
+.rv__answer h4 {
+  margin: 0 0 0.25rem;
+}
+
+.rv__answer p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.rv__answer span {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-size: 0.62rem;
+  color: var(--slate);
+}
+
+.rv__answer em {
+  display: block;
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.66rem;
+  color: var(--slate-2);
+}
+
+.rv__err {
+  font-size: 0.66rem;
+  color: var(--s-review);
+  margin: 0.4rem 0 0;
+}
+
+/* Decisions are the largest targets on the screen. */
+.rv__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: var(--sh);
+  position: sticky;
+  bottom: 0.75rem;
+  z-index: 3;
+}
+
+.rv__actions button {
+  flex: 1 1 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--display);
+  font-size: 0.92rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.75em 1em;
+  cursor: pointer;
+  transition: transform var(--fast) var(--spring);
+}
+
+.rv__actions button:active {
+  transform: scale(0.98);
+}
+
+.rv__actions kbd {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  opacity: 0.6;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0 0.3em;
+}
+
+.is-confirm {
+  color: var(--s-confirm);
+  background: var(--s-confirm-bg);
+}
+
+.is-dismiss {
+  color: var(--s-dismiss);
+  background: var(--s-dismiss-bg);
+}
+
+.is-abstain {
+  color: var(--s-abstain);
+  background: var(--s-abstain-bg);
+}
+
+.is-plain {
+  color: var(--slate);
+  background: var(--surface-2);
+  flex: 0 1 14rem !important;
+}
+
+.rv__working {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+
+.rv__working h3 {
+  margin: 0 0 0.7rem;
+}
+
+.rv__working ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rv__working li {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.rv__working li.is-fail {
+  background: var(--s-review-bg);
+}
+
+.rv__q {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.rv__q span {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex: none;
+  width: 2.2rem;
+}
+
+.is-pass .rv__q span {
+  color: var(--s-confirm);
+}
+
+.is-fail .rv__q span {
+  color: var(--s-review);
+}
+
+.rv__q b {
+  font-family: var(--display);
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.rv__working p {
+  margin: 0.25rem 0 0 2.8rem;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.rv__detail {
+  font-size: 0.68rem !important;
+  color: var(--slate) !important;
+}
+
+.rv__strip h3 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.6rem;
+}
+
+.rv__strip h3 span {
+  font-size: 0.64rem;
+  font-weight: 400;
+  color: var(--slate);
+}
+
+.rv__thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.5rem;
+}
+
+/* Each sampled moment is a control, not a picture: clicking one opens it in
+   the stage above. It looks clickable because it is. */
+.rv__thumbs button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    transform var(--fast) var(--spring),
+    border-color var(--fast) var(--spring);
+}
+
+.rv__thumbs button:hover {
+  transform: translateY(-2px);
+  border-color: var(--rule-strong);
+}
+
+.rv__thumbs button:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.rv__thumbs button.is-strong {
+  border-color: var(--lane-object);
+  box-shadow: 0 0 0 1px var(--lane-object);
+}
+
+.rv__thumbs button.is-on {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.rv__thumbs img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #000;
+}
+
+.rv__thumbs button span {
+  display: block;
+  padding: 0.25rem 0.35rem;
+  font-size: 0.58rem;
+  color: var(--slate);
+  text-align: center;
+}
+
+/* The stage's own source switch: key frame, the wide shot, or the crop the
+   referee actually looked at. */
+.rv__views {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+  padding: 0.4rem 0.45rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--rule);
+}
+
+.rv__views button {
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--slate);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  padding: 0.4em 0.7em;
+  cursor: pointer;
+  transition:
+    background var(--fast) var(--spring),
+    color var(--fast) var(--spring);
+}
+
+.rv__views button:hover {
+  color: var(--ink);
+}
+
+.rv__views button.is-on {
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* An answer has to be visible, or the reviewer cannot tell a saved decision
+   from a dropped keystroke. It stays until it is replaced. */
+.rv__flash {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  padding: 0.65rem 0.85rem;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  animation: rv-in var(--base) var(--spring);
+}
+
+@keyframes rv-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.rv__flash b {
+  font-family: var(--display);
+  font-size: 0.92rem;
+}
+
+.rv__flash span {
+  font-size: 0.86rem;
+  opacity: 0.85;
+  flex: 1 1 14rem;
+}
+
+.rv__flash button {
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  padding: 0.35em 0.7em;
+  cursor: pointer;
+}
+
+.rv__flash kbd {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  opacity: 0.6;
+}
+
+.rv__flash.is-human_confirmed {
+  background: var(--s-confirm-bg);
+  color: var(--s-confirm);
+}
+
+.rv__flash.is-human_dismissed {
+  background: var(--s-dismiss-bg);
+  color: var(--s-dismiss);
+}
+
+.rv__flash.is-needs_better_view {
+  background: var(--s-abstain-bg);
+  color: var(--s-abstain);
+}
+
+.rv__see {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--slate);
+  cursor: pointer;
+  padding-right: 0.3rem;
+}
+
+.rv__toggle {
+  align-self: center;
+  border: 1px solid var(--rule-strong);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  padding: 0.5em 0.9em;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ phone */
+
+@media (max-width: 40rem) {
+  /* Decisions are thumb targets, and they are the only thing on this screen
+     that must never require aiming. Two rows of two, full width, docked. */
+  .rv__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+    bottom: 0;
+    margin: 0 -0.85rem -4rem;
+    border-radius: 12px 12px 0 0;
+    padding: 0.6rem 0.85rem calc(0.6rem + env(safe-area-inset-bottom));
+  }
+
+  .rv__actions button {
+    flex: none;
+    min-height: 3rem;
+    font-size: 0.86rem;
+    padding: 0.5em 0.4em;
+  }
+
+  .is-plain {
+    flex: none !important;
+    grid-column: 1 / -1;
+    min-height: 2.4rem !important;
+  }
+
+  /* Keyboard hints are meaningless without a keyboard. */
+  .rv__actions kbd,
+  .rv__flash kbd {
+    display: none;
+  }
+
+  .rv__top {
+    gap: 0.5rem;
+  }
+
+  .rv__progress {
+    flex: 1 1 100%;
+  }
+
+  .rv__progress span {
+    font-size: 0.58rem;
+    white-space: normal;
+  }
+
+  .rv__nav {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+
+  .rv__nav button {
+    flex: 1;
+    min-height: 2.4rem;
+  }
+
+  .rv__see {
+    order: -1;
+  }
+
+  .rv__shot img {
+    max-height: 52vh;
+  }
+
+  .rv__views {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .rv__views::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rv__views button {
+    white-space: nowrap;
+  }
+
+  .rv__thumbs {
+    grid-template-columns: repeat(auto-fill, minmax(5.2rem, 1fr));
+  }
+
+  .rv__who h2 {
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "config_id": "rf_detr_native",
+  "state": "available",
+  "crop_digest": "165261f983377ae1bb3f19b7dea337b697cb783ae44e3b5a35832238b19a7af5",
+  "checkpoint_sha256": "",
+  "crops_seen": 379,
+  "crops_abstained": 4,
+  "abstention_rate": 0.0106,
+  "slices_run": 0,
+  "raw_detections": 594,
+  "merged_detections": 594,
+  "usable_detections": 588,
+  "by_class": {
+    "bag": 55,
+    "insufficient_visual_evidence": 4,
+    "keyboard": 4,
+    "monitor_or_bezel": 66,
+    "mouse": 19,
+    "phone": 11,
+    "stationery": 22,
+    "unknown_object": 413
+  },
+  "phone": 11,
+  "secondary_paper_chit": 0,
+  "hard_negative_detections": 111,
+  "seconds": 104.838,
+  "crops_per_second": 3.62,
+  "peak_vram_mb": null
+}

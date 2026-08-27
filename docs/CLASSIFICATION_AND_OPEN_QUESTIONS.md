@@ -3,13 +3,6 @@
 *Team DataDynamo — Drishti AI Hackathon 2026, Problem Statement 2*
 *Written 2026-08-22. No code in this document. It is a specification and a map of gaps.*
 
-> **Implementation-status warning:** the ladder in this document is the target
-> review policy, not a completed pipeline feature. Current code emits
-> observation-level flags and separate paper-handling rankings; it does not yet
-> create `incident_candidate` records, persist reviewer decisions, or combine
-> independent modalities. The released-code audit is
-> [`FINAL_LOCK_IN_AUDIT.md`](FINAL_LOCK_IN_AUDIT.md).
-
 ---
 
 ## 0. The problem in one paragraph
@@ -77,6 +70,35 @@ accountable for the judgement** — the last two are human, always.
 design: an automated system that declares a candidate a cheat creates a liability
 we cannot discharge, and our own measurements show why — the strongest object
 signal we have fires on seat placards and shirt fabric.
+
+### Independence, demonstrated
+
+The first working example of rung 3's independence rule is now measured. On
+12_paper, SAM 3 — a different model with a different vocabulary — was asked to
+adjudicate the chit detector's 392 surviving detections:
+
+| Track | Corroborated | Unsupported |
+|---|--:|--:|
+| **118** (the subject) | **110** | 99 |
+| **53** (same man) | **23** | 19 |
+| **22** (chit rank #2) | **0** | 46 |
+| all others | **0** | — |
+
+**133 of 136 corroborations fall on one man.** Two models, different
+vocabularies, agreeing on a specific person and a specific span is what rung 3
+was defined to mean.
+
+On 04_talking the same adjudication behaves very differently but **not to
+zero**: of 1,432 crops it corroborated **7**, suppressed **402** as equipment
+(368 keyboard, 23 mouse, 11 monitor) and could not confirm **1,052**. An
+earlier version of this paragraph said it "corroborates nothing", which was
+wrong — those 7 survivors all fall on track 4, and under the output contract
+they carry that track to `review_candidate`. It is very likely a false
+positive, and there is currently no way to prove that either way.
+
+That is what the equipment-dominance guard in `pipeline/fusion.py` is
+calibrated against: 402 of 409 adjudicated proposals on this video were
+equipment (98%), versus 48 of 184 on 12_paper (26%).
 
 ### The rule that makes rung 3 meaningful
 
@@ -194,7 +216,7 @@ behaviours in the whole domain model — stay unreachable.
 | Q10 | How do we score *reciprocity* (B10)? | **Medium** | Nothing — unbuilt | Two tracks, overlapping windows, yaw vectors pointing at each other's boxes. Strongest available signal and completely unexploited |
 | Q11 | Can we detect talking (B11)? | **High** | Resolution | Mouth keypoints are not resolvable at our scale. Proxy: sustained mutual orientation (Q10) + close proximity. Video 04 is the test case |
 | Q12 | Object passed between two people (B13)? | **High** | Q3 + object tracking | Object appears at A's hands, disappears, appears at B's hands within N seconds |
-| Q20 | How do we stop the chit model firing on **keyboards and mice**? | **Low** | Nothing — now unblocked | D-FINE reports `keyboard`/`mouse` with boxes since the box-carrying re-run. Suppress any chit detection that overlaps one. This is the single cheapest fix on this list |
+| Q20 | How do we stop the chit model firing on **keyboards and mice**? | ~~Low~~ | **MOSTLY SOLVED** | SAM 3 (`general-segmentation-api-6`), prompted with the confuser names. Measured: 48 suppressions on 12_paper; on 04_talking **402 of 1,432 crops** named as equipment and only 7 corroborated — not zero, and those 7 still reach review. See `tools/adjudicate_with_sam3.py` |
 | Q21 | How do we require the object to **move**? | **Medium** | Unbuilt | A keyboard is static relative to the desk; a chit being read moves with the hand. Needs per-detection association across frames, which we do not do for objects |
 | Q22 | How do we use **absence** as evidence? | **Low** | Unbuilt | A keyboard is never absent. An object present in 100% of a person's sightings is furniture, whatever its class. `persistent_object_beside_seat` does this for D-FINE but is not applied to the chit channel |
 
@@ -214,6 +236,8 @@ behaviours in the whole domain model — stay unreachable.
 | Q17 | Offline requirement vs hosted chit model | **Medium** | Architectural | `chit-paper-new/2` is an HTTP call. PS 2 requires offline. Must export weights and run locally before submission |
 | Q18 | Throughput | **Low** | Measured | 12_paper: 88 s of video ≈ 10 min on an RTX 3050. A 3-hour video ≈ 20 h. Needs batching or a bigger card |
 | Q19 | Multi-camera / same person across cameras | **High** | Q3, and unbuilt | Out of scope for the hackathon; name it so it is not assumed |
+| Q23 | SAM 3 is **online**; how does it ship? | **Medium** | Architectural | Same blocker as Q17. It is ~2.5 s/call against a serverless endpoint, so it is a referee over a handful of survivors, never a per-frame detector |
+| Q24 | SAM 3 **misses** true positives the chit model finds (frames 2 and 5) | **Medium** | Inherent | It is the more precise, less sensitive instrument. Running both and treating agreement as the strong signal is the current design; measuring the cost of its misses needs Q13 |
 
 ---
 
@@ -264,7 +288,7 @@ stretches that mean someone left.
 | Behaviours we measure at all | **3** (B8, B9, B12) |
 | Of those, measured *reliably* | **0** — B12 fails on keyboards (Q20), B8/B9 resolve for a minority |
 | Behaviours reaching rung 2 today | 3 |
-| Behaviours reaching rung 3 today | **0** — the escalation logic in §3.5 is specified here, not implemented |
+| Behaviours reaching rung 3 today | **0** — the escalation logic in §3.5 is specified here, not implemented. B12 now *has* an independent corroborator (SAM 3), so it is the first candidate |
 | Ground-truth labels in existence | **0** |
 | Precision / recall figures | **None** |
 | Videos in corpus | 8 |
@@ -274,10 +298,6 @@ stretches that mean someone left.
 incidents. It is a day of work, needs no GPU, and converts every table in this
 document from an assertion into a measurement.
 
-**The second is Q20** — suppressing chit detections that overlap a keyboard or
-mouse. Low effort, newly unblocked by the box-carrying re-run, and without it
-every result on a computer-based test centre is dominated by people typing.
-
-**The third is Q1/Q2/Q6** — seat occupancy. Low difficulty, already has the
+**The second is Q1/Q2/Q6** — seat occupancy. Low difficulty, already has the
 calibration machinery, and unlocks the entire B7/B15/B16 family plus stops us
 flagging invigilators.

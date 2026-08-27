@@ -1,0 +1,16 @@
+{
+  "workflow": "Roboflow workflow kitretsu-gayitunde/sam-3 (SAM 3, sam3/sam3_final)",
+  "prompt": "paper chit,mobile phone,keyboard,computer mouse,monitor,water bottle,hand",
+  "min_overlap": 0.3,
+  "crops_adjudicated": 29,
+  "api_calls": 29,
+  "api_errors": 0,
+  "verdicts": {
+    "unsupported": 19,
+    "suppressed_keyboard": 4,
+    "unsupported_phone": 9,
+    "suppressed_computer mouse": 11,
+    "suppressed_water bottle": 2
+  },
+  "elapsed_s": 6.4
+}

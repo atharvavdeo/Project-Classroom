@@ -1,0 +1,48 @@
+[
+  {
+    "video": "01",
+    "name": "01.Candidate was found using a mobile phone in the examination hall..mkv",
+    "run_id": "corpus_01",
+    "state": "complete",
+    "calibration": "calib/cam01_e1_v1.json",
+    "seconds": {
+      "preflight": 27.2,
+      "ingest": 9.7,
+      "preprocessing": 13.1,
+      "motion": 6.8,
+      "pose": 764.0,
+      "detector": 2692.3,
+      "evidence": 142.5,
+      "evaluate": 4.1
+    }
+  },
+  {
+    "video": "02",
+    "state": "motion_failed"
+  },
+  {
+    "video": "03",
+    "name": "03.CCTV Mobile Usage.mkv",
+    "run_id": "corpus_03",
+    "state": "complete",
+    "calibration": "calib/cam12_e1_v1.json",
+    "seconds": {
+      "preflight": 36.4,
+      "ingest": 17.2,
+      "preprocessing": 16.5,
+      "motion": 9.5,
+      "pose": 342.1,
+      "detector": 5343.4,
+      "evidence": 0.1,
+      "evaluate": 0.1
+    }
+  },
+  {
+    "video": "04",
+    "state": "motion_failed"
+  },
+  {
+    "video": "05",
+    "state": "motion_failed"
+  }
+]

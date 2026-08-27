@@ -1,0 +1,184 @@
+{
+  "run_id": "paper12",
+  "updated_utc": "2026-08-20T07:43:15Z",
+  "stages": [
+    {
+      "stage": "source",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sources": 1
+      }
+    },
+    {
+      "stage": "01_ingest",
+      "state": "complete",
+      "started_utc": "2026-08-20T06:54:32Z",
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": "one complete forward decode pass; motion vectors present",
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "sources": 1,
+        "failed": 0,
+        "preprocessing_configs": 4
+      }
+    },
+    {
+      "stage": "02_health",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "observations": 15
+      }
+    },
+    {
+      "stage": "03_alignment",
+      "state": "skipped_unavailable",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": "no camera_motion or camera_repositioned condition was observed, so no global transform was estimated. Identity is the named baseline, not a silent default (PRD 6.3.2)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "epoch_breaks": 0,
+        "observations": 0
+      }
+    },
+    {
+      "stage": "04_calibration",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": "campaper/e1/v1 (draft)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "seats": 12
+      }
+    },
+    {
+      "stage": "05_motion_roi",
+      "state": "complete",
+      "started_utc": "2026-08-20T06:55:10Z",
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "windows": 4032,
+        "gate_records": 4289
+      }
+    },
+    {
+      "stage": "06_segmentation",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "events": 29,
+        "normal_priority": 21,
+        "low_priority": 8
+      }
+    },
+    {
+      "stage": "07_tracking",
+      "state": "complete",
+      "started_utc": "2026-08-20T06:55:30Z",
+      "finished_utc": "2026-08-20T06:57:30Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sample_rows": 119,
+        "person_boxes": 2081
+      }
+    },
+    {
+      "stage": "08_pose",
+      "state": "complete",
+      "started_utc": "2026-08-20T06:57:30Z",
+      "finished_utc": "2026-08-20T07:22:37Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "manifest_rows": 2081,
+        "manifest_digest": "474d59dda515f5c2bb1e72b5ecc8ee5ef4a32381dc53db9f32a591f1fb73e153"
+      }
+    },
+    {
+      "stage": "09_object",
+      "state": "running",
+      "started_utc": "2026-08-20T07:22:40Z",
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "10_evidence",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "11_gemma",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "12_evaluation",
+      "state": "blocked",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T06:55:29Z",
+      "reason": "no reference manifest; object evaluation is incomplete and no quality claim may be made",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "13_reports",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "09b_paper",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-20T07:43:15Z",
+      "reason": "90 frames scanned over 12 seat desk zone(s)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "chit_scale_candidates": 3
+      }
+    }
+  ]
+}

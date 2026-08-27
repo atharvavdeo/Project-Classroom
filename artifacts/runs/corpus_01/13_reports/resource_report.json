@@ -1,0 +1,376 @@
+{
+  "run_id": "corpus_01",
+  "environment": {
+    "python": "3.13.9",
+    "platform": "Windows 11",
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "gpu_vram_total_gb": 4.0,
+    "driver_version": "592.27",
+    "cuda_runtime": null,
+    "torch_version": "2.10.0+cpu",
+    "torch_cuda_available": false,
+    "onnxruntime_providers": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "free_disk_gb": 69.9,
+    "host_ram_gb": 16.8
+  },
+  "models": [
+    {
+      "config_id": "person_detection_primary",
+      "family": "person_detection",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "tracker_primary",
+      "family": "tracker",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "MIT",
+      "licence_url": "https://github.com/roboflow/supervision/blob/develop/LICENSE.md",
+      "reason": null,
+      "launch_probe": "import supervision",
+      "input_size": null,
+      "precision": null,
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "seat_only_no_track",
+      "family": "tracker",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "n/a-internal",
+      "licence_url": null,
+      "reason": null,
+      "launch_probe": "none required",
+      "input_size": null,
+      "precision": null,
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "rtmpose_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "256x192",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "rtmo_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "rtmo_large",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Tau-J/rtmlib/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rtmlib",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "alphapose_crowd_baseline",
+      "family": "pose",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\alphapose\\fast_421_res152_256x192.pth",
+      "checkpoint_sha256": "f0f15b3b1c1c04fc81999e4ffdeaf0c7b9a542e271b5cc40422fe94c7cfa9b41",
+      "licence": "SJTU-NonCommercial-Research",
+      "licence_url": "https://github.com/MVIG-SJTU/AlphaPose/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "import alphapose.models.builder",
+      "input_size": "256x192",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "dfine_native",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\dfine\\onnx\\model.onnx",
+      "checkpoint_sha256": "76e521ed66874590456f9eeb89c2adf33f0599778cd33b1b614f3090f95845b9",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Peterande/D-FINE/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "onnxruntime session created (inputs: pixel_values)",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "rf_detr_native",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/roboflow/rf-detr/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rfdetr",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "dfine_sahi",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\dfine\\onnx\\model.onnx",
+      "checkpoint_sha256": "76e521ed66874590456f9eeb89c2adf33f0599778cd33b1b614f3090f95845b9",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/Peterande/D-FINE/blob/master/LICENSE",
+      "reason": null,
+      "launch_probe": "onnxruntime session created (inputs: pixel_values)",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "rf_detr_sahi",
+      "family": "object",
+      "state": "available",
+      "checkpoint_path": null,
+      "checkpoint_sha256": null,
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/roboflow/rf-detr/blob/main/LICENSE",
+      "reason": null,
+      "launch_probe": "import rfdetr",
+      "input_size": "640x640",
+      "precision": "fp32",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    },
+    {
+      "config_id": "gemma_marked_evidence",
+      "family": "vlm",
+      "state": "available",
+      "checkpoint_path": "C:\\DrishtiAI\\Project-Classroom\\models\\gemma\\gemma-4-E4B_q4_0-it.gguf",
+      "checkpoint_sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee",
+      "licence": "Gemma-Terms-of-Use",
+      "licence_url": "https://ai.google.dev/gemma/terms",
+      "reason": null,
+      "launch_probe": "version: 0.1.1-dev (build 10472, commit 60eeeb608)",
+      "input_size": null,
+      "precision": "q4_0",
+      "device": "cpu",
+      "device_reason": "no CUDA-capable device usable from this process; nvidia-smi reports NVIDIA GeForce RTX 3050 Laptop GPU but torch.cuda.is_available() is False"
+    }
+  ],
+  "stages": [
+    {
+      "stage": "source",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sources": 1
+      }
+    },
+    {
+      "stage": "01_ingest",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:43:47Z",
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": "one complete forward decode pass; motion vectors present",
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "sources": 1,
+        "failed": 0,
+        "preprocessing_configs": 4
+      }
+    },
+    {
+      "stage": "02_health",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "observations": 17
+      }
+    },
+    {
+      "stage": "03_alignment",
+      "state": "skipped_unavailable",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": "no camera_motion or camera_repositioned condition was observed, so no global transform was estimated. Identity is the named baseline, not a silent default (PRD 6.3.2)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "observations": 0
+      }
+    },
+    {
+      "stage": "04_calibration",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": "01/e1/v1 (draft)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "seats": 6
+      }
+    },
+    {
+      "stage": "05_motion_roi",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:44:10Z",
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "windows": 3036,
+        "gate_records": 3546
+      }
+    },
+    {
+      "stage": "06_segmentation",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T05:44:16Z",
+      "reason": null,
+      "covered_ms": 131540.0,
+      "total_ms": 131540.0,
+      "counts": {
+        "events": 46,
+        "normal_priority": 27,
+        "low_priority": 19
+      }
+    },
+    {
+      "stage": "07_tracking",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:44:17Z",
+      "finished_utc": "2026-08-19T05:45:34Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sample_rows": 166,
+        "person_boxes": 379
+      }
+    },
+    {
+      "stage": "08_pose",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:45:34Z",
+      "finished_utc": "2026-08-19T05:57:00Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "manifest_rows": 379,
+        "manifest_digest": "67489132465ccb8bba616b8e893be00f2a4beb5f77937479e82cfd045280868d"
+      }
+    },
+    {
+      "stage": "09_object",
+      "state": "complete",
+      "started_utc": "2026-08-19T05:57:01Z",
+      "finished_utc": "2026-08-19T06:41:52Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "crops": 379,
+        "crop_digest": "165261f983377ae1bb3f19b7dea337b697cb783ae44e3b5a35832238b19a7af5"
+      }
+    },
+    {
+      "stage": "10_evidence",
+      "state": "complete",
+      "started_utc": "2026-08-19T06:41:54Z",
+      "finished_utc": "2026-08-19T06:44:16Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "events": 46,
+        "valid_packets": 46
+      }
+    },
+    {
+      "stage": "11_gemma",
+      "state": "skipped_unavailable",
+      "started_utc": "2026-08-19T06:44:15Z",
+      "finished_utc": "2026-08-19T06:44:16Z",
+      "reason": "no VLM review was performed; every event needs human review",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "reviews": 46
+      }
+    },
+    {
+      "stage": "12_evaluation",
+      "state": "blocked",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:44:20Z",
+      "reason": "no reference manifest; evaluation incomplete and no quality claim may be made",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "13_reports",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    }
+  ]
+}

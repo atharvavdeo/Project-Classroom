@@ -1,0 +1,255 @@
+.ft {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.9rem 1rem 0.7rem;
+}
+
+.ft h3 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.6rem;
+}
+
+.ft h3 span {
+  font-size: 0.62rem;
+  font-weight: 400;
+  color: var(--slate);
+}
+
+.ft__none {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 44rem;
+}
+
+.ft table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.ft th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slate-2);
+  padding: 0 0.5rem 0.35rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.ft td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: baseline;
+}
+
+.ft tbody tr {
+  cursor: pointer;
+  transition: background var(--fast) var(--spring);
+}
+
+.ft tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.ft tbody tr.is-on {
+  background: var(--accent-wash);
+}
+
+/* The three tiers are a ramp, not a palette: a reviewer's yes reads loudest,
+   an unbacked proposal reads quietest. */
+.ft tbody tr td:first-child {
+  border-left: 3px solid transparent;
+  padding-left: 0.6rem;
+}
+
+.ft tr.is-human td:first-child {
+  border-left-color: var(--s-confirm);
+}
+
+.ft tr.is-second_model td:first-child {
+  border-left-color: var(--lane-object);
+}
+
+.ft tr.is-proposed td:first-child {
+  border-left-color: var(--rule-strong);
+}
+
+.ft tr.is-human td:nth-child(3) {
+  font-weight: 600;
+  color: var(--s-confirm);
+}
+
+.ft tr.is-second_model td:nth-child(3) {
+  font-weight: 600;
+}
+
+.ft tr.is-proposed td {
+  color: var(--slate);
+}
+
+.ft__detail {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  color: var(--slate);
+}
+
+.ft__note {
+  margin: 0.6rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--slate-2);
+  max-width: 46rem;
+}
+
+/* Wide table on a narrow screen scrolls inside its own box; the page never
+   scrolls sideways. */
+.ft__scroll {
+  overflow-x: auto;
+  margin: 0 -0.25rem;
+  padding: 0 0.25rem;
+}
+
+.ft table {
+  min-width: 44rem;
+}
+
+.ft__chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2em 0.45em;
+  border-radius: 3px;
+  white-space: nowrap;
+  background: var(--surface-2);
+  color: var(--slate);
+}
+
+.ft tr.is-human .ft__chip {
+  background: var(--s-confirm-bg);
+  color: var(--s-confirm);
+}
+
+.ft tr.is-second_model .ft__chip {
+  background: var(--s-review-bg);
+  color: var(--s-review);
+}
+
+.ft tr.is-attention .ft__chip {
+  background: var(--s-abstain-bg);
+  color: var(--s-abstain);
+}
+
+.ft tr.is-attention td:first-child {
+  border-left-color: var(--lane-orientation);
+}
+
+/* The reviewer's own confirmations no longer say so in prose -- the chip and
+   the rail carry it. */
+.ft tr.is-human td:nth-child(4),
+.ft tr.is-second_model td:nth-child(4) {
+  font-weight: 600;
+}
+
+.ft__thumb {
+  display: block;
+  width: 3.4rem;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+  cursor: zoom-in;
+}
+
+.ft__thumb img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.ft__thumb:hover {
+  border-color: var(--accent);
+}
+
+.ft__na {
+  font-size: 0.56rem;
+  color: var(--slate-2);
+  white-space: nowrap;
+}
+
+.ft__foot {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ft__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  color: var(--slate);
+  cursor: pointer;
+}
+
+.ft__zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(6px);
+  cursor: zoom-out;
+}
+
+.ft__zoom img {
+  max-width: min(92vw, 60rem);
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.ft__zoom button {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 7px;
+  background: transparent;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+@media (max-width: 40rem) {
+  .ft {
+    padding: 0.8rem 0.7rem 0.7rem;
+  }
+
+  .ft h3 span {
+    font-size: 0.56rem;
+  }
+
+  /* Rows stay tappable even though the table itself scrolls sideways. */
+  .ft td {
+    padding: 0.6rem 0.5rem;
+  }
+}

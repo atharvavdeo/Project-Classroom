@@ -1,0 +1,178 @@
+{
+  "run_id": "1508/12_paper",
+  "updated_utc": "2026-08-22T15:49:37Z",
+  "stages": [
+    {
+      "stage": "source",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sources": 1
+      }
+    },
+    {
+      "stage": "01_ingest",
+      "state": "complete",
+      "started_utc": "2026-08-22T15:38:48Z",
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": "one complete forward decode pass; motion vectors present",
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "sources": 1,
+        "failed": 0
+      }
+    },
+    {
+      "stage": "02_health",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "observations": 15
+      }
+    },
+    {
+      "stage": "03_alignment",
+      "state": "skipped_unavailable",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": "no camera_motion or camera_repositioned condition was observed, so no global transform was estimated. Identity is the named baseline, not a silent default (PRD 6.3.2)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "epoch_breaks": 0,
+        "observations": 0
+      }
+    },
+    {
+      "stage": "04_calibration",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": "campaper/e1/v1 (draft)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "seats": 12
+      }
+    },
+    {
+      "stage": "05_motion_roi",
+      "state": "complete",
+      "started_utc": "2026-08-22T15:39:06Z",
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "windows": 4032,
+        "gate_records": 4289
+      }
+    },
+    {
+      "stage": "06_segmentation",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": null,
+      "covered_ms": 88380.0,
+      "total_ms": 88380.0,
+      "counts": {
+        "events": 29,
+        "normal_priority": 21,
+        "low_priority": 8
+      }
+    },
+    {
+      "stage": "07_tracking",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "08_pose",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "09_object",
+      "state": "blocked",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": "no approved taxonomy; PRD 3 blocks detector selection",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "10_evidence",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "11_gemma",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "12_evaluation",
+      "state": "blocked",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:39:12Z",
+      "reason": "no reference manifest; object evaluation is incomplete and no quality claim may be made",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "13_reports",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "14_person_timeline",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-22T15:49:37Z",
+      "reason": "continuous 4.0 Hz over the whole recording; 236 people profiled",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sampled_rows": 354,
+        "people": 236
+      }
+    }
+  ]
+}

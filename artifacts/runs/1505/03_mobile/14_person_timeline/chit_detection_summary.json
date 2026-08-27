@@ -1,0 +1,15 @@
+{
+  "model": "chit-paper-new/2",
+  "attribution": "chit-paper-new/2 by the Chit-Paper Project, Roboflow Universe, CC BY 4.0 -- https://universe.roboflow.com/chit-paper-project/chit-paper-new",
+  "confidence_floor": 0.4,
+  "min_box_px": 60,
+  "crops_scored": 2035,
+  "boxes_skipped_too_small": 228,
+  "api_calls": 2035,
+  "api_failures": 0,
+  "detections": 885,
+  "samples_with_a_detection": 857,
+  "distinct_tracks_with_a_detection": 21,
+  "distinct_frames_with_a_detection": 803,
+  "elapsed_s": 136.1
+}

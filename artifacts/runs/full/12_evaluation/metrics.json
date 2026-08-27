@@ -1,0 +1,265 @@
+{
+  "configurations": {
+    "dfine_native": {
+      "config_id": "dfine_native",
+      "complete": true,
+      "completeness_note": "every metric derived from this manifest is complete",
+      "duration_ms": 282100.0,
+      "overall": {
+        "class": "all",
+        "reference_count": 3,
+        "TP": 0,
+        "FP": 449,
+        "FN": 0,
+        "ambiguous": 0,
+        "insufficient_visual_evidence": 0,
+        "quality_unavailable": 0,
+        "not_routed_to_candidate": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fp_per_hour": 5729.883,
+        "candidate_routing_recall": 0.0,
+        "recall_conditional_on_routing": null,
+        "full_pipeline_recall": 0.0,
+        "abstention_rate": 0.0,
+        "quality_unavailable_rate": 0.0
+      },
+      "per_class": {
+        "phone": {
+          "class": "phone",
+          "reference_count": 3,
+          "TP": 0,
+          "FP": 217,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fp_per_hour": 2769.231,
+          "candidate_routing_recall": 0.0,
+          "recall_conditional_on_routing": null,
+          "full_pipeline_recall": 0.0,
+          "abstention_rate": 0.0,
+          "quality_unavailable_rate": 0.0
+        },
+        "secondary_paper_chit": {
+          "class": "secondary_paper_chit",
+          "reference_count": 0,
+          "TP": 0,
+          "FP": 232,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 0,
+          "precision": 0.0,
+          "recall": null,
+          "f1": 0.0,
+          "fp_per_hour": 2960.652,
+          "candidate_routing_recall": null,
+          "recall_conditional_on_routing": null,
+          "full_pipeline_recall": null,
+          "abstention_rate": null,
+          "quality_unavailable_rate": null
+        }
+      },
+      "by_visibility": {
+        "too_small": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 1
+        },
+        "partially_occluded": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 1
+        },
+        "heavily_occluded": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 1
+        }
+      },
+      "stage_loss_waterfall": {
+        "motion_roi": 3,
+        "gate": 0,
+        "crop": 0,
+        "tracker_seat": 0,
+        "pose_hand": 0,
+        "detector": 0,
+        "temporal_confirmer": 0,
+        "vlm_disagreement": 0
+      },
+      "waterfall_note": "the earliest stage that could have carried a reference and did not. A reference lost at motion_roi was never shown to a detector, so it is not a detector error.",
+      "candidate_duration_ms": 52469.0,
+      "candidate_duration_fraction": 0.186,
+      "events_per_hour": 293.51,
+      "reference_ranks": {
+        "REF-003": null,
+        "REF-001": null,
+        "REF-002": null
+      },
+      "ranked_references": 0,
+      "unranked_references": 3,
+      "median_reference_rank": null,
+      "note": "zero detections yields these metrics with None for undefined ratios and counts beside them. A precision of None means the detector was never asked; 0.0 would mean it was wrong."
+    },
+    "dfine_sahi": {
+      "config_id": "dfine_sahi",
+      "complete": true,
+      "completeness_note": "every metric derived from this manifest is complete",
+      "duration_ms": 282100.0,
+      "overall": {
+        "class": "all",
+        "reference_count": 3,
+        "TP": 0,
+        "FP": 443,
+        "FN": 0,
+        "ambiguous": 0,
+        "insufficient_visual_evidence": 0,
+        "quality_unavailable": 0,
+        "not_routed_to_candidate": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fp_per_hour": 5653.314,
+        "candidate_routing_recall": 0.0,
+        "recall_conditional_on_routing": null,
+        "full_pipeline_recall": 0.0,
+        "abstention_rate": 0.0,
+        "quality_unavailable_rate": 0.0
+      },
+      "per_class": {
+        "phone": {
+          "class": "phone",
+          "reference_count": 3,
+          "TP": 0,
+          "FP": 307,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fp_per_hour": 3917.76,
+          "candidate_routing_recall": 0.0,
+          "recall_conditional_on_routing": null,
+          "full_pipeline_recall": 0.0,
+          "abstention_rate": 0.0,
+          "quality_unavailable_rate": 0.0
+        },
+        "secondary_paper_chit": {
+          "class": "secondary_paper_chit",
+          "reference_count": 0,
+          "TP": 0,
+          "FP": 136,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 0,
+          "precision": 0.0,
+          "recall": null,
+          "f1": 0.0,
+          "fp_per_hour": 1735.555,
+          "candidate_routing_recall": null,
+          "recall_conditional_on_routing": null,
+          "full_pipeline_recall": null,
+          "abstention_rate": null,
+          "quality_unavailable_rate": null
+        }
+      },
+      "by_visibility": {
+        "too_small": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 1
+        },
+        "partially_occluded": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 1
+        },
+        "heavily_occluded": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "ambiguous": 0,
+          "insufficient_visual_evidence": 0,
+          "quality_unavailable": 0,
+          "not_routed_to_candidate": 1
+        }
+      },
+      "stage_loss_waterfall": {
+        "motion_roi": 3,
+        "gate": 0,
+        "crop": 0,
+        "tracker_seat": 0,
+        "pose_hand": 0,
+        "detector": 0,
+        "temporal_confirmer": 0,
+        "vlm_disagreement": 0
+      },
+      "waterfall_note": "the earliest stage that could have carried a reference and did not. A reference lost at motion_roi was never shown to a detector, so it is not a detector error.",
+      "candidate_duration_ms": 52469.0,
+      "candidate_duration_fraction": 0.186,
+      "events_per_hour": 293.51,
+      "reference_ranks": {
+        "REF-003": null,
+        "REF-001": null,
+        "REF-002": null
+      },
+      "ranked_references": 0,
+      "unranked_references": 3,
+      "median_reference_rank": null,
+      "note": "zero detections yields these metrics with None for undefined ratios and counts beside them. A precision of None means the detector was never asked; 0.0 would mean it was wrong."
+    }
+  },
+  "complete": true,
+  "taxonomy_approved": false,
+  "recommendation": "None. PRD 3 blocks detector selection until the product owner approves the taxonomy. The comparison below is recorded for review, not acted on.",
+  "note": "no forced winner. A configuration that could not run stays in the table as unavailable (PRD 5).",
+  "isolation_verified": true,
+  "reference_summary": {
+    "path": "refs\\cam12_demo_clean.jsonl",
+    "accepted_rows": 3,
+    "rejected_rows": 0,
+    "complete": true,
+    "by_class": {
+      "phone": 3
+    },
+    "by_visibility": {
+      "heavily_occluded": 1,
+      "partially_occluded": 1,
+      "too_small": 1
+    },
+    "localised_rows": 2,
+    "note": "every metric derived from this manifest is complete"
+  }
+}

@@ -1,0 +1,87 @@
+run 1510 started Sat Aug 22 22:42:15 IST 2026
+stage 14 reused from 1508
+
+======== 14b chit detector @0.50, new key, wrist-less skipped ========  22:42:16
+6109 samples over 353 frames; scoring 353 frames
+353/353 stamps matched to a decoded frame, covering 6109/6109 samples
+3249 crops to score (189 boxes under 60px skipped, 2671 with no resolved wrist skipped)
+  500/3249 crops  127 detections  14.6 req/s
+  1000/3249 crops  267 detections  15.2 req/s
+  1500/3249 crops  418 detections  15.7 req/s
+  2000/3249 crops  548 detections  15.9 req/s
+  2500/3249 crops  673 detections  16.0 req/s
+  3000/3249 crops  909 detections  16.1 req/s
+
+1019 detections on 978 of 3249 crops, 44 distinct tracks, 343 distinct frames, in 201s
+-> artifacts\runs\1510\12_paper\14_person_timeline\samples_with_chits.jsonl
+-------- exit 0  22:46:54
+
+======== 14c geometric gates + evidence scoring ========  22:46:54
+1019 raw -> 327 kept detections
+12 tracks with surviving evidence, of 236
+
+rank  track  handling  longest  eps  peak  disposition
+   1    118     56.5s    56.5s    1  0.74  sustained_paper_handling
+   2     53     11.8s     5.5s    3  0.77  sustained_paper_handling
+   3     22     10.2s     3.5s    9  0.68  repeated_brief_paper_handling
+   4    100      6.0s     3.0s    5  0.61  repeated_brief_paper_handling
+   5    114      1.5s     1.2s    2  0.66  brief_paper_handling
+   6     63      1.2s     1.2s    1  0.65  brief_paper_handling
+   7     18      1.0s     0.8s    2  0.71  brief_paper_handling
+   8     16      1.0s     0.8s    2  0.63  brief_paper_handling
+   9     39      1.0s     1.0s    1  0.60  insufficient_observation
+  10     73      1.0s     0.5s    3  0.56  repeated_brief_paper_handling
+  11     84      0.2s     0.2s    1  0.60  brief_paper_handling
+  12     11      0.2s     0.2s    1  0.54  insufficient_observation
+
+-> artifacts\runs\1510\12_paper\14_person_timeline\CHIT_FINDINGS.md
+-> artifacts\runs\1510\12_paper\14_person_timeline\samples_chit_gated.jsonl
+-------- exit 0  22:46:59
+
+======== 14d SAM 3 referee, episode-sampled (3 per episode) ========  22:46:59
+6109 samples, 516 carry a proposal (327 chit, 290 phone at >=0.35)
+150 episode(s) from 617 proposals; crops 516 -> 213 (2.4x fewer calls)
+213 crops to adjudicate at 6 workers (~1 min)
+
+adjudicated 213 crops in 15s
+  not_adjudicated              213
+WARNING: 213 calls failed; those detections are marked `not_adjudicated` and were left unchanged, not suppressed.
+-> artifacts\runs\1510\12_paper\14_person_timeline\samples_sam3_adjudicated.jsonl
+-> artifacts\runs\1510\12_paper\14_person_timeline\sam3_adjudication (0 annotated crops)
+-------- exit 0  22:47:37
+
+======== 15  evidence records + fusion ========  22:47:37
+1510/12_paper: 37072 evidence records, 236 tracks
+  context_observation    14
+  needs_better_view      218
+  review_candidate       4
+-------- exit 0  22:47:45
+
+run 1510 finished Sat Aug 22 22:47:45 IST 2026
+
+======== 14d SAM 3 on kitretsu-gayitunde/sam-3  22:59:00
+6109 samples, 516 carry a proposal (327 chit, 290 phone at >=0.35)
+150 episode(s) from 617 proposals; crops 516 -> 213 (2.4x fewer calls)
+213 crops to adjudicate at 6 workers (~1 min)
+  100/213  4.2/s  {'unsupported_phone': 105, 'suppressed_computer mouse': 3, 'unsupported': 26, 'suppressed_monitor': 7, 'suppressed_keyboard': 8, 'phone_confirmed': 1}
+  200/213  4.8/s  {'unsupported_phone': 181, 'suppressed_computer mouse': 5, 'unsupported': 43, 'suppressed_monitor': 12, 'suppressed_keyboard': 23, 'phone_confirmed': 1, 'corroborated': 11, 'phone_was_paper': 4}
+
+adjudicated 213 crops in 45s
+  unsupported_phone            187
+  unsupported                  47
+  suppressed_keyboard          23
+  corroborated                 14
+  suppressed_monitor           13
+  suppressed_computer mouse    5
+  phone_was_paper              4
+  phone_confirmed              1
+-> artifacts\runs\1510\12_paper\14_person_timeline\samples_sam3_adjudicated.jsonl
+-> artifacts\runs\1510\12_paper\14_person_timeline\sam3_adjudication (30 annotated crops)
+-------- exit 0  23:00:05
+======== 15 evidence records + fusion  23:00:05
+1510/12_paper: 37072 evidence records, 236 tracks
+  context_observation    16
+  needs_better_view      217
+  review_candidate       3
+-------- exit 0  23:00:13
+done Sat Aug 22 23:00:13 IST 2026

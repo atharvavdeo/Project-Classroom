@@ -1,0 +1,17 @@
+[
+  {
+    "video": "01",
+    "name": "01.Candidate was found using a mobile phone in the examination hall..mkv",
+    "run_id": "smoke_01",
+    "state": "complete",
+    "calibration": "calib/cam01_e1_v1.json",
+    "seconds": {
+      "preflight": 16.1,
+      "motion": 7.2,
+      "pose": 34.9,
+      "detector": 41.4,
+      "evidence": 108.1,
+      "evaluate": 4.7
+    }
+  }
+]

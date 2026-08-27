@@ -102,6 +102,26 @@ class TimelineConfig:
     # frame of a mouse read as a phone should not raise anything.
     min_object_rate: float = 0.02
 
+    # --- Dashboard orientation labels ---------------------------------------
+    # These are deliberately presentation classifications, not a second
+    # verdict path. They are measured directly from pose and retained so the
+    # dashboard can distinguish ordinary desk work from the few spans that
+    # deserve contextual review.
+    looking_up_pitch_max: float = -0.20
+    shallow_down_pitch_min: float = 0.20
+    deep_down_pitch_min: float = 0.45
+    deep_down_min_ms: float = 15000.0
+
+    # `yaw_relative_to_torso` is a shoulder-normalised proxy: it stops pinning
+    # at the clamp (0.1% of resolved frames against 28.8% for raw yaw), but on
+    # the frames where raw yaw was one of its two constants it varies with
+    # shoulder squareness rather than with neck rotation -- see the field
+    # comment on PersonSample. So the departure below is measured against the
+    # subject's own resting baseline, never read as an angle.
+    torso_relative_turn_departure: float = 0.30
+    torso_relative_turn_min_ms: float = 4000.0
+    orientation_merge_intervals: float = 2.5
+
 
 @dataclass
 class PersonSample:
@@ -118,6 +138,44 @@ class PersonSample:
     roll: float | None = None
     facing: str = ""
     head_scale_px: float = 0.0
+
+    # Head yaw measured against the shoulder line rather than against head
+    # width. `head_pose.py` has always computed this and stage 14 discarded it,
+    # so nothing downstream could use it.
+    #
+    # It matters because plain `yaw` carries no magnitude on roughly half the
+    # frames. Recomputed from the stored joints of runs 1511/01_phone,
+    # 1510/12_paper and 1509/04_talking -- 5,112 yaw-resolved samples:
+    #
+    #   |yaw| == 1.5 (the clamp)              1,471   28.8%
+    #   |yaw| == 1.0 exactly (one-ear branch)   969   19.0%
+    #   ------------------------------------------------------
+    #   no magnitude available                2,440   47.7%
+    #
+    # The second row is the one that misleads. When a turn occludes an ear,
+    # `head_pose.estimate` reports a *constant* +/-1.0 naming the direction,
+    # because the geometry that would give a magnitude is the occluded part.
+    # A slight glance and a full turn then score identically.
+    #
+    # What this field fixes, and what it does not:
+    #   - it resolves on 4,350 of those 5,112 frames (85.1%) and is at the
+    #     clamp on 0.1% of them, so the scale stops pinning; but
+    #   - on 43.2% of them the underlying yaw was one of the two constants
+    #     above, and `head_pose` computes this as `yaw * shoulder squareness`.
+    #     There the number varies with SHOULDER geometry -- whole-body
+    #     rotation -- not with how far the neck turned.
+    #
+    # That is still the right signal for `turned_and_held`, which is about a
+    # sustained departure from a subject's own resting posture rather than an
+    # angle. It is not a gaze measurement and must never be reported as one.
+    #
+    # Carried as None when the shoulders were not resolvable, never as 0.0.
+    yaw_relative_to_torso: float | None = None
+
+    # Frame-level pitch band. It is descriptive only: the two ordinary bands
+    # never enter the review queue, and the sustained/turn labels are produced
+    # later from PTS-continuous spans in `profile()`.
+    orientation_state: str = "not_assessable"
 
     left_wrist: tuple[float, float] | None = None
     right_wrist: tuple[float, float] | None = None
@@ -168,6 +226,9 @@ class PersonProfile:
     baseline_pitch: float | None = None
     baseline_pitch_spread: float | None = None
 
+    baseline_yaw_relative_to_torso: float | None = None
+    baseline_yaw_relative_to_torso_spread: float | None = None
+
     # Time spent departed from their own resting orientation, by direction.
     samples_turned_left: int = 0
     samples_turned_right: int = 0
@@ -187,6 +248,12 @@ class PersonProfile:
     persistent_object_classes: list = field(default_factory=list)
 
     facing_counts: dict = field(default_factory=dict)
+
+    # Additive, dashboard-safe labels. These do not alter `flags`, fusion, or
+    # a machine state; a client can opt into rendering them without changing
+    # the established review queue.
+    orientation_labels: list = field(default_factory=list)
+    orientation_events: list = field(default_factory=list)
 
     # Observations worth a reviewer's attention, each with the number that
     # produced it. A flag is never a conclusion that someone cheated -- it is a
@@ -222,6 +289,117 @@ def _spread(values: list[float]) -> tuple[float, float]:
     median = statistics.median(values)
     mad = statistics.median([abs(v - median) for v in values]) or 0.0
     return median, mad
+
+
+def pitch_state(pitch: float | None, cfg: TimelineConfig | None = None) -> str:
+    """Return the reviewer-facing pitch band for one resolvable frame.
+
+    `looking_up` and `shallow_down` are explicitly non-escalating. A raw
+    `deep_down` frame is not enough for a card either: only a PTS-continuous
+    15-second span becomes the `deep_down_sustained` dashboard label.
+    """
+    cfg = cfg or TimelineConfig()
+    if pitch is None:
+        return "not_assessable"
+    if pitch < cfg.looking_up_pitch_max:
+        return "looking_up"
+    if cfg.shallow_down_pitch_min <= pitch <= cfg.deep_down_pitch_min:
+        return "shallow_down"
+    if pitch > cfg.deep_down_pitch_min:
+        return "deep_down"
+    return "neutral"
+
+
+def _spans(rows: list[PersonSample], predicate, interval_ms: float,
+           merge_intervals: float) -> list[dict]:
+    """Make PTS-continuous spans, tolerating a bounded sampling wobble.
+
+    `rows` must be ordered by `pts_ms`; `build_timelines` guarantees that.
+    Out-of-order rows would make the gap test compare against the wrong
+    predecessor and silently split or merge spans.
+    """
+    if not rows:
+        return []
+    merge_gap_ms = max(interval_ms * merge_intervals, interval_ms)
+    spans, start, end = [], None, None
+    for row in rows:
+        if predicate(row):
+            if start is None:
+                start = row.pts_ms
+            end = row.pts_ms
+        elif start is not None and row.pts_ms - end > merge_gap_ms:
+            spans.append({"from_ms": round(start, 1),
+                          "to_ms": round(end + interval_ms, 1),
+                          "duration_ms": round(end - start + interval_ms, 1)})
+            start = end = None
+    if start is not None:
+        spans.append({"from_ms": round(start, 1),
+                      "to_ms": round(end + interval_ms, 1),
+                      "duration_ms": round(end - start + interval_ms, 1)})
+    return spans
+
+
+def _orientation_outputs(rows: list[PersonSample], baseline_torso_yaw: float | None,
+                         interval_ms: float, cfg: TimelineConfig) -> tuple[list, list]:
+    """Build labels/events for the four approved dashboard classifications.
+
+    The output is intentionally separate from legacy `flags`. It lets a
+    dashboard expose the requested states while preserving the model's current
+    machine routing and historical profile semantics.
+    """
+    labels, events = [], []
+    counts = {state: sum(pitch_state(r.pitch, cfg) == state for r in rows)
+              for state in ("looking_up", "shallow_down", "deep_down")}
+    for state in ("looking_up", "shallow_down"):
+        if counts[state]:
+            labels.append({
+                "label": state,
+                "classification": "observed_only",
+                "samples": counts[state],
+                "dashboard_action": "display_only",
+                "guardrail": "This band never escalates on duration alone.",
+            })
+
+    for span in _spans(rows,
+                       lambda r: pitch_state(r.pitch, cfg) == "deep_down",
+                       interval_ms, cfg.orientation_merge_intervals):
+        if span["duration_ms"] >= cfg.deep_down_min_ms:
+            event = {"label": "deep_down_sustained", "classification": "review_context",
+                     **span,
+                     "dashboard_action": "show_review_context",
+                     "guardrail": "Head-down posture is not intent; show this with the clip and object/hand context."}
+            events.append(event)
+            labels.append({"label": "deep_down_sustained",
+                           "classification": "review_context",
+                           "events": 1,
+                           "dashboard_action": "show_review_context",
+                           "guardrail": event["guardrail"]})
+
+    if baseline_torso_yaw is not None:
+        def turned(row):
+            value = row.yaw_relative_to_torso
+            return value is not None and abs(value - baseline_torso_yaw) >= \
+                cfg.torso_relative_turn_departure
+
+        for span in _spans(rows, turned, interval_ms, cfg.orientation_merge_intervals):
+            if span["duration_ms"] < cfg.torso_relative_turn_min_ms:
+                continue
+            values = [r.yaw_relative_to_torso for r in rows
+                      if span["from_ms"] <= r.pts_ms < span["to_ms"]
+                      and r.yaw_relative_to_torso is not None]
+            direction = "left" if statistics.median(values) > baseline_torso_yaw \
+                else "right"
+            event = {"label": "turned_and_held", "classification": "context_requires_second_modality",
+                     "direction": direction, **span,
+                     "dashboard_action": "show_only_with_second_modality",
+                     "guardrail": "Torso-relative turn is not gaze and never routes to review on its own."}
+            events.append(event)
+            labels.append({"label": "turned_and_held",
+                           "classification": "context_requires_second_modality",
+                           "events": 1,
+                           "dashboard_action": "show_only_with_second_modality",
+                           "guardrail": event["guardrail"]})
+    return labels, events
 
 
 def profile(timeline: PersonTimeline, duration_ms: float,
@@ -262,6 +440,8 @@ def profile(timeline: PersonTimeline, duration_ms: float,
 
     yaws = [r.yaw for r in rows if r.yaw is not None]
     pitches = [r.pitch for r in rows if r.pitch is not None]
+    torso_yaws = [r.yaw_relative_to_torso for r in rows
+                  if r.yaw_relative_to_torso is not None]
 
     if len(yaws) >= cfg.min_samples_for_baseline:
         out.baseline_yaw, out.baseline_yaw_spread = _spread(yaws)
@@ -278,6 +458,12 @@ def profile(timeline: PersonTimeline, duration_ms: float,
         out.baseline_pitch, out.baseline_pitch_spread = _spread(pitches)
         out.samples_looking_down = sum(
             1 for v in pitches if v - out.baseline_pitch >= cfg.departure)
+    if len(torso_yaws) >= cfg.min_samples_for_baseline:
+        (out.baseline_yaw_relative_to_torso,
+         out.baseline_yaw_relative_to_torso_spread) = _spread(torso_yaws)
+
+    out.orientation_labels, out.orientation_events = _orientation_outputs(
+        rows, out.baseline_yaw_relative_to_torso, interval_ms, cfg)
 
     # Absences: a gap larger than a few sample intervals AND long enough in
     # wall-clock terms to be the person rather than the tracker.
@@ -391,8 +577,15 @@ def flag(profile: PersonProfile, cfg: TimelineConfig | None = None) -> list:
     # Judge on RATE, not raw count. A class attached in most of a person's
     # sightings is a fixed object beside their seat; a handheld one is
     # transient by definition, and the transient case is the reportable one.
-    target_names = ("phone", "secondary_paper_chit",
-                    "book_or_notebook_like_object")
+    # `phone` is deliberately absent. That class is stock COCO `cell phone`
+    # from D-FINE, and the output contract (docs/OUTPUT_CONTRACT.md, reason
+    # code DFINE_OBJECT_CONTEXT) bars it from routing anyone to review: on this
+    # corpus it fires on mice, keyboards and paper edges, and PRD 10 names that
+    # cluster as a failure. The phone route runs through a phone-specific
+    # detector verified by SAM 3 instead -- SAM3_PHONE_NAMED. D-FINE's phone
+    # detections are still carried as workstation context in
+    # `near_hand_object_rates`; they simply do not raise a flag.
+    target_names = ("secondary_paper_chit", "book_or_notebook_like_object")
     transient, persistent = {}, {}
     for name in target_names:
         rate = profile.near_hand_object_rates.get(name, 0.0)
@@ -404,10 +597,13 @@ def flag(profile: PersonProfile, cfg: TimelineConfig | None = None) -> list:
             transient[name] = rate
 
     if transient:
-        phone_rate = transient.get("phone", 0.0)
         out.append({
             "flag": "target_object_near_hands",
-            "severity": "high" if phone_rate >= 0.10 else "medium",
+            # Uniformly medium. The old rule promoted to `high` on a COCO
+            # phone rate, which was the D-FINE phone route this contract
+            # removes; nothing left in `target_names` justifies `high` on its
+            # own, and severity is decided by fusion, not here.
+            "severity": "medium",
             "evidence": ", ".join(
                 f"{k} in {v:.0%} of sightings "
                 f"({profile.near_hand_object_counts.get(k, 0)} of "

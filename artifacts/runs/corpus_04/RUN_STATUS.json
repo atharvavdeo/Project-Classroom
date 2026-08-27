@@ -1,0 +1,167 @@
+{
+  "run_id": "corpus_04",
+  "updated_utc": "2026-08-19T06:47:02Z",
+  "stages": [
+    {
+      "stage": "source",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sources": 1
+      }
+    },
+    {
+      "stage": "01_ingest",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": "one complete forward decode pass; motion vectors present",
+      "covered_ms": 143380.0,
+      "total_ms": 143380.0,
+      "counts": {}
+    },
+    {
+      "stage": "02_health",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": null,
+      "covered_ms": 143380.0,
+      "total_ms": 143380.0,
+      "counts": {
+        "observations": 29
+      }
+    },
+    {
+      "stage": "03_alignment",
+      "state": "skipped_unavailable",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": "no camera_motion or camera_repositioned condition was observed, so no global transform was estimated. Identity is the named baseline, not a silent default (PRD 6.3.2)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "observations": 0
+      }
+    },
+    {
+      "stage": "04_calibration",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": "04/e1/v1 (draft)",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "seats": 7
+      }
+    },
+    {
+      "stage": "05_motion_roi",
+      "state": "complete",
+      "started_utc": "2026-08-19T06:21:45Z",
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": null,
+      "covered_ms": 143380.0,
+      "total_ms": 143380.0,
+      "counts": {
+        "windows": 3514,
+        "gate_records": 3586
+      }
+    },
+    {
+      "stage": "06_segmentation",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": null,
+      "covered_ms": 143380.0,
+      "total_ms": 143380.0,
+      "counts": {
+        "events": 38,
+        "normal_priority": 19,
+        "low_priority": 19
+      }
+    },
+    {
+      "stage": "07_tracking",
+      "state": "complete",
+      "started_utc": "2026-08-19T06:21:56Z",
+      "finished_utc": "2026-08-19T06:27:23Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sample_rows": 186,
+        "person_boxes": 1242
+      }
+    },
+    {
+      "stage": "08_pose",
+      "state": "complete",
+      "started_utc": "2026-08-19T06:27:23Z",
+      "finished_utc": "2026-08-19T06:47:00Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "manifest_rows": 1242,
+        "manifest_digest": "79250e33df9ad4e57f036e7daf8529524afa68e4388b82165e20db7eb4d0003e"
+      }
+    },
+    {
+      "stage": "09_object",
+      "state": "running",
+      "started_utc": "2026-08-19T06:47:02Z",
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "10_evidence",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "11_gemma",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "12_evaluation",
+      "state": "blocked",
+      "started_utc": null,
+      "finished_utc": "2026-08-19T06:21:55Z",
+      "reason": "no reference manifest; object evaluation is incomplete and no quality claim may be made",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "13_reports",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "configurations": {
+    "identity_no_preprocessing": {
+      "config_id": "identity_no_preprocessing",
+      "frames": 12,
+      "seconds": 0.6759390000079293,
+      "mean_abs_difference": 0.0,
+      "max_abs_difference": 0.0,
+      "baseline": {
+        "mean_luma": 133.1805,
+        "std_luma": 75.7089,
+        "sharpness": 907.7069,
+        "blocking_ratio": 1.0954,
+        "saturated_high": 0.048,
+        "saturated_low": 0.038
+      },
+      "transformed": {
+        "mean_luma": 133.1805,
+        "std_luma": 75.7089,
+        "sharpness": 907.7069,
+        "blocking_ratio": 1.0954,
+        "saturated_high": 0.048,
+        "saturated_low": 0.038
+      },
+      "delta": {
+        "mean_luma": 0.0,
+        "std_luma": 0.0,
+        "sharpness": 0.0,
+        "blocking_ratio": 0.0,
+        "saturated_high": 0.0,
+        "saturated_low": 0.0
+      },
+      "artifacts": [
+        "01_ingest/preprocessing/identity_no_preprocessing"
+      ]
+    },
+    "clahe": {
+      "config_id": "clahe",
+      "frames": 12,
+      "seconds": 0.7374334000051022,
+      "mean_abs_difference": 16.9129,
+      "max_abs_difference": 78.0,
+      "baseline": {
+        "mean_luma": 133.1805,
+        "std_luma": 75.7089,
+        "sharpness": 907.7069,
+        "blocking_ratio": 1.0954,
+        "saturated_high": 0.048,
+        "saturated_low": 0.038
+      },
+      "transformed": {
+        "mean_luma": 132.5232,
+        "std_luma": 71.9224,
+        "sharpness": 1110.8836,
+        "blocking_ratio": 1.0832,
+        "saturated_high": 0.0445,
+        "saturated_low": 0.0174
+      },
+      "delta": {
+        "mean_luma": -0.6573,
+        "std_luma": -3.7865,
+        "sharpness": 203.1767,
+        "blocking_ratio": -0.0122,
+        "saturated_high": -0.0035,
+        "saturated_low": -0.0206
+      },
+      "artifacts": [
+        "01_ingest/preprocessing/clahe"
+      ]
+    },
+    "denoise_nlmeans": {
+      "config_id": "denoise_nlmeans",
+      "frames": 12,
+      "seconds": 7.112303100002464,
+      "mean_abs_difference": 1.9413,
+      "max_abs_difference": 72.0,
+      "baseline": {
+        "mean_luma": 133.1805,
+        "std_luma": 75.7089,
+        "sharpness": 907.7069,
+        "blocking_ratio": 1.0954,
+        "saturated_high": 0.048,
+        "saturated_low": 0.038
+      },
+      "transformed": {
+        "mean_luma": 132.9964,
+        "std_luma": 75.7922,
+        "sharpness": 877.0506,
+        "blocking_ratio": 1.0863,
+        "saturated_high": 0.0467,
+        "saturated_low": 0.0405
+      },
+      "delta": {
+        "mean_luma": -0.1841,
+        "std_luma": 0.0833,
+        "sharpness": -30.6563,
+        "blocking_ratio": -0.0091,
+        "saturated_high": -0.0013,
+        "saturated_low": 0.0025
+      },
+      "artifacts": [
+        "01_ingest/preprocessing/denoise_nlmeans"
+      ]
+    },
+    "unsharp_mask": {
+      "config_id": "unsharp_mask",
+      "frames": 12,
+      "seconds": 0.7091781999915838,
+      "mean_abs_difference": 2.8635,
+      "max_abs_difference": 89.0,
+      "baseline": {
+        "mean_luma": 133.1805,
+        "std_luma": 75.7089,
+        "sharpness": 907.7069,
+        "blocking_ratio": 1.0954,
+        "saturated_high": 0.048,
+        "saturated_low": 0.038
+      },
+      "transformed": {
+        "mean_luma": 133.6463,
+        "std_luma": 77.2917,
+        "sharpness": 1786.1778,
+        "blocking_ratio": 1.0864,
+        "saturated_high": 0.054,
+        "saturated_low": 0.054
+      },
+      "delta": {
+        "mean_luma": 0.4658,
+        "std_luma": 1.5828,
+        "sharpness": 878.4709,
+        "blocking_ratio": -0.009,
+        "saturated_high": 0.006,
+        "saturated_low": 0.016
+      },
+      "artifacts": [
+        "01_ingest/preprocessing/unsharp_mask"
+      ]
+    }
+  },
+  "note": "every transform ran on the same frames as the identity baseline; none was applied to the pipeline's own inputs.",
+  "recommendation": "No transform is recommended. These figures measure how much each transform CHANGED the image, not whether it helped. PRD 6 requires any transform to be evaluated enabled and disabled on known references, and no reference manifest exists for this corpus. A transform that raises sharpness while also raising blocking_ratio is amplifying compression structure, which at a 30x20 px object scale is indistinguishable from amplifying the object."
+}

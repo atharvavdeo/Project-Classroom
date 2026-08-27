@@ -1,0 +1,7 @@
+{
+  "config_id": "rf_detr_sahi",
+  "state": "resource_unavailable",
+  "reason": "rfdetr is not installed in this environment, so RF-DETR did not run. It stays in the comparison as unavailable and is never substituted by D-FINE (PRD 5).",
+  "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72",
+  "note": "this configuration did not run. Its row is retained in the comparison and never filled from another."
+}

@@ -1,0 +1,19 @@
+{
+  "condition": "blur",
+  "start_pts_ms": 0.0,
+  "end_pts_ms": 400.0,
+  "duration_ms": 400.0,
+  "action": "reduce_object_pose_reliability",
+  "validated_on": "source",
+  "excludes_from_baseline": false,
+  "blocks_bridging": false,
+  "region": null,
+  "evidence": {
+    "baseline_sharpness": 2777.607,
+    "threshold": 1111.043,
+    "min_sharpness": 25.955,
+    "frames": 7,
+    "merged_observations": 1
+  },
+  "note": ""
+}

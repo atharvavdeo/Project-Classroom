@@ -1,0 +1,72 @@
+.tl {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.tl__lane {
+  display: grid;
+  grid-template-columns: 5.6rem 1fr;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.tl__label {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+  text-align: right;
+}
+
+.tl__track {
+  position: relative;
+  height: 1.4rem;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.tl--compact .tl__track {
+  height: 0.95rem;
+}
+
+/* Marks sit on the vertical centre so severity reads as weight, not position. */
+.tl__track i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  min-width: 2px;
+  opacity: 0.92;
+}
+
+.tl__track i.is-faint {
+  opacity: 0.32;
+}
+
+.tl__none {
+  position: absolute;
+  left: 0.45rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate-2);
+  pointer-events: none;
+}
+
+.tl__playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--ink);
+  z-index: 2;
+  pointer-events: none;
+}

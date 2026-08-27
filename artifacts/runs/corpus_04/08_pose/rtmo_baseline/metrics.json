@@ -1,0 +1,29 @@
+{
+  "config_id": "rtmo_baseline",
+  "state": "available",
+  "manifest_digest": "79250e33df9ad4e57f036e7daf8529524afa68e4388b82165e20db7eb4d0003e",
+  "checkpoint_sha256": "",
+  "rows_seen": 1242,
+  "persons_proposed": 165,
+  "persons_returned": 165,
+  "row_coverage": 0.1329,
+  "joint_observability": {
+    "visible": 1695,
+    "occluded": 450,
+    "not_detected": 0,
+    "not_resolvable_at_source_scale": 0
+  },
+  "joint_visible_fraction": 0.7902,
+  "wrist_observability": {
+    "visible": 257,
+    "occluded": 73,
+    "not_detected": 0,
+    "not_resolvable_at_source_scale": 0
+  },
+  "head_pitch_resolved": 128,
+  "suspected_joint_swaps": 3,
+  "wrist_in_lap_context": 0,
+  "seconds": 326.862,
+  "rows_per_second": 3.8,
+  "peak_vram_mb": null
+}

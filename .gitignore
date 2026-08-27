@@ -83,3 +83,165 @@ __pycache__/
 .qodo/
 .windsurfrules
 .cursorrules
+
+# Run 1505 (03.CCTV Mobile Usage), on the same terms as 1503/1504.
+!/artifacts/runs/1505/
+!/artifacts/runs/1505/**
+/artifacts/runs/1505/**/samples*.jsonl
+/artifacts/runs/1505/**/03_alignment/**/*.png
+
+# The built dashboard and its queue are committed: they are the product, and
+# the HTML is self-contained and diffable. Regenerate with
+# `tools/build_dashboard.py`.
+!/artifacts/dashboard.html
+!/artifacts/review_queue.json
+
+# Output contract v1.0.0 (docs/OUTPUT_CONTRACT.md).
+#
+# `evidence_records.jsonl` is one record per object proposal, rejections
+# included, and runs 2-41 MB per video -- the same reason `samples*.jsonl` is
+# ignored. Rebuild it with `tools/build_evidence_records.py --run <dir>`, which
+# refuses to write unless its recomputed gate reproduces the run's own counts.
+/artifacts/runs/**/evidence_records.jsonl
+
+# The fused outcomes and the funnel ARE committed. They are small, diffable,
+# and they are what the contract actually promises a reader.
+!/artifacts/runs/**/track_outcomes.json
+!/artifacts/runs/**/contract_summary.json
+
+# Reproducibility of the published contract metrics.
+#
+# `tools/build_evidence_records.py` needs exactly two of the per-run sample
+# files to rebuild a run: the raw proposals and the SAM 3 verdicts. Without
+# them a fresh checkout can read the committed summaries but cannot verify
+# them, which is the state 1503/1504/1505 were in -- only 1501 predated the
+# blanket `samples*.jsonl` rules and so was the only reproducible run.
+#
+# The other sample files (samples.jsonl, samples_chit_gated.jsonl,
+# samples_sam3_confirmed.jsonl) stay ignored: they are derivable from these two.
+!/artifacts/runs/**/samples_with_chits.jsonl
+!/artifacts/runs/**/samples_sam3_adjudicated.jsonl
+
+# Run 1506 (06.Candidate...phone - Trim), on the same terms as 1503/1504/1505.
+# The 677 annotated stage-14 frames are excluded: they are the input to the
+# rendered video, not a deliverable, and the video itself carries them.
+!/artifacts/runs/1506/
+!/artifacts/runs/1506/**
+/artifacts/runs/1506/**/annotated/**
+/artifacts/runs/1506/**/03_alignment/**/*.png
+/artifacts/runs/1506/**/samples.jsonl
+/artifacts/runs/1506/**/samples_chit_gated.jsonl
+
+# Rendered videos are never committed. 1506's is 164 MB, over GitHub's
+# per-file limit, and every one of them is regenerable from the samples file
+# with `tools/render_annotated_video.py`.
+/artifacts/runs/**/*.mp4
+
+# Re-assert after the 1506 whitelist above, which otherwise re-includes it.
+# (gitignore is last-match-wins, so a later `!` negation resurrects a file an
+# earlier rule excluded.) Rebuild with tools/build_evidence_records.py.
+/artifacts/runs/**/evidence_records.jsonl
+
+# Run 1507 (last 10s of the trimmed 06 video), same terms as 1503-1506.
+!/artifacts/runs/1507/
+!/artifacts/runs/1507/**
+/artifacts/runs/1507/**/annotated/**
+/artifacts/runs/1507/**/samples.jsonl
+/artifacts/runs/1507/**/samples_chit_gated.jsonl
+/artifacts/runs/1507/**/evidence_records.jsonl
+
+# Runs 1508 (12_paper) and 1509 (01_phone, 04_talking), same terms as 1503-1507.
+!/artifacts/runs/1508/
+!/artifacts/runs/1508/**
+!/artifacts/runs/1509/
+!/artifacts/runs/1509/**
+/artifacts/runs/150[89]/**/annotated/**
+/artifacts/runs/150[89]/**/samples.jsonl
+/artifacts/runs/150[89]/**/samples_chit_gated.jsonl
+/artifacts/runs/150[89]/**/evidence_records.jsonl
+
+# Re-assert LAST so no per-run whitelist above can resurrect these.
+# gitignore is last-match-wins, and this has now bitten twice: a later `!`
+# negation re-included a 32 MB records file, then an 82 MB rendered video.
+/artifacts/runs/**/*.mp4
+/artifacts/runs/**/evidence_records.jsonl
+
+# Runs 1510/1511, same terms as the rest.
+!/artifacts/runs/151[01]/
+!/artifacts/runs/151[01]/**
+/artifacts/runs/151[01]/**/annotated/**
+/artifacts/runs/151[01]/**/samples.jsonl
+/artifacts/runs/151[01]/**/samples_chit_gated.jsonl
+
+# Final re-assert. gitignore is last-match-wins and per-run whitelists above
+# have twice resurrected files an earlier rule excluded.
+/artifacts/runs/**/*.mp4
+/artifacts/runs/**/evidence_records.jsonl
+
+# Runs 1512 (12_paper + 04_talking, the first end-to-end run on the per-frame
+# phone association) and 1513 (a determinism control: 12_paper run twice on
+# identical code, which came back bit-identical). Same terms as 1503-1511 --
+# the reviewable summaries and the two sample files needed to rebuild, nothing
+# else. 1512 alone is 176 MB on disk.
+!/artifacts/runs/151[23]/
+!/artifacts/runs/151[23]/**
+/artifacts/runs/151[23]/**/annotated/**
+/artifacts/runs/151[23]/**/samples.jsonl
+/artifacts/runs/151[23]/**/samples_chit_gated.jsonl
+
+# Scratch comparison copies. The committed track_outcomes.json IS the baseline;
+# `git show <rev>:<path>` recovers any earlier one, so these were redundant.
+*.baseline
+
+# Other assistants' skill installs, alongside the IDE state above.
+/.agents/
+/skills-lock.json
+
+# Console demo media, generated from a run by the two bundler tools.
+#
+# Committing them would put 11 MB of derived bytes in the tree for something
+# `tools/build_overlay_bundle.py` and one ffmpeg transcode reproduce exactly.
+# The small queue bundle IS committed: it is 299 KB, it diffs cleanly, and it
+# is what makes the console open to something on a fresh checkout.
+/console/public/media/
+/console/public/data/*.overlay.json
+
+# Final re-assert. gitignore is last-match-wins and the per-run whitelists
+# above have now resurrected a large file three times.
+/artifacts/runs/**/*.mp4
+/artifacts/runs/**/evidence_records.jsonl
+
+# SAM 3's own annotated crops. 213 files / 12 MB for one 88-second recording,
+# and every one is regenerable by re-running the referee with
+# `--save-annotated <n>` (the default is 8, which is why only 8 existed until
+# the console needed them). The verdicts themselves are in the samples file and
+# ARE committed; these are the pictures behind them.
+/artifacts/runs/**/sam3_adjudication/*.jpg
+
+# Scratch second pass, written only to harvest those crops without touching
+# the committed adjudication.
+/artifacts/runs/**/samples_sam3_annotated_pass.jsonl
+
+# Secrets - never commit credentials
+.env
+.env.*
+*.env
+secrets.json
+
+# Console demo crops, generated by tools/build_review_crops.py (35 MB).
+/console/public/crops/
+
+# The reviewer's own decisions. This is a live SQLite database with WAL
+# sidecars, not source: committing it would ship one machine's review history
+# to everyone who checks the repo out, and the -wal file is a moving target
+# that conflicts on every pull. Export the labels through
+# `GET /api/labels.jsonl` when they need to travel.
+/console/server/*.db
+/console/server/*.db-shm
+/console/server/*.db-wal
+
+# Wrangler's build and local-state scratch. `.wrangler/tmp` is regenerated on
+# every dev run and `.wrangler/state` is the local D1/R2 emulator's data --
+# neither is source, and the state directory is another machine's database.
+/console/.wrangler/
+console/.agent-token.txt

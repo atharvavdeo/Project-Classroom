@@ -1,0 +1,29 @@
+{
+  "config_id": "dfine_sahi",
+  "state": "available",
+  "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72",
+  "checkpoint_sha256": "",
+  "crops_seen": 416,
+  "crops_abstained": 0,
+  "abstention_rate": 0.0,
+  "slices_run": 2048,
+  "raw_detections": 5432,
+  "merged_detections": 5432,
+  "usable_detections": 5409,
+  "by_class": {
+    "bag": 151,
+    "keyboard": 877,
+    "monitor_or_bezel": 783,
+    "mouse": 381,
+    "phone": 318,
+    "secondary_paper_chit": 136,
+    "stationery": 204,
+    "unknown_object": 2582
+  },
+  "phone": 318,
+  "secondary_paper_chit": 136,
+  "hard_negative_detections": 2245,
+  "seconds": 687.061,
+  "crops_per_second": 0.61,
+  "peak_vram_mb": null
+}

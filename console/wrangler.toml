@@ -1,0 +1,62 @@
+# Cloudflare deployment for the Drishti review console.
+#
+# Everything here is on a free-tier allowance at this project's scale: Workers
+# 100k requests/day, D1 5 GB, R2 10 GB with no egress charge. R2 is the one
+# that needs a card on file even at zero spend.
+#
+# The pipeline does not run here. Stages 1-15 are GPU work; this Worker serves
+# what a finished run produced. See docs/DEPLOYMENT.md.
+
+name = "drishti-console"
+main = "worker/index.js"
+compatibility_date = "2026-08-01"
+
+# The built console. Served for every path that is not /api/ or a run asset,
+# with a single-page-app fallback so a deep link resolves instead of 404ing.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+# Workers Assets answers a matching path BEFORE the Worker script runs, and
+# with `not_found_handling = "single-page-application"` it answers *every*
+# unmatched path with index.html. Both of those have to be worked around here.
+#
+# `/` matched dist/index.html, so the console was served straight from Assets
+# and the Worker's landing-page branch never ran.
+#
+# The trap: naming only "/" in this list makes every OTHER path assets-first,
+# and the SPA fallback then swallows the dynamic routes. Measured: `/api/tree`
+# came back `200 text/html` with `<!doctype html>`, the console's fetch parsed
+# it as JSON and died with "e is not iterable", and `/media/*.mp4` returned
+# HTML so every video played as a black frame of length 00:00.0.
+#
+# So every path the Worker owns has to be listed, not just the new one.
+run_worker_first = [
+  "/",
+  "/index.html",
+  "/api/*",
+  "/media/*",
+  "/data/*",
+  "/crops/*",
+]
+
+# Decisions and the project hierarchy. D1 is SQLite, so worker/schema.d1.sql is
+# the local schema with the PRAGMAs removed.
+[[d1_databases]]
+binding = "DB"
+database_name = "drishti"
+# Filled in by `wrangler d1 create drishti` -- see docs/DEPLOYMENT.md.
+database_id = "d298a37d-c93b-4a74-acdc-950fa51542f1"
+
+# Recordings, run bundles and review crops: ~105 MB of derived bytes that do
+# not belong in git or in a Worker script.
+[[r2_buckets]]
+binding = "ASSETS_BUCKET"
+bucket_name = "drishti-runs"
+
+[observability]
+enabled = true
+
+# CEREBRAS_API_KEY is a secret, not a var:
+#   wrangler secret put CEREBRAS_API_KEY
+# Putting it here would commit a live credential.

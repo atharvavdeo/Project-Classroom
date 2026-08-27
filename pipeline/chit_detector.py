@@ -91,7 +91,12 @@ class Config:
     # so 0.40 separates them with room on both sides. Kept low here because
     # discarding at detection time is irreversible; the reportable floor is
     # `TimelineConfig.min_object_confidence`, applied at reprofile time.
-    confidence: float = 0.40
+    # 0.50, not 0.40. Operator decision after reviewing the paper proposals on
+    # 12_paper, 01_phone and 04_talking: below this the class is dominated by
+    # hands on mice, seat placards and desk edges. Measured corroboration rates
+    # at 0.40 were 39.2% / 6.2% / 1.0% respectively -- the last two are noise.
+    # Anything under this floor is dropped outright rather than gated later.
+    confidence: float = 0.50
     overlap: float = 0.50
 
     # Person boxes are padded before cropping so a chit held just outside the
@@ -117,14 +122,20 @@ class Config:
 def api_key() -> str:
     """Read the key from the environment.
 
+    `ROBOFLOW_CHIT_API_KEY` first, so the paper detector can be pointed at a
+    different Roboflow account from the SAM 3 workflow -- they bill and
+    rate-limit separately, and this pipeline exhausted a shared quota in a
+    single afternoon. Falls back to `ROBOFLOW_API_KEY`.
+
     Deliberately not a parameter with a default: a key committed to the repo is
     a key that has to be rotated.
     """
-    key = os.environ.get("ROBOFLOW_API_KEY", "").strip()
+    key = (os.environ.get("ROBOFLOW_CHIT_API_KEY", "").strip()
+           or os.environ.get("ROBOFLOW_API_KEY", "").strip())
     if not key:
         raise RuntimeError(
-            "ROBOFLOW_API_KEY is not set. Export it before running; do not "
-            "hardcode it in a tracked file.")
+            "Neither ROBOFLOW_CHIT_API_KEY nor ROBOFLOW_API_KEY is set. "
+            "Export one before running; do not hardcode it in a tracked file.")
     return key
 
 

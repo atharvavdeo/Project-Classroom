@@ -1,0 +1,32 @@
+{
+ "contract_version": "1.0.0",
+ "run": "1510/12_paper",
+ "records_written": 37072,
+ "gate_config": {
+  "max_size_ratio": 0.12,
+  "max_wrist_distance": 0.35,
+  "min_confidence": 0.5
+ },
+ "sam3_adjudicated": true,
+ "sam3_api_errors": 0,
+ "gate_self_check": "passed \u2014 recomputed kept-counts match the run",
+ "tracks": 236,
+ "states": {
+  "no_action": 0,
+  "context_observation": 16,
+  "needs_better_view": 218,
+  "review_candidate": 2,
+  "human_confirmed": 0,
+  "human_dismissed": 0
+ },
+ "proposals": {
+  "proposals": 1202,
+  "gated": 327,
+  "sam3_supported": 14,
+  "sam3_equipment": 41,
+  "sam3_not_confirmed": 238,
+  "sam3_unavailable": 250,
+  "sam3_phone": 1
+ },
+ "note": "proposal counts are telemetry, not accuracy; no figure here is a count of confirmed cheating"
+}

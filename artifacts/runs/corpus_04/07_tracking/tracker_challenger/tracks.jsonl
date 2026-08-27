@@ -1,0 +1,15 @@
+{"track_id": 1, "start_pts_ms": 0.0, "end_pts_ms": 135380.0, "duration_ms": 135380.0, "boxes": 220, "detected": 186, "interpolated": 34}
+{"track_id": 2, "start_pts_ms": 0.0, "end_pts_ms": 135380.0, "duration_ms": 135380.0, "boxes": 220, "detected": 186, "interpolated": 34}
+{"track_id": 3, "start_pts_ms": 0.0, "end_pts_ms": 135380.0, "duration_ms": 135380.0, "boxes": 220, "detected": 186, "interpolated": 34}
+{"track_id": 4, "start_pts_ms": 0.0, "end_pts_ms": 135380.0, "duration_ms": 135380.0, "boxes": 220, "detected": 186, "interpolated": 34}
+{"track_id": 5, "start_pts_ms": 0.0, "end_pts_ms": 135380.0, "duration_ms": 135380.0, "boxes": 220, "detected": 186, "interpolated": 34}
+{"track_id": 6, "start_pts_ms": 0.0, "end_pts_ms": 135380.0, "duration_ms": 135380.0, "boxes": 175, "detected": 149, "interpolated": 26}
+{"track_id": 7, "start_pts_ms": 2000.0, "end_pts_ms": 41660.0, "duration_ms": 39660.0, "boxes": 39, "detected": 34, "interpolated": 5}
+{"track_id": 8, "start_pts_ms": 12500.0, "end_pts_ms": 20380.0, "duration_ms": 7880.0, "boxes": 15, "detected": 14, "interpolated": 1}
+{"track_id": 9, "start_pts_ms": 23380.0, "end_pts_ms": 27260.0, "duration_ms": 3880.0, "boxes": 10, "detected": 10, "interpolated": 0}
+{"track_id": 10, "start_pts_ms": 71500.0, "end_pts_ms": 72780.0, "duration_ms": 1280.0, "boxes": 4, "detected": 4, "interpolated": 0}
+{"track_id": 11, "start_pts_ms": 77500.0, "end_pts_ms": 83780.0, "duration_ms": 6280.0, "boxes": 22, "detected": 22, "interpolated": 0}
+{"track_id": 12, "start_pts_ms": 92780.0, "end_pts_ms": 133380.0, "duration_ms": 40600.0, "boxes": 24, "detected": 22, "interpolated": 2}
+{"track_id": 13, "start_pts_ms": 107900.0, "end_pts_ms": 107900.0, "duration_ms": 0.0, "boxes": 1, "detected": 1, "interpolated": 0}
+{"track_id": 14, "start_pts_ms": 108900.0, "end_pts_ms": 109900.0, "duration_ms": 1000.0, "boxes": 3, "detected": 3, "interpolated": 0}
+{"track_id": 15, "start_pts_ms": 128780.0, "end_pts_ms": 133020.0, "duration_ms": 4240.0, "boxes": 7, "detected": 6, "interpolated": 1}

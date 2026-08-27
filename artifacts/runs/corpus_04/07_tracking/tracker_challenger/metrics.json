@@ -1,0 +1,36 @@
+{
+  "config_id": "tracker_challenger",
+  "state": "available",
+  "reason": "",
+  "tracks": 15,
+  "boxes": 1400,
+  "detected_boxes": 1195,
+  "interpolated_boxes": 205,
+  "interpolated_fraction": 0.1464,
+  "median_track_ms": 39660.0,
+  "longest_track_ms": 135380.0,
+  "seconds": 0.542,
+  "continuity": {
+    "config_id": "tracker_challenger",
+    "state": "available",
+    "tracks": 15,
+    "short_tracks": 1,
+    "fragments_per_1000ms": 0.0164,
+    "seat_inconsistent_transitions": 0,
+    "seat_inconsistency_note": "one track ID whose attributed seat changed mid-track. This is a proxy for an ID switch, not an ID-switch count: this corpus has no per-person identity ground truth and PRD 1 forbids creating one."
+  },
+  "association": {
+    "associations": 1400,
+    "resolved": 0,
+    "resolved_fraction": 0.0,
+    "ambiguous_seat": 0,
+    "unattributed": 1400,
+    "by_rule": {
+      "refused": 1400
+    },
+    "continuity_share": 0.0,
+    "per_seat": {},
+    "median_margin": null,
+    "note": "a high continuity share means most seats came from a track's majority rather than from this frame's geometry, which is a signal to review calibration or detector quality."
+  }
+}

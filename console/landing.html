@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en" class="motion-pending">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nothing Is Called Cheating Here</title>
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Drishti reviews exam-hall CCTV, proposes what a human should look at, and never decides.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Instrument+Sans:wght@400..700&display=swap">
+<script>
+  // Added before first paint so nothing flashes in at full opacity and then
+  // animates. The timeout is the safety net: if the card's animationend never
+  // fires -- a decoding stall, a backgrounded tab -- the page must still end up
+  // visible rather than permanently at opacity 0.
+  (function () {
+    var root = document.documentElement;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      root.classList.remove("motion-pending");
+      return;
+    }
+    window.__motionFallback = setTimeout(function () {
+      root.classList.remove("motion-pending");
+    }, 3500);
+  })();
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { overflow: hidden; background: #000; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+
+  :root {
+    font-family: "Instrument Sans", Arial, sans-serif;
+    color-scheme: dark;
+  }
+
+  .viewport {
+    position: fixed;
+    inset: 0;
+    isolation: isolate;
+    background: #000;
+  }
+
+  .screen {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+
+    --gutter-start: clamp(36px, 4.177vw, 96px);
+    --gutter-end: clamp(36px, 4.04vw, 96px);
+    --header-top: clamp(20px, 2.264vh, 30px);
+    --hero-bottom: clamp(34px, 5.19vh, 64px);
+    --display-size: clamp(50px, 7.10vh, 82px);
+    --display-leading: clamp(64px, 8.70vh, 100px);
+    --copy-size: clamp(14px, 1.70vh, 19px);
+    --copy-leading: clamp(19px, 2.17vh, 24px);
+    --title-copy-gap: clamp(15px, 2.08vh, 24px);
+    --copy-cta-gap: clamp(24px, 3.11vh, 36px);
+    --cta-width: clamp(150px, 16.2vh, 182px);
+    --cta-height: clamp(38px, 3.96vh, 44px);
+    --control-baseline-shift: clamp(1px, .19vh, 2px);
+    --card-width: clamp(150px, 18.96vh, 215px);
+  }
+
+  .background {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.30), transparent 26%, transparent 58%, rgba(0,0,0,.72)),
+      radial-gradient(ellipse at 44% 54%, transparent 26%, rgba(0,0,0,.46) 100%);
+  }
+
+  /* ------------------------------------------------------------- header */
+
+  .header {
+    position: absolute;
+    inset: var(--header-top) var(--gutter-end) auto var(--gutter-start);
+    height: 48px;
+    display: flex;
+    align-items: flex-start;
+    white-space: nowrap;
+    z-index: 3;
+  }
+
+  .brand {
+    position: relative;
+    top: 10px;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    text-decoration: none;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav {
+    display: flex;
+    position: relative;
+    top: 9px;
+    margin-left: clamp(36px, 3.03vw, 48px);
+    gap: clamp(32px, 2.9vw, 43px);
+  }
+
+  .nav a {
+    position: relative;
+    font-size: 16px;
+    font-weight: 430;
+    letter-spacing: -.36px;
+    color: rgba(229,229,230,.77);
+    text-shadow: 0 1px 3px rgba(0,0,0,.55);
+    text-decoration: none;
+  }
+
+  .nav a:first-child { top: -3px; }
+  .nav a:nth-child(4) { margin-left: 1px; }
+
+  .nav a.active { color: #fff; }
+  .nav a.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    width: 44px;
+    height: 2px;
+    background: rgba(255,255,255,.82);
+  }
+
+  .time-panel {
+    margin-left: auto;
+    width: 232px;
+    height: 48px;
+    padding-left: 8px;
+    border-left: 2px solid rgba(230,230,230,.52);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  .time-panel .label {
+    font-size: 15px;
+    font-weight: 420;
+    color: rgba(240,240,240,.77);
+  }
+
+  .time-panel .value {
+    font-size: 15px;
+    font-weight: 440;
+    color: rgba(255,255,255,.93);
+  }
+
+  .sign-up {
+    margin-left: clamp(20px, 1.95vw, 29px);
+    width: 132px;
+    height: 42px;
+    border: 0;
+    border-radius: 7px;
+    background: #fff;
+    color: #101010;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 460;
+    letter-spacing: -.34px;
+    cursor: pointer;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.72),
+      0 1px 5px rgba(0,0,0,.34);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,.17);
+    border-radius: 11px;
+    background: linear-gradient(145deg, rgba(26,34,36,.86), rgba(16,29,33,.9));
+    backdrop-filter: blur(14px) saturate(110%);
+    color: #fff;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  /* --------------------------------------------------------------- hero */
+
+  .hero-content {
+    position: absolute;
+    left: var(--gutter-start);
+    bottom: var(--hero-bottom);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 2;
+  }
+
+  .hero-title {
+    margin: 0;
+    font-family: "Archivo", "Instrument Sans", Arial, sans-serif;
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-size: var(--display-size);
+    line-height: var(--display-leading);
+    letter-spacing: -2.1px;
+    -webkit-text-stroke: .12px currentColor;
+    white-space: nowrap;
+    text-shadow: 0 2px 2px rgba(0,0,0,.44);
+  }
+
+  .line {
+    display: block;
+    overflow: hidden;
+    transform-origin: left center;
+  }
+
+  .line-reveal { display: block; }
+
+  .line-one {
+    color: #fff;
+    transform: scaleX(.775);
+  }
+
+  .line-two {
+    color: rgba(211,207,207,.78);
+    transform: scaleX(.793);
+  }
+
+  .hero-copy {
+    position: relative;
+    left: 1px;
+    margin: var(--title-copy-gap) 0 0;
+    width: clamp(390px, 31.67vw, 500px);
+    color: rgba(226,229,228,.84);
+    font-size: var(--copy-size);
+    line-height: var(--copy-leading);
+    font-weight: 350;
+    letter-spacing: .13px;
+    text-shadow: 0 1px 3px rgba(0,0,0,.7);
+  }
+
+  .primary-cta {
+    position: relative;
+    margin-top: var(--copy-cta-gap);
+    width: var(--cta-width);
+    height: var(--cta-height);
+    border: 0;
+    border-radius: 7px;
+    background: #fff;
+    color: #111;
+    box-shadow: 0 1px 5px rgba(0,0,0,.38);
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    display: block;
+  }
+
+  .primary-cta .label {
+    position: absolute;
+    left: 8.125%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(15px, 1.60vh, 17px);
+    font-weight: 450;
+    letter-spacing: -.3px;
+  }
+
+  .primary-cta .arrow-box {
+    position: absolute;
+    right: 3.125%;
+    top: 14.286%;
+    width: 20.625%;
+    height: 71.429%;
+    border-radius: 7px;
+    background: #070909;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ---------------------------------------------------------- demo card */
+
+  .demo-card {
+    position: absolute;
+    right: var(--gutter-end);
+    bottom: var(--hero-bottom);
+    width: var(--card-width);
+    aspect-ratio: 201 / 265;
+    container-type: inline-size;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: clamp(12px, 1.52vh, 18px);
+    background: linear-gradient(145deg, rgba(24,22,20,.80), rgba(5,12,14,.86));
+    box-shadow:
+      0 2px 10px rgba(0,0,0,.44),
+      0 0 0 3px rgba(255,255,255,.035) inset,
+      0 0 0 1px rgba(0,0,0,.9);
+    backdrop-filter: blur(14px) saturate(108%);
+    z-index: 2;
+  }
+
+  .demo-visual {
+    position: absolute;
+    left: 3.5cqw;
+    top: 4cqw;
+    width: 92.5cqw;
+    height: 92cqw;
+    border-radius: 4cqw;
+    background: #101a1e;
+    overflow: hidden;
+  }
+
+  .demo-visual video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(.89) saturate(.93) contrast(1.03);
+    display: block;
+  }
+
+  .play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 29cqw;
+    height: 29cqw;
+    border: 1px solid rgba(255,255,255,.34);
+    border-radius: 50%;
+    background: rgba(3,5,7,.47);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .watch-button {
+    position: absolute;
+    left: 3.5cqw;
+    right: 3.5cqw;
+    bottom: 4cqw;
+    top: calc(4cqw + 92cqw + 4cqw);
+    border: 1px solid rgba(255,255,255,.21);
+    border-radius: 4cqw;
+    background: linear-gradient(145deg, rgba(26,34,36,.86), rgba(16,29,33,.9));
+    backdrop-filter: blur(14px) saturate(110%);
+    color: #fff;
+    font-family: inherit;
+    font-size: clamp(12px, 6.6cqw, 15px);
+    font-weight: 430;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ------------------------------------------------------------- motion */
+
+  @keyframes entrance-brand {
+    from { opacity: 0; transform: translate3d(0, 7px, 0) scale(.94); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  }
+  @keyframes entrance-nav {
+    from { opacity: 0; transform: translate3d(0, 6px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  @keyframes entrance-action {
+    from { opacity: 0; transform: translate3d(0, 8px, 0) scale(.985); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  }
+  @keyframes entrance-line {
+    from { transform: translate3d(0, 110%, 0) skewY(2deg); }
+    to   { transform: translate3d(0, 0, 0) skewY(0); }
+  }
+  @keyframes entrance-copy {
+    from { opacity: 0; transform: translate3d(0, 10px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  @keyframes entrance-card {
+    from { opacity: 0; transform: translate3d(0, 12px, 0) scale(.968); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .motion-pending .brand,
+    .motion-pending .nav a,
+    .motion-pending .time-panel,
+    .motion-pending .sign-up,
+    .motion-pending .menu-toggle,
+    .motion-pending .hero-copy,
+    .motion-pending .primary-cta,
+    .motion-pending .demo-card { opacity: 0; }
+
+    .motion-pending .line-reveal {
+      transform: translate3d(0, 110%, 0) skewY(2deg);
+    }
+
+    .brand { animation: entrance-brand 580ms cubic-bezier(.16,1,.3,1) 60ms both; }
+    .nav a { animation: entrance-nav 480ms cubic-bezier(.16,1,.3,1) both; }
+    .nav a:nth-child(1) { animation-delay: 130ms; }
+    .nav a:nth-child(2) { animation-delay: 175ms; }
+    .nav a:nth-child(3) { animation-delay: 220ms; }
+    .nav a:nth-child(4) { animation-delay: 265ms; }
+    .time-panel { animation: entrance-nav 520ms cubic-bezier(.16,1,.3,1) 180ms both; }
+    .sign-up { animation: entrance-action 520ms cubic-bezier(.16,1,.3,1) 220ms both; }
+    .menu-toggle { animation: entrance-action 520ms cubic-bezier(.16,1,.3,1) 140ms both; }
+    .line-one .line-reveal { animation: entrance-line 800ms cubic-bezier(.22,1,.36,1) 300ms both; }
+    .line-two .line-reveal { animation: entrance-line 850ms cubic-bezier(.22,1,.36,1) 440ms both; }
+    .hero-copy { animation: entrance-copy 620ms cubic-bezier(.16,1,.3,1) 740ms both; }
+    .primary-cta { animation: entrance-action 560ms cubic-bezier(.16,1,.3,1) 960ms both; }
+    .demo-card {
+      transform-origin: 82% 50%;
+      animation: entrance-card 920ms cubic-bezier(.22,1,.36,1) 1040ms both;
+    }
+
+    button, a { transition: filter 140ms ease, opacity 140ms ease; }
+    button:hover, a:hover { filter: brightness(1.08); }
+  }
+
+  :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+  /* ------------------------------------------------------- tablet */
+
+  @media (min-width: 620px) and (max-width: 790px),
+         (min-width: 620px) and (max-width: 1100px) and (orientation: portrait) {
+    .menu-toggle { display: inline-flex; margin-left: auto; }
+    .header-actions {
+      position: absolute;
+      right: 0;
+      top: 56px;
+      flex: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 18px;
+      width: min(324px, calc(100vw - var(--gutter-start) - var(--gutter-end)));
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(24,32,34,.88), rgba(12,24,28,.92));
+      backdrop-filter: blur(18px) saturate(110%);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(.985);
+      transition: opacity 180ms ease, transform 180ms ease, visibility 180ms;
+    }
+    .header.menu-open .header-actions {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+    .nav { position: static; flex-direction: column; margin: 0; gap: 14px; }
+    .nav a:first-child { top: 0; }
+    .nav a.active::after { display: none; }
+    .time-panel { margin: 0; width: auto; height: auto; }
+    .sign-up { margin: 0; width: 100%; }
+    .hero-title { font-size: clamp(44px, 6.2vh, 64px); line-height: 1.14; }
+    .hero-copy { width: min(500px, calc(100vw - var(--gutter-start) - var(--gutter-end))); }
+  }
+
+  /* ------------------------------------------------------- mobile */
+
+  @media (max-width: 619px) {
+    .screen {
+      --mobile-gutter: max(20px, env(safe-area-inset-left));
+      --gutter-start: var(--mobile-gutter);
+      --gutter-end: var(--mobile-gutter);
+      --hero-bottom: max(28px, env(safe-area-inset-bottom));
+    }
+    .menu-toggle { display: inline-flex; margin-left: auto; }
+    .header-actions {
+      position: absolute;
+      right: 0;
+      top: 56px;
+      flex: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+      width: min(340px, calc(100vw - 2 * var(--mobile-gutter)));
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(24,32,34,.88), rgba(12,24,28,.92));
+      backdrop-filter: blur(18px) saturate(110%);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(.985);
+      transition: opacity 180ms ease, transform 180ms ease, visibility 180ms;
+    }
+    .header.menu-open .header-actions {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+    .nav { position: static; flex-direction: column; margin: 0; gap: 13px; }
+    .nav a:first-child { top: 0; }
+    .nav a.active::after { display: none; }
+    .time-panel { margin: 0; width: auto; height: auto; }
+    .sign-up { margin: 0; width: 100%; }
+
+    /* The desktop headline is one long nowrap line squeezed with scaleX. That
+       cannot survive a 360px viewport: it either overflows or is compressed
+       to the point of being unreadable. On phones the line wraps normally and
+       the horizontal squeeze is dropped entirely -- legibility beats matching
+       the desktop letterform. */
+    .hero-title {
+      font-size: clamp(31px, 6.4svh, 44px);
+      line-height: 1.12;
+      letter-spacing: -1.1px;
+      white-space: normal;
+    }
+    .line { overflow: visible; }
+    .line-one, .line-two { transform: none; }
+
+    .hero-copy br { display: none; }
+    .hero-copy {
+      width: min(440px, calc(100vw - 2 * var(--mobile-gutter)));
+      font-size: clamp(13.5px, 1.85svh, 16px);
+      line-height: 1.5;
+    }
+
+    .primary-cta {
+      width: min(280px, calc(100vw - 2 * var(--mobile-gutter)));
+      height: 46px;
+    }
+
+    /* Above the hero, not beside it, and small enough that it never crowds
+       the headline it sits over. */
+    .demo-card {
+      top: max(84px, calc(env(safe-area-inset-top) + 78px));
+      bottom: auto;
+      right: var(--mobile-gutter);
+      width: clamp(112px, 32vw, 148px);
+    }
+  }
+
+  /* A short phone in landscape, or a very short window: the card is the first
+     thing to go, because the headline and the one CTA are the page. */
+  @media (max-width: 619px) and (max-height: 620px) {
+    .demo-card { display: none; }
+  }
+
+  @media (max-height: 520px) and (orientation: landscape) {
+    .demo-card { display: none; }
+    .hero-title { font-size: clamp(32px, 11vh, 48px); line-height: 1.08; }
+  }
+</style>
+</head>
+<body>
+
+<main class="viewport">
+  <section class="screen" id="screen">
+
+    <video class="background" autoplay muted loop playsinline disablepictureinpicture aria-hidden="true">
+      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_064556_051587f1-74a1-4336-8c05-4dde3594ed05.mp4" type="video/mp4">
+    </video>
+
+    <header class="header" id="header">
+      <a class="brand" href="/" aria-label="Drishti home">
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" aria-hidden="true">
+          <defs><clipPath id="disc"><circle cx="12.5" cy="12.5" r="12.5"/></clipPath></defs>
+          <g clip-path="url(#disc)">
+            <rect width="25" height="25" fill="#ededed"/>
+            <path d="M12.5 2 L21 12.5 L12.5 23 L4 12.5 Z" fill="#050606"/>
+            <path d="M12.5 6.2 L18 12.5 L12.5 18.8 L7 12.5 Z" fill="#fafafa"/>
+            <path d="M12.5 9.1 L15.4 12.5 L12.5 15.9 L9.6 12.5 Z" fill="#0a0b0b"/>
+            <path d="M21 12.5 L25 12.5 L25 25 L12.5 25 Z" fill="#737778" opacity=".5"/>
+          </g>
+        </svg>
+      </a>
+
+      <div class="header-actions" id="tablet-navigation">
+        <nav class="nav" aria-label="Primary">
+          <a class="active" href="/">Home</a>
+          <a href="/app">Console</a>
+          <a href="/app">Recordings</a>
+          <a href="/app">Review</a>
+        </nav>
+
+        <div class="time-panel">
+          <span class="label">Corpus</span>
+          <span class="value">6 recordings&nbsp; • &nbsp;593 people tracked</span>
+        </div>
+
+        <a class="sign-up" href="/app">Open Console</a>
+      </div>
+
+      <button class="menu-toggle" id="menu-toggle" type="button"
+              aria-expanded="false" aria-controls="tablet-navigation" aria-label="Open menu">
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" aria-hidden="true">
+          <path class="bar-top" d="M1 4h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path class="bar-bottom" d="M1 10h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="line line-one"><span class="line-reveal">Nothing Here</span></span>
+          <span class="line line-two"><span class="line-reveal">Is Called Cheating.</span></span>
+        </h1>
+
+        <p class="hero-copy">
+          Detectors propose, a second model referees, and neither one judges.<br>
+          Drishti hands a proctor a short list of moments worth watching,<br>
+          with the evidence and the arithmetic attached to every one.
+        </p>
+
+        <a class="primary-cta" href="/app">
+          <span class="label">Open the console</span>
+          <span class="arrow-box">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M3 11L11 3M11 3H5M11 3v6" stroke="#fff" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <article class="demo-card">
+        <div class="demo-visual">
+          <!-- Real footage from the corpus rather than stock: a ten-second
+               clip, 0.6 MB, which is why it can autoplay in a card without
+               costing a phone its data. -->
+          <video autoplay muted loop playsinline disablepictureinpicture
+                 aria-label="Exam hall footage from the review corpus">
+            <source src="/media/c06_phone_last10.mp4" type="video/mp4">
+          </video>
+          <span class="play" aria-hidden="true">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="none">
+              <path d="M2 1.6v12.8L12.5 8 2 1.6Z" fill="#fff"/>
+            </svg>
+          </span>
+        </div>
+        <a class="watch-button" href="/app">See a review</a>
+      </article>
+    </section>
+
+  </section>
+</main>
+
+<script>
+  /* Any click anywhere on this page goes to the console.
+   *
+   * The page is a front door, not a destination -- there is nothing here to
+   * read past the hero, so a click that lands on empty background should not
+   * be a dead click. Real anchors are left alone and navigate themselves
+   * (same destination), which keeps keyboard and middle-click behaviour
+   * intact; a whole-page handler is not reachable by keyboard, so the CTA
+   * anchors have to stay real. */
+  (function () {
+    var TARGET = "/app";
+    document.addEventListener("click", function (e) {
+      if (e.defaultPrevented) return;
+      // Let the browser handle modified clicks (new tab, download, etc.) and
+      // any click that already landed on a link.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      if (e.target.closest("a[href]")) return;
+      window.location.href = TARGET;
+    });
+  })();
+
+  (function () {
+    var root = document.documentElement;
+    var card = document.querySelector(".demo-card");
+    if (card) {
+      card.addEventListener("animationend", function () {
+        root.classList.remove("motion-pending");
+        clearTimeout(window.__motionFallback);
+      }, { once: true });
+    }
+
+    /* ---- tablet / mobile menu ---- */
+    var header = document.getElementById("header");
+    var toggle = document.getElementById("menu-toggle");
+    var panel = document.getElementById("tablet-navigation");
+    if (!header || !toggle || !panel) return;
+
+    function toggleVisible() {
+      return getComputedStyle(toggle).display !== "none";
+    }
+
+    function setOpen(open) {
+      header.classList.toggle("menu-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      // `inert` only while the panel is a closed dropdown. On desktop the same
+      // markup is the visible header, and marking it inert there would take the
+      // whole nav out of the tab order.
+      if (toggleVisible() && !open) panel.setAttribute("inert", "");
+      else panel.removeAttribute("inert");
+      if (open) {
+        var first = panel.querySelector("a");
+        if (first) first.focus();
+      }
+    }
+
+    function sync() { setOpen(header.classList.contains("menu-open")); }
+
+    toggle.addEventListener("click", function () {
+      setOpen(!header.classList.contains("menu-open"));
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && header.classList.contains("menu-open")) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener("pointerdown", function (e) {
+      if (!header.classList.contains("menu-open")) return;
+      if (panel.contains(e.target) || toggle.contains(e.target)) return;
+      setOpen(false);
+    });
+
+    panel.addEventListener("click", function (e) {
+      if (e.target.closest("a")) setOpen(false);
+    });
+
+    window.addEventListener("resize", sync);
+    sync();
+  })();
+</script>
+</body>
+</html>

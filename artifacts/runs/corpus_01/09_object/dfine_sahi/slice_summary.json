@@ -1,0 +1,9 @@
+{
+  "slices": 1663,
+  "tiles": 1288,
+  "full_crop_passes": 375,
+  "slices_per_crop": 4.53,
+  "raw_detections": 7588,
+  "edge_flagged": 4991,
+  "note": "slicing magnifies a region into the detector input; it does not add source pixels. Abstention floors are judged on the native footprint and are unchanged by it (PRD 19)."
+}

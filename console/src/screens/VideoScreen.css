@@ -1,0 +1,456 @@
+.video {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16rem;
+  gap: 1.1rem;
+  align-items: start;
+}
+
+@media (max-width: 62rem) {
+  .video {
+    grid-template-columns: 1fr;
+  }
+}
+
+.video__main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.video__legend {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--slate-2);
+  margin: 0.5rem 0 0.1rem;
+}
+
+.video__layers {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+/* A stretch a human marked by hand. Full height and hatched, so it never
+   reads as one more machine lane stacked with the others. */
+.ribbon__human {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 2px;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+.ribbon__human.is-violation {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(200, 54, 54, 0.85) 0 5px,
+    rgba(200, 54, 54, 0.55) 5px 10px
+  );
+  border: 1px solid rgba(200, 54, 54, 0.95);
+}
+
+.ribbon__human.is-review {
+  background: rgba(214, 150, 60, 0.45);
+  border: 1px solid rgba(214, 150, 60, 0.8);
+}
+
+.ribbon__human.is-note {
+  background: rgba(140, 150, 160, 0.3);
+  border: 1px dashed rgba(140, 150, 160, 0.75);
+}
+
+/* The heatmap's scale, in the units it accumulated. */
+.video__heatnote {
+  margin: 0.4rem 0 0;
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--slate);
+  max-width: 68ch;
+}
+
+.video__layers button,
+.video__people button,
+.video__focus header button {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  color: var(--slate);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 0.3em 0.55em;
+  cursor: pointer;
+  transition:
+    background var(--fast) var(--spring),
+    color var(--fast) var(--spring);
+}
+
+.video__layers button.is-on,
+.video__people button.is-on {
+  color: var(--accent);
+  background: var(--accent-wash);
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.video__layers button:active,
+.video__people button:active {
+  transform: scale(0.97);
+}
+
+.video__loading,
+.video__error {
+  font-size: 0.75rem;
+  color: var(--slate);
+  margin: 0;
+}
+
+.video__error {
+  color: var(--s-review);
+}
+
+.video__focus {
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  background: var(--surface);
+  padding: 0.8rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.video__focus header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.video__focus header button {
+  margin-left: auto;
+}
+
+.video__focus p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--slate);
+}
+
+.video__aside {
+  position: sticky;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.video__people {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.video__people button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  text-align: left;
+}
+
+.video__hidden {
+  margin: 0;
+  font-size: 0.62rem;
+  color: var(--slate-2);
+}
+
+/* --------------------------------------------------------------- ribbon */
+
+/* One band, flush under the picture, showing only what the reviewer asked
+   for. The old screen drew five fixed lanes whether or not anything was in
+   them, which made an empty run look identical to a busy one. */
+.ribbon {
+  padding: 0.55rem 0.65rem 0.5rem;
+  background: var(--surface);
+  border-top: 1px solid var(--rule);
+}
+
+.ribbon__band {
+  position: relative;
+  height: 2.1rem;
+  background: var(--sunk);
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ribbon__band i {
+  position: absolute;
+  top: 12%;
+  height: 76%;
+  min-width: 2px;
+  border-radius: 2px;
+  opacity: 0.88;
+}
+
+.ribbon__none {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.62rem;
+  color: var(--slate-2);
+}
+
+.ribbon__head {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px var(--surface);
+  pointer-events: none;
+}
+
+.ribbon__scale {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 0.3rem;
+  font-size: 0.6rem;
+  color: var(--slate-2);
+}
+
+.ribbon__scale b {
+  font-size: 0.72rem;
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------- picker */
+
+.picker {
+  position: relative;
+}
+
+.picker__button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: var(--display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  border-radius: 7px;
+  padding: 0.55em 0.7em;
+  cursor: pointer;
+  text-align: left;
+}
+
+.picker__button i {
+  font-style: normal;
+  font-size: 0.55rem;
+  color: var(--slate);
+}
+
+.picker__menu {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + 0.3rem);
+  left: 0;
+  right: 0;
+  max-height: 22rem;
+  overflow-y: auto;
+  padding: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: var(--sh-lift);
+}
+
+.picker__menu label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.4rem;
+  border-radius: 5px;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.picker__menu label:hover {
+  background: var(--surface-2);
+}
+
+.picker__menu label i {
+  width: 0.45rem;
+  height: 0.9rem;
+  border-radius: 2px;
+  flex: none;
+}
+
+.picker__menu label span {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.picker__menu label b {
+  font-size: 0.68rem;
+  color: var(--slate);
+}
+
+.picker__none {
+  margin: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--slate);
+}
+
+.picker__all {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.35rem 0.4rem 0.15rem;
+  border-top: 1px solid var(--rule);
+  margin-top: 0.25rem;
+}
+
+.picker__all button {
+  flex: 1;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--slate);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.3em;
+  cursor: pointer;
+}
+
+.picker__all button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------------------------------------------------------------- tiles */
+
+.ftiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.6rem, 1fr));
+  gap: 0.4rem;
+}
+
+.ftile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.55rem 0.6rem;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ftile, var(--accent));
+  border-radius: 7px;
+  cursor: pointer;
+  transition:
+    transform var(--fast) var(--spring),
+    box-shadow var(--fast) var(--spring);
+}
+
+.ftile:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--sh);
+}
+
+.ftile:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.ftile b {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.ftile span {
+  font-family: var(--display);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink-2);
+}
+
+.ftile em {
+  font-style: normal;
+  font-size: 0.56rem;
+  color: var(--slate-2);
+}
+
+.ftiles__none {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--slate);
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------ phone */
+
+@media (max-width: 62rem) {
+  .video__aside {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 40rem) {
+  /* The person list is 236 rows. Sticky and full height on a phone it becomes
+     the whole page; capped and scrollable it stays a control. */
+  .video__people {
+    max-height: 14rem;
+    overflow-y: auto;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 0.25rem;
+  }
+
+  .ftiles {
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  }
+
+  .ribbon__band {
+    height: 2.6rem;
+  }
+
+  .video__layers {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    padding-bottom: 0.2rem;
+  }
+
+  .video__layers::-webkit-scrollbar {
+    display: none;
+  }
+
+  .video__layers button {
+    white-space: nowrap;
+    min-height: 2.1rem;
+  }
+}

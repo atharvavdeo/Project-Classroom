@@ -1,0 +1,141 @@
+{
+  "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72",
+  "crop_rows": 416,
+  "crop_equivalence": "verified",
+  "mismatched_configs": [],
+  "equivalence_note": "every configuration below processed byte-identical crop rows, so a difference in their output is attributable to the detector and its slicing (PRD 4)",
+  "taxonomy_approved": false,
+  "configurations": [
+    {
+      "config_id": "rf_detr_native",
+      "state": "resource_unavailable",
+      "reason": "rfdetr is not installed in this environment, so RF-DETR did not run. It stays in the comparison as unavailable and is never substituted by D-FINE (PRD 5).",
+      "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72",
+      "note": "this configuration did not run. Its row is retained in the comparison and never filled from another."
+    },
+    {
+      "config_id": "dfine_native",
+      "state": "available",
+      "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72",
+      "checkpoint_sha256": "",
+      "crops_seen": 416,
+      "crops_abstained": 0,
+      "abstention_rate": 0.0,
+      "slices_run": 0,
+      "raw_detections": 3179,
+      "merged_detections": 3179,
+      "usable_detections": 3170,
+      "by_class": {
+        "bag": 115,
+        "keyboard": 290,
+        "monitor_or_bezel": 580,
+        "mouse": 385,
+        "phone": 225,
+        "secondary_paper_chit": 232,
+        "stationery": 165,
+        "unknown_object": 1187
+      },
+      "phone": 225,
+      "secondary_paper_chit": 232,
+      "hard_negative_detections": 1420,
+      "seconds": 136.039,
+      "crops_per_second": 3.06,
+      "peak_vram_mb": null
+    },
+    {
+      "config_id": "rf_detr_sahi",
+      "state": "resource_unavailable",
+      "reason": "rfdetr is not installed in this environment, so RF-DETR did not run. It stays in the comparison as unavailable and is never substituted by D-FINE (PRD 5).",
+      "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72",
+      "note": "this configuration did not run. Its row is retained in the comparison and never filled from another."
+    },
+    {
+      "config_id": "dfine_sahi",
+      "state": "available",
+      "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72",
+      "checkpoint_sha256": "",
+      "crops_seen": 416,
+      "crops_abstained": 0,
+      "abstention_rate": 0.0,
+      "slices_run": 2048,
+      "raw_detections": 5432,
+      "merged_detections": 5432,
+      "usable_detections": 5409,
+      "by_class": {
+        "bag": 151,
+        "keyboard": 877,
+        "monitor_or_bezel": 783,
+        "mouse": 381,
+        "phone": 318,
+        "secondary_paper_chit": 136,
+        "stationery": 204,
+        "unknown_object": 2582
+      },
+      "phone": 318,
+      "secondary_paper_chit": 136,
+      "hard_negative_detections": 2245,
+      "seconds": 687.061,
+      "crops_per_second": 0.61,
+      "peak_vram_mb": null
+    }
+  ],
+  "failure_clusters": {
+    "dfine_native": {
+      "status": "unlabelled",
+      "detail": "no reference labels were supplied, so no confusion can be computed. The class mix below is the shape of the output, not its accuracy.",
+      "by_class": {
+        "bag": 115,
+        "keyboard": 290,
+        "monitor_or_bezel": 580,
+        "mouse": 385,
+        "phone": 225,
+        "secondary_paper_chit": 232,
+        "stationery": 165,
+        "unknown_object": 1187
+      },
+      "hard_negative_calls": {
+        "mouse": 385,
+        "keyboard": 290,
+        "monitor_or_bezel": 580,
+        "stationery": 165
+      }
+    },
+    "dfine_sahi": {
+      "status": "unlabelled",
+      "detail": "no reference labels were supplied, so no confusion can be computed. The class mix below is the shape of the output, not its accuracy.",
+      "by_class": {
+        "bag": 151,
+        "keyboard": 877,
+        "monitor_or_bezel": 783,
+        "mouse": 381,
+        "phone": 318,
+        "secondary_paper_chit": 136,
+        "stationery": 204,
+        "unknown_object": 2582
+      },
+      "hard_negative_calls": {
+        "mouse": 381,
+        "keyboard": 877,
+        "monitor_or_bezel": 783,
+        "stationery": 204
+      }
+    }
+  },
+  "available": [
+    "dfine_native",
+    "dfine_sahi"
+  ],
+  "unavailable": [
+    {
+      "config_id": "rf_detr_native",
+      "state": "resource_unavailable",
+      "reason": "rfdetr is not installed in this environment, so RF-DETR did not run. It stays in the comparison as unavailable and is never substituted by D-FINE (PRD 5)."
+    },
+    {
+      "config_id": "rf_detr_sahi",
+      "state": "resource_unavailable",
+      "reason": "rfdetr is not installed in this environment, so RF-DETR did not run. It stays in the comparison as unavailable and is never substituted by D-FINE (PRD 5)."
+    }
+  ],
+  "selection": "none. PRD 3 blocks detector selection and evaluation until the product owner approves the taxonomy, and PRD 15 places selection in stage 12 against the reference manifest."
+}

@@ -70,6 +70,14 @@ def main() -> int:
                     default=ROOT / "models/dfine/onnx/model.onnx")
     ap.add_argument("--sample-hz", type=float, default=2.0)
     ap.add_argument("--pose-device", default="cuda")
+    ap.add_argument("--pose-backend", default="auto",
+                    choices=("auto", "alphapose", "rtmlib"),
+                    help="auto uses AlphaPose when its checkpoint is present "
+                         "and rtmlib otherwise; rtmlib downloads its own ONNX "
+                         "weights, which is what makes a fresh rented GPU "
+                         "usable without shipping 333 MB of .pth")
+    ap.add_argument("--rtmlib-config", default="rtmpose_baseline",
+                    choices=("rtmpose_baseline", "rtmo_baseline", "rtmo_large"))
     ap.add_argument("--annotate", type=int, default=40,
                     help="sampled frames to render with every person boxed and "
                          "given a gaze arrow. 0 none, -1 all.")
@@ -187,14 +195,43 @@ def main() -> int:
               f"{len(pose_rows)} pose rows from tracked boxes directly")
 
     pose_reader = SequentialFrameReader(args.video)
-    pose_runner = ps.alphapose_runner(
-        "alphapose_crowd_baseline",
-        str(ROOT / "models/alphapose/256x192_res152_lr1e-3_1x-duc.yaml"),
-        str(ROOT / "models/alphapose/fast_421_res152_256x192.pth"),
-        frame_reader=pose_reader, device=args.pose_device)
-    pose_result = ps.run(pose_rows, pose_runner, "alphapose_crowd_baseline",
-                         profile_doc)
-    print(f"  pose: {pose_result.state} "
+
+    # Which pose model runs, and why it is a choice rather than a constant.
+    #
+    # AlphaPose is the measured baseline for this corpus and stays the default.
+    # It needs a 333 MB checkpoint that is deliberately not in git, which is
+    # fine on a machine that has been set up once and fatal on an ephemeral
+    # rented GPU: the pod would burn paid minutes downloading weights, or fail
+    # outright.
+    #
+    # rtmlib fetches its own ONNX weights on first use, so `--pose-backend
+    # rtmlib` makes a fresh pod viable. It is a *different model* and will not
+    # reproduce AlphaPose's numbers -- which is why the config_id travels with
+    # the result into the manifest and every downstream record, rather than
+    # both backends pretending to be the same thing.
+    backend = args.pose_backend
+    if backend == "auto":
+        checkpoint = ROOT / "models/alphapose/fast_421_res152_256x192.pth"
+        backend = "alphapose" if checkpoint.exists() else "rtmlib"
+        if backend == "rtmlib":
+            print(f"  pose: no AlphaPose checkpoint at {checkpoint}; "
+                  f"falling back to rtmlib (a different model, recorded as such)")
+
+    if backend == "alphapose":
+        config_id = "alphapose_crowd_baseline"
+        pose_runner = ps.alphapose_runner(
+            config_id,
+            str(ROOT / "models/alphapose/256x192_res152_lr1e-3_1x-duc.yaml"),
+            str(ROOT / "models/alphapose/fast_421_res152_256x192.pth"),
+            frame_reader=pose_reader, device=args.pose_device)
+    else:
+        config_id = args.rtmlib_config
+        pose_runner = ps.rtmlib_runner(
+            config_id, frame_reader=pose_reader,
+            device="cuda" if args.pose_device == "cuda" else "cpu")
+
+    pose_result = ps.run(pose_rows, pose_runner, config_id, profile_doc)
+    print(f"  pose: {pose_result.state} via {config_id} "
           f"({len(pose_result.observations)} observations)")
 
     # ----------------------------------------- head orientation + samples --
@@ -206,7 +243,7 @@ def main() -> int:
         source = by_row.get(row.get("pose_row_id"))
         track_id = getattr(source, "track_id", None)
         head = hp.estimate(joints, pose_row_id=row.get("pose_row_id", ""),
-                           config_id="alphapose_crowd_baseline",
+                           config_id=config_id,
                            pts_ms=float(row["pts_ms"]),
                            seat_state=row.get("seat_state", "unattributed"),
                            track_id=track_id)
@@ -216,6 +253,7 @@ def main() -> int:
             return ((float(j["x"]), float(j["y"]))
                     if j and j.get("observability") == "visible" else None)
 
+        timeline_cfg = pt.TimelineConfig()
         samples.append(pt.PersonSample(
             track_id=track_id if track_id is not None else -1,
             pts_ms=float(row["pts_ms"]),
@@ -223,6 +261,8 @@ def main() -> int:
             seat_state=row.get("seat_state", "unattributed"),
             torso_scale_px=row.get("torso_scale_px"),
             yaw=head.yaw, pitch=head.pitch, roll=head.roll,
+            yaw_relative_to_torso=head.yaw_relative_to_torso,
+            orientation_state=pt.pitch_state(head.pitch, timeline_cfg),
             facing=head.facing, head_scale_px=head.head_scale_px,
             left_wrist=wrist("left_wrist"), right_wrist=wrist("right_wrist"),
             wrist_below_desk=bool(row.get("wrist_in_lap_context")),
@@ -245,22 +285,29 @@ def main() -> int:
         for item in found:
             box = item["box"]
             cx, cy = (box[0] + box[2]) / 2.0, (box[1] + box[3]) / 2.0
-            best, best_distance = None, None
+            best, best_torso_distance, best_norm_distance, best_wrist = \
+                None, None, None, ""
             for sample in here:
                 scale = sample.torso_scale_px
                 if not scale:
                     continue
-                for wrist in (sample.left_wrist, sample.right_wrist):
+                person_w = max(sample.box[2] - sample.box[0], 1.0)
+                for wrist_name, wrist in (("left", sample.left_wrist),
+                                          ("right", sample.right_wrist)):
                     if not wrist:
                         continue
-                    distance = math.hypot(cx - wrist[0], cy - wrist[1]) / scale
-                    if best_distance is None or distance < best_distance:
-                        best, best_distance = sample, distance
-            if best is not None and best_distance <= tcfg_attach.near_hand_torso:
+                    torso_distance = math.hypot(cx - wrist[0], cy - wrist[1]) / scale
+                    if best_torso_distance is None or torso_distance < best_torso_distance:
+                        best, best_torso_distance = sample, torso_distance
+                        best_norm_distance = math.hypot(cx - wrist[0], cy - wrist[1]) / person_w
+                        best_wrist = wrist_name
+            if best is not None and best_torso_distance <= tcfg_attach.near_hand_torso:
                 best.near_hand_objects.append({
                     "cls": item["cls"], "confidence": item["confidence"],
                     "box": box, "source": "full_frame",
-                    "wrist_distance_torso": round(best_distance, 3)})
+                    "nearest_wrist": best_wrist,
+                    "wrist_distance_norm": round(best_norm_distance, 4),
+                    "wrist_distance_torso": round(best_torso_distance, 3)})
                 attached += 1
             else:
                 unattached += 1
@@ -296,7 +343,9 @@ def main() -> int:
                 if not scale:
                     continue
                 radius = max(scale * args.hand_crop_torso, 24.0)
-                for wrist in (sample.left_wrist, sample.right_wrist):
+                person_w = max(sample.box[2] - sample.box[0], 1.0)
+                for wrist_name, wrist in (("left", sample.left_wrist),
+                                          ("right", sample.right_wrist)):
                     if not wrist:
                         continue
                     x1 = max(int(wrist[0] - radius), 0)
@@ -312,11 +361,17 @@ def main() -> int:
                         taxonomy = od.COCO_TO_TAXONOMY.get(det.cls)
                         if taxonomy is None or det.cls == "person":
                             continue
+                        cx = (det.box[0] + det.box[2]) / 2.0
+                        cy = (det.box[1] + det.box[3]) / 2.0
+                        distance_px = math.hypot(cx - wrist[0], cy - wrist[1])
                         sample.near_hand_objects.append({
                             "cls": taxonomy,
                             "confidence": round(float(det.confidence), 4),
                             "box": [round(float(v), 1) for v in det.box],
-                            "source": "wrist_crop"})
+                            "source": "wrist_crop",
+                            "nearest_wrist": wrist_name,
+                            "wrist_distance_norm": round(distance_px / person_w, 4),
+                            "wrist_distance_torso": round(distance_px / scale, 3)})
                         found += 1
             if looked and looked % 500 == 0:
                 print(f"    hand crops: {looked} looked, {found} objects",

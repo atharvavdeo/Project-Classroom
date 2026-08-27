@@ -1,0 +1,170 @@
+{
+  "run_id": "full",
+  "updated_utc": "2026-08-18T20:36:25Z",
+  "stages": [
+    {
+      "stage": "source",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "01_ingest",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "02_health",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "03_alignment",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "04_calibration",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    },
+    {
+      "stage": "05_motion_roi",
+      "state": "complete",
+      "started_utc": "2026-08-18T20:08:58Z",
+      "finished_utc": "2026-08-18T20:09:03Z",
+      "reason": null,
+      "covered_ms": 282100.0,
+      "total_ms": 282100.0,
+      "counts": {
+        "windows": 2116,
+        "gate_records": 2892
+      }
+    },
+    {
+      "stage": "06_segmentation",
+      "state": "complete",
+      "started_utc": null,
+      "finished_utc": "2026-08-18T20:09:03Z",
+      "reason": null,
+      "covered_ms": 282100.0,
+      "total_ms": 282100.0,
+      "counts": {
+        "events": 23,
+        "normal_priority": 9,
+        "low_priority": 14
+      }
+    },
+    {
+      "stage": "07_tracking",
+      "state": "complete",
+      "started_utc": "2026-08-18T20:09:12Z",
+      "finished_utc": "2026-08-18T20:10:26Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "sample_rows": 224,
+        "person_boxes": 416
+      }
+    },
+    {
+      "stage": "08_pose",
+      "state": "complete",
+      "started_utc": "2026-08-18T20:10:26Z",
+      "finished_utc": "2026-08-18T20:13:46Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "manifest_rows": 416,
+        "manifest_digest": "e740670cced453b26aa22fa0081c2186f2ab7743ffcab6fd64e8a9d1b615361c"
+      }
+    },
+    {
+      "stage": "09_object",
+      "state": "complete",
+      "started_utc": "2026-08-18T20:13:52Z",
+      "finished_utc": "2026-08-18T20:27:48Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "crops": 416,
+        "crop_digest": "4aa2ee325248e2431bd652e9e89de6652e179487be1991533c46cb445e6c6e72"
+      }
+    },
+    {
+      "stage": "10_evidence",
+      "state": "complete",
+      "started_utc": "2026-08-18T20:34:25Z",
+      "finished_utc": "2026-08-18T20:34:25Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "events": 23,
+        "valid_packets": 23
+      }
+    },
+    {
+      "stage": "11_gemma",
+      "state": "skipped_unavailable",
+      "started_utc": "2026-08-18T20:34:25Z",
+      "finished_utc": "2026-08-18T20:34:25Z",
+      "reason": "no VLM review was performed; every event needs human review",
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "reviews": 23
+      }
+    },
+    {
+      "stage": "12_evaluation",
+      "state": "complete",
+      "started_utc": "2026-08-18T20:36:24Z",
+      "finished_utc": "2026-08-18T20:36:25Z",
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {
+        "references": 3,
+        "configurations": 2
+      }
+    },
+    {
+      "stage": "13_reports",
+      "state": "pending",
+      "started_utc": null,
+      "finished_utc": null,
+      "reason": null,
+      "covered_ms": null,
+      "total_ms": null,
+      "counts": {}
+    }
+  ]
+}

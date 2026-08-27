@@ -1,0 +1,17 @@
+{
+  "version_id": "04/e1/v1",
+  "approval_state": "draft",
+  "operator": "tools/propose_calibration.py (automatic proposal)",
+  "reviewer": "",
+  "seats": [
+    "04-P01",
+    "04-P02",
+    "04-P03",
+    "04-P04",
+    "04-P05",
+    "04-P06",
+    "04-P07"
+  ],
+  "frame_w": 640,
+  "frame_h": 480
+}

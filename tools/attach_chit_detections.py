@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from pipeline import artifacts, chit_detector as cd  # noqa: E402
+from pipeline import chit_evidence as ce  # noqa: E402
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -83,11 +84,28 @@ def main() -> int:
     # detections back into frame coordinates.
     jobs: list[tuple] = []
     skipped_small = 0
+    skipped_no_wrist = 0
+
+    # `chit_evidence.EvidenceConfig.drop_when_no_wrist` discards every paper
+    # detection on a person whose wrists never resolved. Calling the detector
+    # for those people buys nothing: the answer is thrown away by the gate
+    # whatever it is. On 12_paper that is 2,671 of 6,109 calls -- 44% of the
+    # bill for information the pipeline is already committed to ignoring.
+    #
+    # Read from the gate's own config rather than hardcoded, so turning the
+    # gate off re-enables the calls instead of silently starving it.
+    skip_wristless = ce.EvidenceConfig.drop_when_no_wrist
+
+    def has_wrist(sample: dict) -> bool:
+        return bool(sample.get("left_wrist") or sample.get("right_wrist"))
 
     def build(stamp: float, canvas) -> None:
         """Turn every person at `stamp` into a crop job against `canvas`."""
-        nonlocal skipped_small
+        nonlocal skipped_small, skipped_no_wrist
         for sample in by_pts[stamp]:
+            if skip_wristless and not has_wrist(sample):
+                skipped_no_wrist += 1
+                continue
             rect = cd.crop_geometry(sample["box"], frame_w, frame_h, cfg)
             if rect is None:
                 skipped_small += 1
@@ -167,7 +185,8 @@ def main() -> int:
         return 2
 
     print(f"{len(jobs)} crops to score "
-          f"({skipped_small} boxes under {cfg.min_box_px}px skipped)")
+          f"({skipped_small} boxes under {cfg.min_box_px}px skipped, "
+          f"{skipped_no_wrist} with no resolved wrist skipped)")
     if not jobs:
         print("nothing to score", file=sys.stderr)
         return 2
@@ -228,6 +247,7 @@ def main() -> int:
         "min_box_px": cfg.min_box_px,
         "crops_scored": len(jobs),
         "boxes_skipped_too_small": skipped_small,
+        "samples_skipped_no_wrist": skipped_no_wrist,
         "api_calls": client.calls,
         "api_failures": client.failures,
         "detections": attached,

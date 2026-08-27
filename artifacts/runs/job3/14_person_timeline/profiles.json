@@ -1,0 +1,474 @@
+[
+  {
+    "track_id": 1,
+    "seat_state": "unattributed",
+    "samples": 16,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 7500.0,
+    "observed_span_ms": 7500.0,
+    "coverage_of_recording": 0.9375,
+    "resolvable_samples": 16,
+    "median_head_scale_px": 21.9,
+    "baseline_yaw": -1.5,
+    "baseline_yaw_spread": 0.0,
+    "baseline_pitch": -0.0754,
+    "baseline_pitch_spread": 0.0008,
+    "baseline_yaw_relative_to_torso": -1.2001,
+    "baseline_yaw_relative_to_torso_spread": 0.018,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 75,
+      "keyboard": 138,
+      "mouse": 42,
+      "phone": 31,
+      "bag": 6
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 4.688,
+      "keyboard": 8.625,
+      "mouse": 2.625,
+      "phone": 1.938,
+      "bag": 0.375
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse",
+      "phone"
+    ],
+    "facing_counts": {
+      "turned_right": 16
+    },
+    "orientation_labels": [],
+    "orientation_events": [],
+    "flags": [],
+    "note": ""
+  },
+  {
+    "track_id": 2,
+    "seat_state": "unattributed",
+    "samples": 16,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 7500.0,
+    "observed_span_ms": 7500.0,
+    "coverage_of_recording": 0.9375,
+    "resolvable_samples": 16,
+    "median_head_scale_px": 27.2,
+    "baseline_yaw": 0.4458,
+    "baseline_yaw_spread": 0.1585,
+    "baseline_pitch": 0.245,
+    "baseline_pitch_spread": 0.0818,
+    "baseline_yaw_relative_to_torso": 0.4132,
+    "baseline_yaw_relative_to_torso_spread": 0.1684,
+    "samples_turned_left": 0,
+    "samples_turned_right": 1,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0625,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "phone": 17,
+      "bag": 12,
+      "monitor_or_bezel": 1
+    },
+    "near_hand_object_rates": {
+      "phone": 1.062,
+      "bag": 0.75,
+      "monitor_or_bezel": 0.062
+    },
+    "persistent_object_classes": [
+      "bag",
+      "phone"
+    ],
+    "facing_counts": {
+      "turned_left": 12,
+      "downward": 4
+    },
+    "orientation_labels": [
+      {
+        "label": "shallow_down",
+        "classification": "observed_only",
+        "samples": 10,
+        "dashboard_action": "display_only",
+        "guardrail": "This band never escalates on duration alone."
+      }
+    ],
+    "orientation_events": [],
+    "flags": [],
+    "note": ""
+  },
+  {
+    "track_id": 3,
+    "seat_state": "unattributed",
+    "samples": 16,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 7500.0,
+    "observed_span_ms": 7500.0,
+    "coverage_of_recording": 0.9375,
+    "resolvable_samples": 15,
+    "median_head_scale_px": 43.5,
+    "baseline_yaw": -0.0827,
+    "baseline_yaw_spread": 0.3241,
+    "baseline_pitch": 0.3536,
+    "baseline_pitch_spread": 0.0253,
+    "baseline_yaw_relative_to_torso": -0.0733,
+    "baseline_yaw_relative_to_torso_spread": 0.2778,
+    "samples_turned_left": 5,
+    "samples_turned_right": 3,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.5333,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "phone": 26,
+      "bag": 10,
+      "book_or_notebook_like_object": 35,
+      "keyboard": 34,
+      "mouse": 11,
+      "monitor_or_bezel": 11,
+      "stationery": 11
+    },
+    "near_hand_object_rates": {
+      "phone": 1.625,
+      "bag": 0.625,
+      "book_or_notebook_like_object": 2.188,
+      "keyboard": 2.125,
+      "mouse": 0.688,
+      "monitor_or_bezel": 0.688,
+      "stationery": 0.688
+    },
+    "persistent_object_classes": [
+      "bag",
+      "book_or_notebook_like_object",
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse",
+      "phone",
+      "stationery"
+    ],
+    "facing_counts": {
+      "downward": 6,
+      "turned_right": 4,
+      "turned_left": 5,
+      "not_resolvable_at_source_scale": 1
+    },
+    "orientation_labels": [
+      {
+        "label": "shallow_down",
+        "classification": "observed_only",
+        "samples": 11,
+        "dashboard_action": "display_only",
+        "guardrail": "This band never escalates on duration alone."
+      },
+      {
+        "label": "turned_and_held",
+        "classification": "context_requires_second_modality",
+        "events": 1,
+        "dashboard_action": "show_only_with_second_modality",
+        "guardrail": "Torso-relative turn is not gaze and never routes to review on its own."
+      }
+    ],
+    "orientation_events": [
+      {
+        "label": "turned_and_held",
+        "classification": "context_requires_second_modality",
+        "direction": "left",
+        "from_ms": 4000.0,
+        "to_ms": 8000.0,
+        "duration_ms": 4000.0,
+        "dashboard_action": "show_only_with_second_modality",
+        "guardrail": "Torso-relative turn is not gaze and never routes to review on its own."
+      }
+    ],
+    "flags": [
+      {
+        "flag": "sustained_attention_away",
+        "severity": "medium",
+        "evidence": "53% of 16 sightings departed from this person's own resting yaw of -0.08 (5 left, 3 right)",
+        "why": "head held away from their resting orientation for much of the time observed, more often to their left."
+      },
+      {
+        "flag": "persistent_object_beside_seat",
+        "severity": "info",
+        "evidence": "book_or_notebook_like_object in 219% of sightings",
+        "why": "present near this person's hands for most of the recording, so it is a fixed feature of their workstation rather than something they picked up. Recorded, not flagged: persistence is not corroboration for a handheld object."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 4,
+    "seat_state": "unattributed",
+    "samples": 16,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 7500.0,
+    "observed_span_ms": 7500.0,
+    "coverage_of_recording": 0.9375,
+    "resolvable_samples": 13,
+    "median_head_scale_px": 33.6,
+    "baseline_yaw": -1.2426,
+    "baseline_yaw_spread": 0.0226,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "baseline_yaw_relative_to_torso": -0.8872,
+    "baseline_yaw_relative_to_torso_spread": 0.0273,
+    "samples_turned_left": 1,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0769,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 96,
+      "keyboard": 68,
+      "mouse": 87,
+      "phone": 11,
+      "bag": 8
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 6.0,
+      "keyboard": 4.25,
+      "mouse": 5.438,
+      "phone": 0.688,
+      "bag": 0.5
+    },
+    "persistent_object_classes": [
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse",
+      "phone"
+    ],
+    "facing_counts": {
+      "turned_right": 12,
+      "not_resolvable_at_source_scale": 3,
+      "turned_left": 1
+    },
+    "orientation_labels": [
+      {
+        "label": "looking_up",
+        "classification": "observed_only",
+        "samples": 1,
+        "dashboard_action": "display_only",
+        "guardrail": "This band never escalates on duration alone."
+      }
+    ],
+    "orientation_events": [],
+    "flags": [],
+    "note": ""
+  },
+  {
+    "track_id": 5,
+    "seat_state": "unattributed",
+    "samples": 16,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 7500.0,
+    "observed_span_ms": 7500.0,
+    "coverage_of_recording": 0.9375,
+    "resolvable_samples": 0,
+    "median_head_scale_px": 36.2,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "baseline_yaw_relative_to_torso": null,
+    "baseline_yaw_relative_to_torso_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 65,
+      "mouse": 68,
+      "keyboard": 89,
+      "bag": 11,
+      "phone": 11,
+      "book_or_notebook_like_object": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 4.062,
+      "mouse": 4.25,
+      "keyboard": 5.562,
+      "bag": 0.688,
+      "phone": 0.688,
+      "book_or_notebook_like_object": 0.062
+    },
+    "persistent_object_classes": [
+      "bag",
+      "keyboard",
+      "monitor_or_bezel",
+      "mouse",
+      "phone"
+    ],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 16
+    },
+    "orientation_labels": [],
+    "orientation_events": [],
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "0 resolvable of 16 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 0 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  },
+  {
+    "track_id": 6,
+    "seat_state": "unattributed",
+    "samples": 16,
+    "first_seen_ms": 0.0,
+    "last_seen_ms": 7500.0,
+    "observed_span_ms": 7500.0,
+    "coverage_of_recording": 0.9375,
+    "resolvable_samples": 15,
+    "median_head_scale_px": 17.3,
+    "baseline_yaw": -0.9063,
+    "baseline_yaw_spread": 0.4347,
+    "baseline_pitch": 0.1572,
+    "baseline_pitch_spread": 0.0681,
+    "baseline_yaw_relative_to_torso": -0.8528,
+    "baseline_yaw_relative_to_torso_spread": 0.4594,
+    "samples_turned_left": 6,
+    "samples_turned_right": 2,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.6154,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {
+      "monitor_or_bezel": 26,
+      "keyboard": 15,
+      "phone": 3,
+      "mouse": 2,
+      "book_or_notebook_like_object": 20,
+      "bag": 1
+    },
+    "near_hand_object_rates": {
+      "monitor_or_bezel": 1.625,
+      "keyboard": 0.938,
+      "phone": 0.188,
+      "mouse": 0.125,
+      "book_or_notebook_like_object": 1.25,
+      "bag": 0.062
+    },
+    "persistent_object_classes": [
+      "book_or_notebook_like_object",
+      "keyboard",
+      "monitor_or_bezel"
+    ],
+    "facing_counts": {
+      "downward": 2,
+      "turned_right": 7,
+      "not_resolvable_at_source_scale": 1,
+      "frontal": 6
+    },
+    "orientation_labels": [
+      {
+        "label": "shallow_down",
+        "classification": "observed_only",
+        "samples": 5,
+        "dashboard_action": "display_only",
+        "guardrail": "This band never escalates on duration alone."
+      },
+      {
+        "label": "turned_and_held",
+        "classification": "context_requires_second_modality",
+        "events": 1,
+        "dashboard_action": "show_only_with_second_modality",
+        "guardrail": "Torso-relative turn is not gaze and never routes to review on its own."
+      }
+    ],
+    "orientation_events": [
+      {
+        "label": "turned_and_held",
+        "classification": "context_requires_second_modality",
+        "direction": "left",
+        "from_ms": 4000.0,
+        "to_ms": 8000.0,
+        "duration_ms": 4000.0,
+        "dashboard_action": "show_only_with_second_modality",
+        "guardrail": "Torso-relative turn is not gaze and never routes to review on its own."
+      }
+    ],
+    "flags": [
+      {
+        "flag": "sustained_attention_away",
+        "severity": "high",
+        "evidence": "62% of 16 sightings departed from this person's own resting yaw of -0.91 (6 left, 2 right)",
+        "why": "head held away from their resting orientation for much of the time observed, more often to their left."
+      },
+      {
+        "flag": "persistent_object_beside_seat",
+        "severity": "info",
+        "evidence": "book_or_notebook_like_object in 125% of sightings",
+        "why": "present near this person's hands for most of the recording, so it is a fixed feature of their workstation rather than something they picked up. Recorded, not flagged: persistence is not corroboration for a handheld object."
+      }
+    ],
+    "note": ""
+  },
+  {
+    "track_id": 7,
+    "seat_state": "unattributed",
+    "samples": 15,
+    "first_seen_ms": 500.0,
+    "last_seen_ms": 7500.0,
+    "observed_span_ms": 7000.0,
+    "coverage_of_recording": 0.875,
+    "resolvable_samples": 6,
+    "median_head_scale_px": 53.2,
+    "baseline_yaw": null,
+    "baseline_yaw_spread": null,
+    "baseline_pitch": null,
+    "baseline_pitch_spread": null,
+    "baseline_yaw_relative_to_torso": null,
+    "baseline_yaw_relative_to_torso_spread": null,
+    "samples_turned_left": 0,
+    "samples_turned_right": 0,
+    "samples_looking_down": 0,
+    "fraction_away_from_baseline": 0.0,
+    "absences": [],
+    "longest_absence_ms": 0.0,
+    "wrist_below_desk_samples": 0,
+    "near_hand_object_counts": {},
+    "near_hand_object_rates": {},
+    "persistent_object_classes": [],
+    "facing_counts": {
+      "not_resolvable_at_source_scale": 9,
+      "downward": 1,
+      "frontal": 5
+    },
+    "orientation_labels": [
+      {
+        "label": "shallow_down",
+        "classification": "observed_only",
+        "samples": 1,
+        "dashboard_action": "display_only",
+        "guardrail": "This band never escalates on duration alone."
+      }
+    ],
+    "orientation_events": [],
+    "flags": [
+      {
+        "flag": "no_orientation_baseline",
+        "severity": "info",
+        "evidence": "6 resolvable of 15 sighting(s)",
+        "why": "too few resolvable head samples to establish this person's resting orientation, so no departure figure can be reported for them. A data-quality fact about us, not an observation about them."
+      }
+    ],
+    "note": "only 5 resolvable yaw sample(s); under the 8 needed for a baseline, so no departure figure is reported for this person"
+  }
+]

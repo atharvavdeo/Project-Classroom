@@ -1,0 +1,208 @@
+{
+  "crop_digest": "ac7227b7dc3e6daa2a4ea78ddfb7d072a3cd9e890e60c1dad03fc1152b131b8a",
+  "crop_rows": 217,
+  "crop_equivalence": "verified",
+  "mismatched_configs": [],
+  "equivalence_note": "every configuration below processed byte-identical crop rows, so a difference in their output is attributable to the detector and its slicing (PRD 4)",
+  "taxonomy_approved": false,
+  "configurations": [
+    {
+      "config_id": "rf_detr_native",
+      "state": "available",
+      "crop_digest": "ac7227b7dc3e6daa2a4ea78ddfb7d072a3cd9e890e60c1dad03fc1152b131b8a",
+      "checkpoint_sha256": "",
+      "crops_seen": 217,
+      "crops_abstained": 0,
+      "abstention_rate": 0.0,
+      "slices_run": 0,
+      "raw_detections": 617,
+      "merged_detections": 617,
+      "usable_detections": 617,
+      "by_class": {
+        "bag": 16,
+        "keyboard": 4,
+        "monitor_or_bezel": 21,
+        "mouse": 25,
+        "phone": 10,
+        "stationery": 3,
+        "unknown_object": 538
+      },
+      "phone": 10,
+      "secondary_paper_chit": 0,
+      "hard_negative_detections": 53,
+      "seconds": 42.858,
+      "crops_per_second": 5.06,
+      "peak_vram_mb": null
+    },
+    {
+      "config_id": "dfine_native",
+      "state": "available",
+      "crop_digest": "ac7227b7dc3e6daa2a4ea78ddfb7d072a3cd9e890e60c1dad03fc1152b131b8a",
+      "checkpoint_sha256": "",
+      "crops_seen": 217,
+      "crops_abstained": 0,
+      "abstention_rate": 0.0,
+      "slices_run": 0,
+      "raw_detections": 1648,
+      "merged_detections": 1648,
+      "usable_detections": 1645,
+      "by_class": {
+        "bag": 66,
+        "keyboard": 151,
+        "monitor_or_bezel": 303,
+        "mouse": 200,
+        "phone": 108,
+        "stationery": 81,
+        "unknown_object": 739
+      },
+      "phone": 108,
+      "secondary_paper_chit": 0,
+      "hard_negative_detections": 735,
+      "seconds": 137.4,
+      "crops_per_second": 1.58,
+      "peak_vram_mb": null
+    },
+    {
+      "config_id": "rf_detr_sahi",
+      "state": "available",
+      "crop_digest": "ac7227b7dc3e6daa2a4ea78ddfb7d072a3cd9e890e60c1dad03fc1152b131b8a",
+      "checkpoint_sha256": "",
+      "crops_seen": 217,
+      "crops_abstained": 0,
+      "abstention_rate": 0.0,
+      "slices_run": 1065,
+      "raw_detections": 919,
+      "merged_detections": 919,
+      "usable_detections": 919,
+      "by_class": {
+        "bag": 19,
+        "keyboard": 7,
+        "monitor_or_bezel": 47,
+        "mouse": 23,
+        "phone": 19,
+        "stationery": 17,
+        "unknown_object": 787
+      },
+      "phone": 19,
+      "secondary_paper_chit": 0,
+      "hard_negative_detections": 94,
+      "seconds": 275.043,
+      "crops_per_second": 0.79,
+      "peak_vram_mb": null
+    },
+    {
+      "config_id": "dfine_sahi",
+      "state": "available",
+      "crop_digest": "ac7227b7dc3e6daa2a4ea78ddfb7d072a3cd9e890e60c1dad03fc1152b131b8a",
+      "checkpoint_sha256": "",
+      "crops_seen": 217,
+      "crops_abstained": 0,
+      "abstention_rate": 0.0,
+      "slices_run": 1065,
+      "raw_detections": 2767,
+      "merged_detections": 2767,
+      "usable_detections": 2755,
+      "by_class": {
+        "bag": 82,
+        "keyboard": 458,
+        "monitor_or_bezel": 405,
+        "mouse": 199,
+        "phone": 159,
+        "stationery": 103,
+        "unknown_object": 1361
+      },
+      "phone": 159,
+      "secondary_paper_chit": 0,
+      "hard_negative_detections": 1165,
+      "seconds": 920.32,
+      "crops_per_second": 0.24,
+      "peak_vram_mb": null
+    }
+  ],
+  "failure_clusters": {
+    "rf_detr_native": {
+      "status": "unlabelled",
+      "detail": "no reference labels were supplied, so no confusion can be computed. The class mix below is the shape of the output, not its accuracy.",
+      "by_class": {
+        "bag": 16,
+        "keyboard": 4,
+        "monitor_or_bezel": 21,
+        "mouse": 25,
+        "phone": 10,
+        "stationery": 3,
+        "unknown_object": 538
+      },
+      "hard_negative_calls": {
+        "mouse": 25,
+        "keyboard": 4,
+        "monitor_or_bezel": 21,
+        "stationery": 3
+      }
+    },
+    "dfine_native": {
+      "status": "unlabelled",
+      "detail": "no reference labels were supplied, so no confusion can be computed. The class mix below is the shape of the output, not its accuracy.",
+      "by_class": {
+        "bag": 66,
+        "keyboard": 151,
+        "monitor_or_bezel": 303,
+        "mouse": 200,
+        "phone": 108,
+        "stationery": 81,
+        "unknown_object": 739
+      },
+      "hard_negative_calls": {
+        "mouse": 200,
+        "keyboard": 151,
+        "monitor_or_bezel": 303,
+        "stationery": 81
+      }
+    },
+    "rf_detr_sahi": {
+      "status": "unlabelled",
+      "detail": "no reference labels were supplied, so no confusion can be computed. The class mix below is the shape of the output, not its accuracy.",
+      "by_class": {
+        "bag": 19,
+        "keyboard": 7,
+        "monitor_or_bezel": 47,
+        "mouse": 23,
+        "phone": 19,
+        "stationery": 17,
+        "unknown_object": 787
+      },
+      "hard_negative_calls": {
+        "mouse": 23,
+        "keyboard": 7,
+        "monitor_or_bezel": 47,
+        "stationery": 17
+      }
+    },
+    "dfine_sahi": {
+      "status": "unlabelled",
+      "detail": "no reference labels were supplied, so no confusion can be computed. The class mix below is the shape of the output, not its accuracy.",
+      "by_class": {
+        "bag": 82,
+        "keyboard": 458,
+        "monitor_or_bezel": 405,
+        "mouse": 199,
+        "phone": 159,
+        "stationery": 103,
+        "unknown_object": 1361
+      },
+      "hard_negative_calls": {
+        "mouse": 199,
+        "keyboard": 458,
+        "monitor_or_bezel": 405,
+        "stationery": 103
+      }
+    }
+  },
+  "available": [
+    "rf_detr_native",
+    "dfine_native",
+    "rf_detr_sahi",
+    "dfine_sahi"
+  ],
+  "unavailable": [],
+  "selection": "none. PRD 3 blocks detector selection and evaluation until the product owner approves the taxonomy, and PRD 15 places selection in stage 12 against the reference manifest."
+}

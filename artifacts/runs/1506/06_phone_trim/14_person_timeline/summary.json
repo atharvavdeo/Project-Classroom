@@ -1,0 +1,38 @@
+{
+  "people": 140,
+  "sampled_rows": 677,
+  "duration_ms": 169170.3,
+  "people_with_a_yaw_baseline": 12,
+  "coverage_of_recording": {
+    "min": 0.0,
+    "median": 0.0044,
+    "max": 0.999
+  },
+  "fraction_away_from_baseline": {
+    "min": 0.0,
+    "median": 0.2866,
+    "max": 0.6613
+  },
+  "people_with_absences": 0,
+  "config": {
+    "departure": 0.3,
+    "absence_intervals": 4.0,
+    "min_absence_ms": 2000.0,
+    "min_samples_for_baseline": 8,
+    "near_hand_torso": 2.0,
+    "min_object_confidence": 0.0,
+    "persistent_object_rate": 0.5,
+    "min_object_rate": 0.02
+  },
+  "note": "Every person observed is profiled, whether or not anything notable happened to them. A person's departure figures are measured against their own resting orientation, so they are comparable within that person over time and not between people.",
+  "coverage_caveat": "coverage_of_recording is the span between a person's first and last sighting divided by the recording length. It is NOT a guarantee they were watched throughout that span -- tracking breaks and re-identification does not exist, so one physical person may appear as several tracks.",
+  "flags": {
+    "frequent_orientation_change": 3,
+    "target_object_near_hands": 5,
+    "no_orientation_baseline": 128,
+    "persistent_object_beside_seat": 2,
+    "sustained_attention_away": 3,
+    "prolonged_downward_orientation": 1,
+    "low_coverage": 3
+  }
+}

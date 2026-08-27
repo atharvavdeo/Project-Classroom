@@ -1,0 +1,235 @@
+/* Design tokens for the review console.
+ *
+ * Three theme states, not two: an explicit choice stamps data-theme on <html>,
+ * and the default "system" setting stamps nothing, so prefers-color-scheme is
+ * the only separator. Every colour is defined on bare :root first and only
+ * redefined in the dark blocks -- a colour whose sole definition lives inside
+ * a media query never applies in the unstamped state.
+ *
+ * The state ramp is deliberately a separate scale from --accent. "Clickable"
+ * and "serious" must never be confusable.
+ */
+
+:root {
+  --paper: #f4f6f8;
+  --surface: #ffffff;
+  --surface-2: #eaeef2;
+  --sunk: #e1e7ec;
+  --glass: rgba(255, 255, 255, 0.72);
+
+  --ink: #111820;
+  --ink-2: #3d4854;
+  --slate: #68757f;
+  --slate-2: #8b98a3;
+
+  --rule: #d3dbe2;
+  --rule-strong: #b6c2cc;
+
+  --accent: #1a6c87;
+  --accent-2: #13566c;
+  --accent-wash: #dceaf0;
+
+  /* Six states. Machine first, then the two only a human may write. */
+  --s-none: #8a96a0;
+  --s-none-bg: #e7ecf0;
+  --s-context: #2f6e96;
+  --s-context-bg: #ddeaf3;
+  --s-abstain: #8a6414;
+  --s-abstain-bg: #f6ebd2;
+  --s-review: #a6431f;
+  --s-review-bg: #f7e0d7;
+  --s-confirm: #2c6b45;
+  --s-confirm-bg: #dcede2;
+  --s-dismiss: #6b7280;
+  --s-dismiss-bg: #e9ebee;
+
+  /* Five flag lanes. Same colours drive the timeline, filters and reports. */
+  --lane-object: #a6431f;
+  --lane-orientation: #8a6414;
+  --lane-hands: #2f6e96;
+  --lane-presence: #6b5b8a;
+  --lane-quality: #5a7a6b;
+
+  --display: "Archivo", system-ui, sans-serif;
+  --body: "Source Serif 4", Georgia, serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  --rail: 15rem;
+  --sh: 0 1px 2px rgba(17, 24, 32, 0.06), 0 4px 14px rgba(17, 24, 32, 0.05);
+  --sh-lift: 0 2px 6px rgba(17, 24, 32, 0.08), 0 14px 34px rgba(17, 24, 32, 0.09);
+
+  /* Springs, from the motion spec. Critically damped by default; bounce only
+   * follows a gesture that carried momentum. */
+  --spring: cubic-bezier(0.32, 0.72, 0.35, 1);
+  --fast: 140ms;
+  --base: 240ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0c1116;
+    --surface: #141b22;
+    --surface-2: #1a232b;
+    --sunk: #0f161c;
+    --glass: rgba(20, 27, 34, 0.72);
+
+    --ink: #e6edf3;
+    --ink-2: #c2cdd6;
+    --slate: #93a1ac;
+    --slate-2: #6f7e8a;
+
+    --rule: #28333d;
+    --rule-strong: #3a4854;
+
+    --accent: #5fb6d4;
+    --accent-2: #8acfe6;
+    --accent-wash: #15303c;
+
+    --s-none: #8a96a0;
+    --s-none-bg: #1e262e;
+    --s-context: #71b4dc;
+    --s-context-bg: #152936;
+    --s-abstain: #d9a84a;
+    --s-abstain-bg: #2e2515;
+    --s-review: #e5825c;
+    --s-review-bg: #33190f;
+    --s-confirm: #6fbe8c;
+    --s-confirm-bg: #122619;
+    --s-dismiss: #8b949e;
+    --s-dismiss-bg: #1c2228;
+
+    --lane-object: #e5825c;
+    --lane-orientation: #d9a84a;
+    --lane-hands: #71b4dc;
+    --lane-presence: #a48fd0;
+    --lane-quality: #7fb49b;
+
+    --sh: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.35);
+    --sh-lift: 0 2px 8px rgba(0, 0, 0, 0.5), 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0c1116;
+  --surface: #141b22;
+  --surface-2: #1a232b;
+  --sunk: #0f161c;
+  --glass: rgba(20, 27, 34, 0.72);
+
+  --ink: #e6edf3;
+  --ink-2: #c2cdd6;
+  --slate: #93a1ac;
+  --slate-2: #6f7e8a;
+
+  --rule: #28333d;
+  --rule-strong: #3a4854;
+
+  --accent: #5fb6d4;
+  --accent-2: #8acfe6;
+  --accent-wash: #15303c;
+
+  --s-none: #8a96a0;
+  --s-none-bg: #1e262e;
+  --s-context: #71b4dc;
+  --s-context-bg: #152936;
+  --s-abstain: #d9a84a;
+  --s-abstain-bg: #2e2515;
+  --s-review: #e5825c;
+  --s-review-bg: #33190f;
+  --s-confirm: #6fbe8c;
+  --s-confirm-bg: #122619;
+  --s-dismiss: #8b949e;
+  --s-dismiss-bg: #1c2228;
+
+  --lane-object: #e5825c;
+  --lane-orientation: #d9a84a;
+  --lane-hands: #71b4dc;
+  --lane-presence: #a48fd0;
+  --lane-quality: #7fb49b;
+
+  --sh: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.35);
+  --sh-lift: 0 2px 8px rgba(0, 0, 0, 0.5), 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--display);
+  margin: 0;
+  text-wrap: balance;
+  font-optical-sizing: auto;
+}
+
+/* Tracking is size-specific: large text tightens, small uppercase opens up. */
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.15;
+}
+h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.016em;
+  line-height: 1.25;
+}
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.006em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reduced motion means a gentler equivalent, not a slower animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Frostier, not translucent, when the viewer asks for less transparency. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass: var(--surface);
+  }
+}

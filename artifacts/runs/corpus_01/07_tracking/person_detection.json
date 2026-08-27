@@ -1,0 +1,16 @@
+{
+  "config_id": "person_detection_primary",
+  "state": "available",
+  "reason": "",
+  "rows_seen": 166,
+  "rows_with_person": 164,
+  "row_coverage": 0.988,
+  "persons_proposed": 392,
+  "persons_returned": 379,
+  "persons_per_row": 2.283,
+  "detected_boxes": 379,
+  "interpolated_boxes": 0,
+  "seconds": 71.649,
+  "rows_per_second": 2.32,
+  "peak_vram_mb": null
+}

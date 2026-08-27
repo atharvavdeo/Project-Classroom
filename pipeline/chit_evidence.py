@@ -77,7 +77,11 @@ class EvidenceConfig:
     # positives run 0.52-0.74 and the worst false positive reaches 0.65, so
     # this gate does almost no work and must not be relied on. It is here to
     # drop the 0.22-0.28 rubbish, nothing more.
-    min_confidence: float = 0.40
+    # Matches the detector's own floor (chit_detector.Config.confidence),
+    # raised to 0.50 by operator decision. Kept in step deliberately: a gate
+    # looser than the detector cannot remove anything, and a gate tighter
+    # than it silently re-filters what the detector already sent.
+    min_confidence: float = 0.50
 
     # Detection area as a fraction of the person's box. The chit is small and
     # specific; a box covering a quarter of a person is their shirt. Measured

@@ -1,0 +1,5 @@
+{
+  "digest": "67489132465ccb8bba616b8e893be00f2a4beb5f77937479e82cfd045280868d",
+  "rows": 379,
+  "note": "every pose configuration is given these rows unchanged. A configuration reporting a different digest was not compared (PRD 4)."
+}

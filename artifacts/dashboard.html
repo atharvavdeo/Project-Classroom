@@ -1,0 +1,118 @@
+<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Invigilation Review Queue</title><style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600;700&display=swap');
+
+:root{
+  --paper:#f1f2ef; --raise:#f7f8f5; --ink:#12161a; --ink-2:#4a5560;
+  --rule:#d3d7d2; --rule-soft:#e4e7e2;
+  --amber:#b4700c; --flag:#9e3529; --settled:#47695b;
+  --flagwash:#f6ece9; --amberwash:#f7f0e2;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0d1114; --raise:#141a1f; --ink:#e6e9e6; --ink-2:#93a0a8;
+    --rule:#242c33; --rule-soft:#1b2228;
+    --amber:#d99a3c; --flag:#c86353; --settled:#7fa593;
+    --flagwash:#1e1512; --amberwash:#1c1710;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0d1114; --raise:#141a1f; --ink:#e6e9e6; --ink-2:#93a0a8;
+  --rule:#242c33; --rule-soft:#1b2228;
+  --amber:#d99a3c; --flag:#c86353; --settled:#7fa593;
+  --flagwash:#1e1512; --amberwash:#1c1710;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  font-size:15px;line-height:1.6;font-weight:400}
+.wrap{max-width:960px;margin:0 auto;padding:44px 22px 96px}
+
+.mast{border-bottom:2px solid var(--ink);padding-bottom:18px;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+h1{font-size:27px;font-weight:700;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.mast .id{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
+  color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase;text-align:right}
+.standfirst{max-width:64ch;color:var(--ink-2);margin:16px 0 0;font-size:15px}
+.standfirst b{color:var(--ink);font-weight:600}
+
+.tally{display:flex;gap:0;margin:30px 0 6px;border:1px solid var(--rule);
+  border-radius:2px;overflow:hidden;flex-wrap:wrap}
+.tally div{flex:1 1 118px;padding:13px 16px;border-right:1px solid var(--rule)}
+.tally div:last-child{border-right:0}
+.tally b{display:block;font-family:"IBM Plex Mono",monospace;font-size:23px;
+  font-weight:500;font-variant-numeric:tabular-nums;line-height:1.2}
+.tally span{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+.tally .hi b{color:var(--flag)}
+.tally .mid b{color:var(--amber)}
+
+h2{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);
+  margin:44px 0 0;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+
+.entry{display:grid;grid-template-columns:96px 1fr;gap:0 22px;
+  padding:20px 0;border-bottom:1px solid var(--rule-soft)}
+.gutter{font-family:"IBM Plex Mono",monospace;font-size:12px;
+  font-variant-numeric:tabular-nums;color:var(--ink-2);line-height:1.7}
+.gutter .tc{color:var(--ink);font-weight:500;font-size:13px}
+.gutter .src{display:block;margin-top:3px;font-size:10.5px;letter-spacing:.04em}
+.led{width:9px;height:9px;display:inline-block;margin-right:7px;
+  vertical-align:1px;border-radius:1px}
+.led.flag{background:var(--flag)}
+.led.watch{background:var(--amber)}
+.subject{font-size:17px;font-weight:600;letter-spacing:-.01em;margin:0}
+.verdict{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;margin:2px 0 0}
+.verdict.flag{color:var(--flag)}
+.verdict.watch{color:var(--amber)}
+.because{margin:12px 0 0;padding:0;list-style:none}
+.because li{position:relative;padding-left:15px;margin:0 0 6px;max-width:64ch}
+.because li::before{content:"";position:absolute;left:0;top:.62em;
+  width:6px;height:1.5px;background:var(--amber)}
+.meta{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0 0;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-2);
+  letter-spacing:.03em}
+.caveat{margin:12px 0 0;padding:10px 13px;background:var(--amberwash);
+  border-left:2px solid var(--amber);font-size:13.5px;color:var(--ink-2);max-width:66ch}
+.caveat b{color:var(--ink);font-weight:600}
+.acts{display:flex;gap:7px;margin:15px 0 0}
+button{font:inherit;font-size:12.5px;font-weight:450;padding:5px 13px;
+  border:1px solid var(--rule);background:transparent;color:var(--ink);
+  border-radius:2px;cursor:pointer;transition:border-color .12s,color .12s}
+button:hover{border-color:var(--ink-2)}
+button.pri{border-color:var(--flag);color:var(--flag)}
+button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.entry.done{opacity:.44}
+.stamp{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--settled);
+  letter-spacing:.05em;margin:13px 0 0}
+
+.ladder{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0 0}
+.ladder th,.ladder td{text-align:left;padding:9px 12px 9px 0;
+  border-bottom:1px solid var(--rule-soft);vertical-align:top}
+.ladder th{font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.ladder td:first-child{font-family:"IBM Plex Mono",monospace;font-size:12px;
+  white-space:nowrap;font-weight:500}
+.scroll{overflow-x:auto}
+.colophon{margin:40px 0 0;padding:20px 0 0;border-top:2px solid var(--ink);
+  font-size:13.5px;color:var(--ink-2);max-width:70ch}
+.colophon b{color:var(--ink);font-weight:600}
+.empty{padding:34px 0;color:var(--ink-2);max-width:64ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:620px){
+  .entry{grid-template-columns:1fr;gap:9px}
+  .gutter{display:flex;gap:12px;align-items:baseline}
+  .gutter .src{margin-top:0}
+}
+</style><div class="wrap"><header class="mast"><h1>Invigilation Review Queue</h1><div class="id">Project Classroom · Drishti AI PS2<br>03_mobile, 12_paper, 04_talking</div></header><p class="standfirst">People are ranked by how much <b>independent</b> evidence supports a second look — evidence from different sensing methods, not the same detector firing repeatedly. <b>Nothing on this page is a finding of cheating.</b> Only a human watching the footage can confirm one.</p><div class="tally"><div class="hi"><b>2</b><span>Review</span></div><div class="mid"><b>9</b><span>Worth a look</span></div><div><b>495</b><span>People tracked</span></div><div><b>484</b><span>Not assessed</span></div><div><b>0</b><span>Confirmed</span></div></div><h2>Queue</h2><article class="entry"><div class="gutter"><span class="tc">00:00</span><span class="src">03_mobile</span></div><div><p class="subject"><span class="led flag"></span>Person #1</p><p class="verdict flag">Two independent signals — review</p><ul class="because"><li>turned away from their own resting posture in 79% of the frames where their head could be measured</li><li>turned both ways repeatedly (240 left, 300 right)</li><li>SAM 3 identified a mobile phone in their hands (2 frame(s)) — a phone is prohibited outright</li></ul><div class="meta"><span>head orientation</span><span>object at hands</span><span>seen 100% of recording</span><span>00:00&ndash;04:41</span></div><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:00</span><span class="src">04_talking</span></div><div><p class="subject"><span class="led flag"></span>Person #4</p><p class="verdict flag">Two independent signals — review</p><ul class="because"><li>turned both ways repeatedly (123 left, 48 right)</li><li>handled a small pale object; a second model (SAM 3) independently agreed in 7 frame(s), longest continuous stretch 21.8s</li></ul><div class="meta"><span>head orientation</span><span>object at hands</span><span>seen 100% of recording</span><span>00:00&ndash;02:23</span></div><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:01</span><span class="src">12_paper</span></div><div><p class="subject"><span class="led watch"></span>Person #18</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>turned away from their own resting posture in 80% of the frames where their head could be measured</li><li>turned both ways repeatedly (44 left, 41 right)</li></ul><div class="meta"><span>head orientation</span><span>seen 36% of recording</span><span>00:01&ndash;00:33</span></div><p class="caveat"><b>Caveat.</b> SAM 3 could not confirm 5 of their object detections either way — unverified, not cleared</p><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:00</span><span class="src">04_talking</span></div><div><p class="subject"><span class="led watch"></span>Person #7</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>turned away from their own resting posture in 77% of the frames where their head could be measured</li><li>turned both ways repeatedly (18 left, 12 right)</li></ul><div class="meta"><span>head orientation</span><span>seen 12% of recording</span><span>00:00&ndash;00:18</span></div><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:00</span><span class="src">12_paper</span></div><div><p class="subject"><span class="led watch"></span>Person #16</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>turned away from their own resting posture in 53% of the frames where their head could be measured</li><li>turned both ways repeatedly (36 left, 5 right)</li></ul><div class="meta"><span>head orientation</span><span>seen 99% of recording</span><span>00:00&ndash;01:28</span></div><p class="caveat"><b>Caveat.</b> SAM 3 could not confirm 6 of their object detections either way — unverified, not cleared</p><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:00</span><span class="src">04_talking</span></div><div><p class="subject"><span class="led watch"></span>Person #1</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>turned away from their own resting posture in 51% of the frames where their head could be measured</li><li>turned both ways repeatedly (24 left, 40 right)</li></ul><div class="meta"><span>head orientation</span><span>seen 100% of recording</span><span>00:00&ndash;02:23</span></div><p class="caveat"><b>Caveat.</b> SAM 3 could not confirm 3 of their object detections either way — unverified, not cleared</p><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:30</span><span class="src">12_paper</span></div><div><p class="subject"><span class="led watch"></span>Person #118</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>handled a small pale object; a second model (SAM 3) independently agreed in 110 frame(s), longest continuous stretch 56.5s</li></ul><div class="meta"><span>object at hands</span><span>seen 66% of recording</span><span>00:30&ndash;01:28</span></div><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:05</span><span class="src">12_paper</span></div><div><p class="subject"><span class="led watch"></span>Person #53</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>handled a small pale object; a second model (SAM 3) independently agreed in 23 frame(s), longest continuous stretch 12.0s</li></ul><div class="meta"><span>object at hands</span><span>seen 25% of recording</span><span>00:05&ndash;00:27</span></div><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:24</span><span class="src">03_mobile</span></div><div><p class="subject"><span class="led watch"></span>Person #17</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>turned both ways repeatedly (12 left, 7 right)</li></ul><div class="meta"><span>head orientation</span><span>seen 6% of recording</span><span>00:24&ndash;00:41</span></div><p class="caveat"><b>Caveat.</b> SAM 3 could not confirm 1 of their object detections either way — unverified, not cleared</p><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:09</span><span class="src">03_mobile</span></div><div><p class="subject"><span class="led watch"></span>Person #8</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>turned both ways repeatedly (10 left, 5 right)</li></ul><div class="meta"><span>head orientation</span><span>seen 5% of recording</span><span>00:09&ndash;00:24</span></div><p class="caveat"><b>Caveat.</b> SAM 3 could not confirm 18 of their object detections either way — unverified, not cleared</p><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><article class="entry"><div class="gutter"><span class="tc">00:00</span><span class="src">04_talking</span></div><div><p class="subject"><span class="led watch"></span>Person #6</p><p class="verdict watch">One signal — worth a look</p><ul class="because"><li>turned both ways repeatedly (15 left, 6 right)</li></ul><div class="meta"><span>head orientation</span><span>seen 58% of recording</span><span>00:00&ndash;01:22</span></div><p class="caveat"><b>Caveat.</b> SAM 3 could not confirm 4 of their object detections either way — unverified, not cleared</p><p class="caveat"><b>Caveat.</b> no seat calibration for this camera, so this is a tracked person, not a seat number</p><div class="acts"><button class="pri" data-act="confirm">Confirm incident</button><button data-act="dismiss">Dismiss</button><button data-act="better">Need better view</button></div></div></article><h2>How an entry reaches this page</h2><div class="scroll"><table class="ladder"><tr><th>Level</th><th>What it means</th><th>Decided by</th></tr><tr><td>Review</td><td>Two indicators from <em>different</em> sensing methods coincide on the same person</td><td>Machine, ranked</td></tr><tr><td>Worth a look</td><td>One indicator survived every gate</td><td>Machine</td></tr><tr><td>Not assessed</td><td>No indicator survived the gates — <em>or</em> the recording never showed enough to judge. This is not an all-clear</td><td>Machine</td></tr><tr><td>Confirmed</td><td>A person watched the footage and agreed</td><td><b>Human only — never the system</b></td></tr></table></div><div class="colophon"><b>What this page does not claim.</b> No ground-truth record exists for these recordings, so nothing here is a precision or accuracy measurement — every count is what the system reported, not what was true. The system cannot re-identify a person across a tracking break, so one person may appear as several entries, and a person who leaves and returns is not verified to be the same person. Object detection runs against a hosted service, which conflicts with the offline requirement in Problem Statement 2. <b>Reviewer decisions on this page are not saved.</b> The buttons change only what this browser shows; nothing is written back. Persisted, append-only review is specified in docs/OUTPUT_CONTRACT.md and is not yet built. This page also still renders the older <code>pipeline/verdict.py</code> ladder rather than the frozen output contract.</div></div><script>
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const c=b.closest('.entry'); const a=b.dataset.act;
+  c.classList.add('done');
+  const m=document.createElement('p'); m.className='stamp';
+  m.textContent=(a==='confirm'?'CONFIRMED BY REVIEWER':
+    a==='dismiss'?'DISMISSED BY REVIEWER':'FLAGGED FOR A BETTER VIEW')+
+    ' — held in this page only, not written back to the run.';
+  c.querySelector('.acts').replaceWith(m);
+});
+</script></html>

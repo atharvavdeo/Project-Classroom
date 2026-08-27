@@ -1,0 +1,4162 @@
+[
+ {
+  "track_id": 1,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_HANDLING_SUSTAINED",
+   "OBJECT_HANDLING_RECURRENT",
+   "ORIENTATION_DOWN_PROLONGED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "463 of 463 proposals were at a wrist and small enough, across 12 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 702, called equipment 17"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": true,
+    "detail": "longest continuous handling 51.0s, 126.2s in total across 12 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "2% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 463,
+   "gated": 463,
+   "sam3_supported": 0,
+   "sam3_equipment": 17,
+   "sam3_not_confirmed": 702,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 2,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "OBJECT_TOO_LARGE",
+   "OBJECT_NO_WRIST_RESOLVED",
+   "SAM3_NOT_CONFIRMED",
+   "ORIENTATION_DOWN_PROLONGED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "1 of 28 proposals were at a wrist and small enough, across 1 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 122, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 74% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.2s, 0.2s in total across 1 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 28,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 122,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 3,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_TOO_LARGE",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "13 of 19 proposals were at a wrist and small enough, across 3 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 169, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 93% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 2.8s, 3.2s in total across 3 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 19,
+   "gated": 13,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 169,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 66,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_HANDLING_SUSTAINED",
+   "OBJECT_HANDLING_RECURRENT",
+   "ORIENTATION_DOWN_PROLONGED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "227 of 227 proposals were at a wrist and small enough, across 11 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 227, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": true,
+    "detail": "longest continuous handling 20.5s, 62.8s in total across 11 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 227,
+   "gated": 227,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 227,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 89,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 28,
+  "seat": "unattributed",
+  "state": "review_candidate",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "OBJECT_TOO_LARGE",
+   "OBJECT_NO_WRIST_RESOLVED",
+   "SAM3_PHONE_NAMED",
+   "SAM3_SUPPORTED",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_HANDLING_RECURRENT",
+   "ORIENTATION_DOWN_PROLONGED"
+  ],
+  "modalities": [
+   "object_at_hands"
+  ],
+  "priority": 496.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "62 of 198 proposals were at a wrist and small enough, across 11 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": true,
+    "detail": "SAM 3 supported 20, named a phone 60, could not confirm 423, called equipment 2"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 86% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": true,
+    "detail": "longest continuous handling 4.5s, 16.8s in total across 11 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 198,
+   "gated": 62,
+   "sam3_supported": 20,
+   "sam3_equipment": 2,
+   "sam3_not_confirmed": 423,
+   "sam3_unavailable": 0,
+   "sam3_phone": 60
+  }
+ },
+ {
+  "track_id": 42,
+  "seat": "unattributed",
+  "state": "review_candidate",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "OBJECT_TOO_LARGE",
+   "OBJECT_NO_WRIST_RESOLVED",
+   "SAM3_SUPPORTED",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_HANDLING_RECURRENT",
+   "ORIENTATION_AWAY_SUSTAINED"
+  ],
+  "modalities": [
+   "head_orientation",
+   "object_at_hands"
+  ],
+  "priority": 22.5,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "29 of 112 proposals were at a wrist and small enough, across 11 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": true,
+    "detail": "SAM 3 supported 6, named a phone 0, could not confirm 69, called equipment 111"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 82% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": true,
+    "detail": "longest continuous handling 2.5s, 8.8s in total across 11 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "60% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 112,
+   "gated": 29,
+   "sam3_supported": 6,
+   "sam3_equipment": 111,
+   "sam3_not_confirmed": 69,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 13,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "15 of 15 proposals were at a wrist and small enough, across 6 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 16, called equipment 0"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 1.5s, 4.8s in total across 6 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "0% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 15,
+   "gated": 15,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 16,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 6,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "OBJECT_TOO_LARGE",
+   "OBJECT_NO_WRIST_RESOLVED",
+   "SAM3_SUPPORTED",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_HANDLING_RECURRENT"
+  ],
+  "modalities": [],
+  "priority": 0.5,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "46 of 108 proposals were at a wrist and small enough, across 10 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 2, named a phone 0, could not confirm 141, called equipment 82"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 92% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": true,
+    "detail": "longest continuous handling 4.2s, 16.5s in total across 10 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "36% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 108,
+   "gated": 46,
+   "sam3_supported": 2,
+   "sam3_equipment": 82,
+   "sam3_not_confirmed": 141,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 125,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_TOO_LARGE",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "14 of 26 proposals were at a wrist and small enough, across 6 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 53, called equipment 75"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 99% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 1.8s, 4.0s in total across 6 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "59% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 26,
+   "gated": 14,
+   "sam3_supported": 0,
+   "sam3_equipment": 75,
+   "sam3_not_confirmed": 53,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 124,
+  "seat": "unattributed",
+  "state": "review_candidate",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "OBJECT_TOO_LARGE",
+   "OBJECT_NO_WRIST_RESOLVED",
+   "SAM3_PHONE_NAMED",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED",
+   "OBJECT_HANDLING_RECURRENT",
+   "ORIENTATION_AWAY_SUSTAINED",
+   "ORIENTATION_CHANGE_FREQUENT",
+   "ORIENTATION_DOWN_PROLONGED"
+  ],
+  "modalities": [
+   "head_orientation",
+   "object_at_hands"
+  ],
+  "priority": 29.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "21 of 96 proposals were at a wrist and small enough, across 7 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": true,
+    "detail": "SAM 3 supported 0, named a phone 1, could not confirm 125, called equipment 1"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 93% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": true,
+    "detail": "longest continuous handling 2.2s, 5.8s in total across 7 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "1% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 96,
+   "gated": 21,
+   "sam3_supported": 0,
+   "sam3_equipment": 1,
+   "sam3_not_confirmed": 125,
+   "sam3_unavailable": 0,
+   "sam3_phone": 1
+  }
+ },
+ {
+  "track_id": 29,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 18,
+  "seat": "unattributed",
+  "state": "review_candidate",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_AWAY_FROM_WRIST",
+   "SAM3_PHONE_NAMED",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED",
+   "ORIENTATION_DOWN_PROLONGED"
+  ],
+  "modalities": [],
+  "priority": 137.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "10 of 13 proposals were at a wrist and small enough, across 4 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": true,
+    "detail": "SAM 3 supported 0, named a phone 17, could not confirm 68, called equipment 2"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 95% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 1.2s, 2.8s in total across 4 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "2% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 13,
+   "gated": 10,
+   "sam3_supported": 0,
+   "sam3_equipment": 2,
+   "sam3_not_confirmed": 68,
+   "sam3_unavailable": 0,
+   "sam3_phone": 17
+  }
+ },
+ {
+  "track_id": 112,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_TOO_LARGE",
+   "SAM3_SUPPORTED",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.25,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "12 of 14 proposals were at a wrist and small enough, across 5 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 1, named a phone 0, could not confirm 34, called equipment 15"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 94% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 2.8s, 4.2s in total across 5 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "30% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 14,
+   "gated": 12,
+   "sam3_supported": 1,
+   "sam3_equipment": 15,
+   "sam3_not_confirmed": 34,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 121,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_TOO_LARGE",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "1 of 2 proposals were at a wrist and small enough, across 1 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 9, called equipment 38"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.2s, 0.2s in total across 1 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": false,
+    "detail": "81% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 38,
+   "sam3_not_confirmed": 9,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 24,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "ORIENTATION_NOT_ASSESSABLE",
+   "TALKING_NOT_MEASURABLE",
+   "OBJECT_PROPOSAL_PAPER",
+   "OBJECT_AT_WRIST",
+   "OBJECT_TOO_LARGE",
+   "SAM3_EQUIPMENT_CONTEXT",
+   "SAM3_NOT_CONFIRMED"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "proposal_survives_geometry",
+    "passed": true,
+    "detail": "4 of 25 proposals were at a wrist and small enough, across 3 episode(s)"
+   },
+   {
+    "name": "sam3_supports_or_cannot_exclude",
+    "passed": false,
+    "detail": "SAM 3 supported 0, named a phone 0, could not confirm 27, called equipment 24"
+   },
+   {
+    "name": "associated_with_this_person",
+    "passed": true,
+    "detail": "a wrist resolved in 100% of this person's sightings"
+   },
+   {
+    "name": "lasts_or_recurs",
+    "passed": false,
+    "detail": "longest continuous handling 0.8s, 1.2s in total across 3 episode(s)"
+   },
+   {
+    "name": "no_dominant_equipment_explanation",
+    "passed": true,
+    "detail": "47% of adjudicated proposals at this seat were named workstation equipment"
+   }
+  ],
+  "funnel": {
+   "proposals": 25,
+   "gated": 4,
+   "sam3_supported": 0,
+   "sam3_equipment": 24,
+   "sam3_not_confirmed": 27,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 4,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 4.7% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 13,
+   "gated": 3,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 13,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 76,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 4.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 118,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 3.8% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 8,
+   "gated": 5,
+   "sam3_supported": 0,
+   "sam3_equipment": 18,
+   "sam3_not_confirmed": 15,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 8,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 3.8% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 26,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 3.7% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 40,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 3.7% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 78,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 3.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 9,
+   "gated": 5,
+   "sam3_supported": 2,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 24,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 5,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 68,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 3.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 97,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 3.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 88,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 5,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 16,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 108,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.7% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 14,
+   "gated": 7,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 23,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 17,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 139,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 12,
+   "gated": 2,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 38,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 14,
+   "gated": 8,
+   "sam3_supported": 0,
+   "sam3_equipment": 3,
+   "sam3_not_confirmed": 11,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 86,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 16,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.8% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 6,
+   "gated": 5,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 11,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 64,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 22,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 43,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.8% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 6,
+   "gated": 6,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 15,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 87,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 132,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.6% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 32,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 16,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 75,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.8% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 74,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.5% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 19,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 46,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 5,
+   "gated": 3,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 3,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 134,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 11,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 2.2% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 3,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 3,
+   "sam3_not_confirmed": 10,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 85,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 14,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 10,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 135,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 27,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 13,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 1,
+   "sam3_not_confirmed": 8,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 59,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.7% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 2,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 110,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 3,
+   "gated": 3,
+   "sam3_supported": 2,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 7,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 113,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 5,
+   "gated": 4,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 12,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 9,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 49,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 3,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 3,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 50,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 52,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 77,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 111,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.6% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 6,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 133,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.2% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 2,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 25,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 7,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 33,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 56,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 69,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 70,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.7% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 81,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 84,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 1,
+   "sam3_not_confirmed": 4,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 129,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 6,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 5,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 14,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.6% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 23,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 39,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 2,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 41,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.9% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 57,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 73,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 1.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 7,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 6,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 100,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 4,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 114,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 123,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 2,
+   "sam3_not_confirmed": 3,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 126,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 12,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 30,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 48,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 3,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 55,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 58,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 61,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 62,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 65,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 2,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 92,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 93,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 96,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 99,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.4% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 102,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 106,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.1% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 122,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 3,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 2,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 127,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.3% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 7,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 10,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 15,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 20,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 21,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 31,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 32,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 34,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 3,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 35,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 36,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 37,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 4
+  }
+ },
+ {
+  "track_id": 44,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 45,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 47,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 51,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 53,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 54,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 1
+  }
+ },
+ {
+  "track_id": 60,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 63,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 67,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 71,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 72,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 79,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 80,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 82,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 83,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 90,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 91,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 94,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 95,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 98,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 101,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 103,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 104,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 105,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 107,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 109,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 115,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 116,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 1,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 2,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 117,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 1,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 119,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 120,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 3,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 128,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 130,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 131,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 1,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 136,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 137,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 138,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 4,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 1,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ },
+ {
+  "track_id": 140,
+  "seat": "unattributed",
+  "state": "needs_better_view",
+  "reason_codes": [
+   "SEAT_UNCALIBRATED",
+   "TRACK_FRAGMENT"
+  ],
+  "modalities": [],
+  "priority": 0.0,
+  "conditions": [
+   {
+    "name": "track_long_enough_to_profile",
+    "passed": false,
+    "detail": "seen in 0.0% of the recording"
+   }
+  ],
+  "funnel": {
+   "proposals": 0,
+   "gated": 0,
+   "sam3_supported": 0,
+   "sam3_equipment": 0,
+   "sam3_not_confirmed": 0,
+   "sam3_unavailable": 0,
+   "sam3_phone": 0
+  }
+ }
+]

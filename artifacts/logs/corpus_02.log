@@ -1,0 +1,107 @@
+
+======================================================================
+Phase 0  preflight + run manifest
+======================================================================
+experiment   product_zero  (5b6434de4643)
+residency    sequential, 2.0 GB safety margin
+python       3.13.9 on Windows 11
+gpu          NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB, driver 592.27
+torch        2.10.0+cpu, cuda NOT available
+onnxruntime  AzureExecutionProvider, CPUExecutionProvider
+free disk    69.6 GB at C:\DrishtiAI\Project-Classroom\artifacts\runs
+
+configurations
+  OK  person_detection_primary  person_detection  available             import rtmlib
+  OK  tracker_primary           tracker           available             import supervision
+  OK  seat_only_no_track        tracker           available             none required
+  OK  rtmpose_baseline          pose              available             import rtmlib
+  OK  rtmo_baseline             pose              available             import rtmlib
+  OK  rtmo_large                pose              available             import rtmlib
+  OK  alphapose_crowd_baseline  pose              available             import alphapose.models.builder
+  OK  dfine_native              object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_native            object            available             import rfdetr
+  OK  dfine_sahi                object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_sahi              object            available             import rfdetr
+  OK  gemma_marked_evidence     vlm               available             version: 0.1.1-dev (build 10472, commit 60eeeb608)
+Traceback (most recent call last):
+  File "C:\DrishtiAI\Project-Classroom\tools\preflight_rtx3090.py", line 344, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\DrishtiAI\Project-Classroom\tools\preflight_rtx3090.py", line 285, in main
+    paths = artifacts.create_run(artifact_root, run_id)
+  File "C:\DrishtiAI\Project-Classroom\pipeline\artifacts.py", line 194, in create_run
+    raise FileExistsError(
+        f"{paths.dir} already exists. Run IDs are immutable; pick a new one."
+    )
+FileExistsError: C:\DrishtiAI\Project-Classroom\artifacts\runs\corpus_02 already exists. Run IDs are immutable; pick a new one.
+
+======================================================================
+Phase 1  ingest inventory + contact sheets
+======================================================================
+Traceback (most recent call last):
+  File "C:\DrishtiAI\Project-Classroom\tools\validate_video.py", line 218, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\DrishtiAI\Project-Classroom\tools\validate_video.py", line 173, in main
+    manifest = RunManifest.read(paths)
+  File "C:\DrishtiAI\Project-Classroom\pipeline\run_manifest.py", line 168, in read
+    data = json.loads((paths.dir / MANIFEST_FILE).read_text(encoding="utf-8"))
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\DrishtiAI\\Project-Classroom\\artifacts\\runs\\corpus_02\\RUN_MANIFEST.json'
+
+======================================================================
+Phase 1  preprocessing A/B (identity/CLAHE/denoise/sharpen)
+======================================================================
+Traceback (most recent call last):
+  File "C:\DrishtiAI\Project-Classroom\tools\run_preprocessing_ab.py", line 117, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\DrishtiAI\Project-Classroom\tools\run_preprocessing_ab.py", line 61, in main
+    status = RunStatus(paths, RunManifest.read(paths).run_id)
+                              ~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\DrishtiAI\Project-Classroom\pipeline\run_manifest.py", line 168, in read
+    data = json.loads((paths.dir / MANIFEST_FILE).read_text(encoding="utf-8"))
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\DrishtiAI\\Project-Classroom\\artifacts\\runs\\corpus_02\\RUN_MANIFEST.json'
+
+======================================================================
+Phases 1-3  health, motion, ROI, segmentation
+======================================================================
+Traceback (most recent call last):
+  File "C:\DrishtiAI\Project-Classroom\tools\run_motion_scan.py", line 261, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\DrishtiAI\Project-Classroom\tools\run_motion_scan.py", line 76, in main
+    status = RunStatus(paths, RunManifest.read(paths).run_id)
+                              ~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\DrishtiAI\Project-Classroom\pipeline\run_manifest.py", line 168, in read
+    data = json.loads((paths.dir / MANIFEST_FILE).read_text(encoding="utf-8"))
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\anaconda3\Lib\pathlib\_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\DrishtiAI\\Project-Classroom\\artifacts\\runs\\corpus_02\\RUN_MANIFEST.json'

@@ -1,0 +1,423 @@
+{
+  "severities": [
+    "blocked",
+    "info",
+    "low",
+    "medium",
+    "high"
+  ],
+  "groups": {
+    "object": [
+      {
+        "key": "phone",
+        "display": "Mobile phone",
+        "group": "object",
+        "severity": "high",
+        "colour": "#ef4444",
+        "description": "A detector reported a phone-like object at this location and time."
+      },
+      {
+        "key": "secondary_paper_chit",
+        "display": "Paper / chit",
+        "group": "object",
+        "severity": "high",
+        "colour": "#f97316",
+        "description": "Reported by the detector's paper class. On this corpus that class fires on answer sheets and printed material as well as on notes."
+      },
+      {
+        "key": "book_or_notebook_like_object",
+        "display": "Book or notebook",
+        "group": "object",
+        "severity": "medium",
+        "colour": "#f59e0b",
+        "description": "A bound or printed paper object. Exam material and prohibited material look alike at this resolution."
+      },
+      {
+        "key": "stationery",
+        "display": "Stationery",
+        "group": "object",
+        "severity": "low",
+        "colour": "#eab308",
+        "description": "Pen, pencil or similar. Expected in an examination."
+      },
+      {
+        "key": "answer_sheet",
+        "display": "Answer sheet",
+        "group": "object",
+        "severity": "info",
+        "colour": "#84cc16",
+        "description": "Expected examination material."
+      },
+      {
+        "key": "calculator",
+        "display": "Calculator",
+        "group": "object",
+        "severity": "low",
+        "colour": "#a3e635",
+        "description": "May be permitted or prohibited depending on the examination."
+      },
+      {
+        "key": "bag",
+        "display": "Bag",
+        "group": "object",
+        "severity": "low",
+        "colour": "#22d3ee",
+        "description": "A bag within reach of the candidate."
+      },
+      {
+        "key": "monitor_or_bezel",
+        "display": "Monitor",
+        "group": "object",
+        "severity": "info",
+        "colour": "#64748b",
+        "description": "Fixed equipment. Counted as a hard negative for phone detection: a dark rectangle is the shape a phone detector confuses most."
+      },
+      {
+        "key": "keyboard",
+        "display": "Keyboard",
+        "group": "object",
+        "severity": "info",
+        "colour": "#64748b",
+        "description": "Fixed equipment, and this detector's most frequent false call on desk texture."
+      },
+      {
+        "key": "mouse",
+        "display": "Mouse",
+        "group": "object",
+        "severity": "info",
+        "colour": "#64748b",
+        "description": "Fixed equipment."
+      },
+      {
+        "key": "hand",
+        "display": "Hand",
+        "group": "object",
+        "severity": "info",
+        "colour": "#94a3b8",
+        "description": "An observed hand."
+      },
+      {
+        "key": "unknown_object",
+        "display": "Unclassified object",
+        "group": "object",
+        "severity": "info",
+        "colour": "#94a3b8",
+        "description": "Something was detected but matched no class in the taxonomy."
+      },
+      {
+        "key": "insufficient_visual_evidence",
+        "display": "Insufficient evidence",
+        "group": "object",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "The source region was below the resolution floor, so no call was made. An abstention is a result, not a failure."
+      }
+    ],
+    "object_status": [
+      {
+        "key": "temporally_supported_object_evidence",
+        "display": "Confirmed across frames",
+        "group": "object_status",
+        "severity": "high",
+        "colour": "#ef4444",
+        "description": "The same object was found at the same place in several frames."
+      },
+      {
+        "key": "single_frame_object_candidate",
+        "display": "Single frame only",
+        "group": "object_status",
+        "severity": "low",
+        "colour": "#f59e0b",
+        "description": "Seen in one frame. Retained, not discarded: a singleton is a status."
+      },
+      {
+        "key": "conflicting_object_evidence",
+        "display": "Conflicting",
+        "group": "object_status",
+        "severity": "medium",
+        "colour": "#f97316",
+        "description": "Frames disagreed about what the object is. Conflict is reported, never silently resolved to the majority."
+      },
+      {
+        "key": "insufficient_visual_evidence",
+        "display": "Insufficient",
+        "group": "object_status",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "Below the resolution floor."
+      }
+    ],
+    "facing": [
+      {
+        "key": "frontal",
+        "display": "Facing forward",
+        "group": "facing",
+        "severity": "info",
+        "colour": "#22c55e",
+        "description": "Head oriented toward the candidate's own workstation."
+      },
+      {
+        "key": "turned_left",
+        "display": "Turned left",
+        "group": "facing",
+        "severity": "medium",
+        "colour": "#f59e0b",
+        "description": "Head yaw to the candidate's own left, beyond their resting posture."
+      },
+      {
+        "key": "turned_right",
+        "display": "Turned right",
+        "group": "facing",
+        "severity": "medium",
+        "colour": "#f59e0b",
+        "description": "Head yaw to the candidate's own right, beyond their resting posture."
+      },
+      {
+        "key": "downward",
+        "display": "Looking down",
+        "group": "facing",
+        "severity": "low",
+        "colour": "#eab308",
+        "description": "Head pitched down. Normal while writing or reading."
+      },
+      {
+        "key": "not_resolvable_at_source_scale",
+        "display": "Not resolvable",
+        "group": "facing",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "The head was too small in the source for any orientation claim."
+      }
+    ],
+    "head_event": [
+      {
+        "key": "look_down",
+        "display": "Prolonged look down",
+        "group": "head_event",
+        "severity": "medium",
+        "colour": "#eab308",
+        "description": "Head held below this candidate's own resting pitch for a sustained period. Expected during written work; length is what matters."
+      },
+      {
+        "key": "yaw_left",
+        "display": "Sustained turn left",
+        "group": "head_event",
+        "severity": "medium",
+        "colour": "#f59e0b",
+        "description": "Head held turned to the candidate's left beyond their own baseline."
+      },
+      {
+        "key": "yaw_right",
+        "display": "Sustained turn right",
+        "group": "head_event",
+        "severity": "medium",
+        "colour": "#f59e0b",
+        "description": "Head held turned to the candidate's right beyond their own baseline."
+      },
+      {
+        "key": "look_up",
+        "display": "Look up",
+        "group": "head_event",
+        "severity": "low",
+        "colour": "#a3e635",
+        "description": "Head raised above resting pitch. PS #1 names raising the head while thinking as normal behaviour."
+      },
+      {
+        "key": "over_shoulder",
+        "display": "Over-shoulder turn",
+        "group": "head_event",
+        "severity": "high",
+        "colour": "#ef4444",
+        "description": "Yaw far enough that one ear is occluded by the turn: the candidate is looking behind, not merely aside."
+      },
+      {
+        "key": "repeated_same_direction",
+        "display": "Repeated glances, one direction",
+        "group": "head_event",
+        "severity": "high",
+        "colour": "#ef4444",
+        "description": "Several sustained turns the same way within a short window. This is the pattern that separates a stretch from sustained attention elsewhere."
+      },
+      {
+        "key": "toward_occupied_neighbour",
+        "display": "Turn toward an occupied seat",
+        "group": "head_event",
+        "severity": "high",
+        "colour": "#ef4444",
+        "description": "The direction of the turn points at an adjacent seat that a person occupies, rather than at an aisle, a wall or a partition."
+      },
+      {
+        "key": "lean_toward_neighbour",
+        "display": "Lean toward neighbour",
+        "group": "posture",
+        "severity": "high",
+        "colour": "#ef4444",
+        "description": "Torso displaced toward an adjacent occupied seat beyond this candidate's own resting position."
+      },
+      {
+        "key": "left_seat",
+        "display": "Away from seat",
+        "group": "posture",
+        "severity": "medium",
+        "colour": "#f97316",
+        "description": "No person was associated with this seat for a sustained period."
+      },
+      {
+        "key": "returned_to_seat",
+        "display": "Returned to seat",
+        "group": "posture",
+        "severity": "info",
+        "colour": "#22c55e",
+        "description": "A person was associated with this seat again after an absence."
+      },
+      {
+        "key": "seat_change",
+        "display": "Seat change",
+        "group": "posture",
+        "severity": "high",
+        "colour": "#ef4444",
+        "description": "A track that was associated with one seat became associated with a different seat. Requires an approved calibration."
+      }
+    ],
+    "observability": [
+      {
+        "key": "visible",
+        "display": "Visible",
+        "group": "observability",
+        "severity": "info",
+        "colour": "#22c55e",
+        "description": "The keypoint was resolved."
+      },
+      {
+        "key": "occluded",
+        "display": "Occluded",
+        "group": "observability",
+        "severity": "info",
+        "colour": "#f59e0b",
+        "description": "Something blocked it. On this corpus that is usually a monitor, a chair back or a partition."
+      },
+      {
+        "key": "not_detected",
+        "display": "Not detected",
+        "group": "observability",
+        "severity": "info",
+        "colour": "#94a3b8",
+        "description": "The model returned nothing here."
+      },
+      {
+        "key": "not_resolvable_at_source_scale",
+        "display": "Below source resolution",
+        "group": "observability",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "Too few source pixels for a claim. Distinct from 'not detected': the model was never entitled to answer."
+      }
+    ],
+    "disposition": [
+      {
+        "key": "high_potential_corroborated",
+        "display": "High potential",
+        "group": "disposition",
+        "severity": "high",
+        "colour": "#dc2626",
+        "description": "Object evidence confirmed across frames AND sustained pose context AND a resolved seat AND no quality or geometry penalty. Four independent things agree. Open first."
+      },
+      {
+        "key": "flagged_for_review",
+        "display": "Flagged for review",
+        "group": "disposition",
+        "severity": "medium",
+        "colour": "#f59e0b",
+        "description": "Partial corroboration, or among the strongest motion in this recording. The working queue."
+      },
+      {
+        "key": "retained_low_priority",
+        "display": "Retained",
+        "group": "disposition",
+        "severity": "low",
+        "colour": "#64748b",
+        "description": "Real but weak. Searchable, not queued."
+      },
+      {
+        "key": "rejected_not_offered",
+        "display": "Withheld",
+        "group": "disposition",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "A quality gate withheld this from the queue. It is NOT a finding that nothing happened: the evidence keeps its score and stays searchable."
+      }
+    ],
+    "health": [
+      {
+        "key": "blur",
+        "display": "Blurred",
+        "group": "health",
+        "severity": "info",
+        "colour": "#f59e0b",
+        "description": "Reduced sharpness."
+      },
+      {
+        "key": "exposure_change",
+        "display": "Exposure change",
+        "group": "health",
+        "severity": "info",
+        "colour": "#f59e0b",
+        "description": "Illumination shifted; motion estimates over this span are suspect."
+      },
+      {
+        "key": "compression_noise",
+        "display": "Compression noise",
+        "group": "health",
+        "severity": "info",
+        "colour": "#f59e0b",
+        "description": "Blocking artefacts at a level that can imitate small-object detail."
+      },
+      {
+        "key": "whiteout",
+        "display": "Whiteout",
+        "group": "health",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "Saturated."
+      },
+      {
+        "key": "blackout",
+        "display": "Blackout",
+        "group": "health",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "Near black."
+      },
+      {
+        "key": "frozen_video",
+        "display": "Frozen video",
+        "group": "health",
+        "severity": "blocked",
+        "colour": "#475569",
+        "description": "Consecutive identical frames; the recording stalled."
+      },
+      {
+        "key": "camera_motion_uncertain",
+        "display": "Camera motion uncertain",
+        "group": "health",
+        "severity": "info",
+        "colour": "#f97316",
+        "description": "Global motion could not be compensated to the required residual, so raw evidence is retained and rank is penalised."
+      },
+      {
+        "key": "environmental_motion",
+        "display": "Environmental motion",
+        "group": "health",
+        "severity": "info",
+        "colour": "#94a3b8",
+        "description": "Fans, curtains or lighting, not a person."
+      }
+    ]
+  },
+  "severity_note": "severity orders reviewer attention. It is not a probability that misconduct occurred, and no part of this system estimates one. A UI must not render it as a guilt score.",
+  "not_measured": [
+    "eye gaze or iris direction -- impossible at 4.7-10.1 px interocular distance on this corpus",
+    "face identity -- never computed, by design",
+    "any assertion that a candidate cheated"
+  ]
+}

@@ -290,6 +290,78 @@ meant to be scale-free and is not. It should normalise against torso width.
 
 ---
 
+## 6.4 SAM 3 as a referee — the strongest result in the project
+
+The `general-segmentation-api-6` workflow was integrated
+(`pipeline/roboflow_workflow.py`, `tools/adjudicate_with_sam3.py`). Its
+definition was fetched from the Roboflow API rather than assumed: it is
+**SAM 3** (`sam3/sam3_final`) with `classes` as a free-text prompt, outputs
+`annotated_image` and `predictions`.
+
+Being able to **name the confuser** is what every other detector here lacks. On
+the exact 04_talking frame where the chit model returned `chit-paper 0.74` on a
+keyboard, prompting `"mobile phone, paper chit, keyboard"` returns **six
+keyboards at 0.52-0.89, zero phones, zero chits**.
+
+### On the nine verification frames
+
+| # | Truth | chit-paper-new/2 | SAM 3 |
+|--:|---|---|---|
+| 1 | paper in hands | chit 0.74 | paper chit 0.55 |
+| 2 | card raised | chit 0.56 | **nothing — miss** |
+| 3 | **a phone** | chit 0.52 (**wrong class**) | **mobile phone 0.91** |
+| 4 | placard wall | silent | silent |
+| 5 | paper in hands | chit 0.72 | **nothing — miss** |
+| 6 | sheets on desk | silent | silent |
+| 7 | dark object | 0.52 ambiguous | nothing |
+| 8 | object in hand | 3 weak boxes 0.22-0.28 | mobile phone 0.64 |
+| 9 | held sheet | chit 0.68, one box | **two chits 0.65 / 0.73** |
+
+SAM 3 is the **more precise and less sensitive** instrument: it fixes the class
+confusion on frame 3, finds a second chit on frame 9 that the chit model missed,
+and misses two true positives the chit model found. That is why it is wired in
+as a *referee over existing detections*, not as a replacement detector.
+
+### Adjudicating 12_paper — the control
+
+392 gated detections adjudicated. Verdicts concentrate almost perfectly:
+
+| Track | Corroborated | Suppressed | Unsupported |
+|---|--:|--:|--:|
+| **118** (the subject) | **110** | 9 | 99 |
+| **53** (the same man, re-ID split) | **23** | 4 | 19 |
+| 114 | 3 | 0 | 4 |
+| **22** (previously ranked #2) | **0** | 0 | 46 |
+| every other track | **0** | — | — |
+
+**133 of 136 corroborations land on the one man who actually took the paper.**
+Track 22, which the chit pipeline ranked second with 15.2 s of handling, is
+independently rejected. 48 detections were suppressed as keyboards, monitors or
+a mouse.
+
+This is the first time two independent models have agreed on a specific person
+in this project, and it is exactly the "independent indicator" the
+classification ladder requires -- a second chit detection 250 ms later is not
+independent evidence; a different model with a different vocabulary is.
+
+### Adjudicating 04_talking
+
+**Zero corroborated.** Every gated detection came back `unsupported` or
+`suppressed_keyboard` / `suppressed_computer mouse`. SAM 3 independently
+confirms the conclusion reached by rendering: run 1504's chit findings are
+keyboards and mice, and none of them is evidence of anything.
+
+### One defect in the adjudicator, found and fixed
+
+The first version listed `hand` as a confuser. A chit held in a hand always
+overlaps a hand, so **56 of 60 adjudications came back `suppressed_hand`,
+including the true positives**. `hand` is context, not a confuser: it is still
+in the prompt, because naming it helps SAM 3 locate the region, but it can no
+longer suppress. Confuser matching also now takes the *strongest* overlap rather
+than the first in segment order.
+
+---
+
 ## 7. Metric tables
 
 ### 7.1 Object detections (D-FINE, stock COCO)

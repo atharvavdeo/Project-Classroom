@@ -1,0 +1,40 @@
+{
+  "config_id": "seat_only_no_track",
+  "state": "available",
+  "reason": "",
+  "tracks": 0,
+  "boxes": 416,
+  "detected_boxes": 416,
+  "interpolated_boxes": 0,
+  "interpolated_fraction": 0.0,
+  "median_track_ms": null,
+  "longest_track_ms": null,
+  "seconds": 0.002,
+  "continuity": {
+    "config_id": "seat_only_no_track",
+    "state": "available",
+    "tracks": 0,
+    "short_tracks": 0,
+    "fragments_per_1000ms": null,
+    "seat_inconsistent_transitions": 0,
+    "seat_inconsistency_note": "one track ID whose attributed seat changed mid-track. This is a proxy for an ID switch, not an ID-switch count: this corpus has no per-person identity ground truth and PRD 1 forbids creating one."
+  },
+  "association": {
+    "associations": 416,
+    "resolved": 372,
+    "resolved_fraction": 0.8942,
+    "ambiguous_seat": 0,
+    "unattributed": 44,
+    "by_rule": {
+      "footprint_overlap": 372,
+      "refused": 44
+    },
+    "continuity_share": 0.0,
+    "per_seat": {
+      "R-desk": 142,
+      "S-61": 230
+    },
+    "median_margin": null,
+    "note": "a high continuity share means most seats came from a track's majority rather than from this frame's geometry, which is a signal to review calibration or detector quality."
+  }
+}

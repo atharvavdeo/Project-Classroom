@@ -1,0 +1,30 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42em;
+  font-family: var(--mono);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.chip--md {
+  font-size: 0.7rem;
+  padding: 0.26em 0.62em;
+}
+
+.chip--sm {
+  font-size: 0.62rem;
+  padding: 0.2em 0.5em;
+}
+
+.chip i {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}

@@ -1,0 +1,607 @@
+{
+  "alphapose_crowd_baseline": {
+    "observations": 217,
+    "median_torso_scale_px": 83.5,
+    "angles": {
+      "head_pitch_norm": {
+        "n": 151,
+        "median": -0.44,
+        "p10": -0.68,
+        "p90": -0.28,
+        "iqr": 0.19
+      },
+      "torso_lean_deg": {
+        "n": 152,
+        "median": 33.95,
+        "p10": 8.53,
+        "p90": 66.57,
+        "iqr": 17.08
+      },
+      "left_elbow_deg": {
+        "n": 136,
+        "median": 82.32,
+        "p10": 64.04,
+        "p90": 115.11,
+        "iqr": 32.48
+      },
+      "right_elbow_deg": {
+        "n": 140,
+        "median": 154.16,
+        "p10": 55.32,
+        "p90": 175.61,
+        "iqr": 31.21
+      }
+    },
+    "confidence": {
+      "nose": {
+        "n": 165,
+        "median": 0.92,
+        "p10": 0.63,
+        "p90": 0.94,
+        "iqr": 0.06
+      },
+      "left_shoulder": {
+        "n": 159,
+        "median": 0.73,
+        "p10": 0.66,
+        "p90": 0.79,
+        "iqr": 0.05
+      },
+      "right_shoulder": {
+        "n": 154,
+        "median": 0.67,
+        "p10": 0.52,
+        "p90": 0.81,
+        "iqr": 0.14
+      },
+      "left_elbow": {
+        "n": 148,
+        "median": 0.87,
+        "p10": 0.52,
+        "p90": 0.9,
+        "iqr": 0.05
+      },
+      "right_elbow": {
+        "n": 147,
+        "median": 0.75,
+        "p10": 0.52,
+        "p90": 0.9,
+        "iqr": 0.18
+      },
+      "left_wrist": {
+        "n": 139,
+        "median": 0.85,
+        "p10": 0.45,
+        "p90": 0.9,
+        "iqr": 0.18
+      },
+      "right_wrist": {
+        "n": 146,
+        "median": 0.84,
+        "p10": 0.48,
+        "p90": 0.91,
+        "iqr": 0.21
+      },
+      "left_hip": {
+        "n": 138,
+        "median": 0.51,
+        "p10": 0.38,
+        "p90": 0.66,
+        "iqr": 0.12
+      },
+      "right_hip": {
+        "n": 140,
+        "median": 0.5,
+        "p10": 0.37,
+        "p90": 0.71,
+        "iqr": 0.16
+      }
+    },
+    "observability": {
+      "nose": {
+        "visible": 165,
+        "occluded": 45,
+        "not_resolvable_at_source_scale": 7
+      },
+      "left_shoulder": {
+        "visible": 159,
+        "occluded": 51,
+        "not_resolvable_at_source_scale": 7
+      },
+      "right_shoulder": {
+        "visible": 154,
+        "occluded": 56,
+        "not_resolvable_at_source_scale": 7
+      },
+      "left_elbow": {
+        "visible": 148,
+        "occluded": 62,
+        "not_resolvable_at_source_scale": 7
+      },
+      "right_elbow": {
+        "visible": 147,
+        "occluded": 63,
+        "not_resolvable_at_source_scale": 7
+      },
+      "left_wrist": {
+        "occluded": 71,
+        "visible": 139,
+        "not_resolvable_at_source_scale": 7
+      },
+      "right_wrist": {
+        "occluded": 64,
+        "visible": 146,
+        "not_resolvable_at_source_scale": 7
+      },
+      "left_hip": {
+        "visible": 138,
+        "occluded": 72,
+        "not_resolvable_at_source_scale": 7
+      },
+      "right_hip": {
+        "visible": 140,
+        "occluded": 70,
+        "not_resolvable_at_source_scale": 7
+      }
+    },
+    "jitter_torso_normalised": {
+      "nose": {
+        "n": 86,
+        "median": 0.17,
+        "p10": 0.04,
+        "p90": 0.43,
+        "iqr": 0.19
+      },
+      "left_shoulder": {
+        "n": 86,
+        "median": 0.14,
+        "p10": 0.04,
+        "p90": 0.47,
+        "iqr": 0.16
+      },
+      "right_shoulder": {
+        "n": 85,
+        "median": 0.11,
+        "p10": 0.02,
+        "p90": 0.28,
+        "iqr": 0.16
+      },
+      "left_elbow": {
+        "n": 83,
+        "median": 0.21,
+        "p10": 0.04,
+        "p90": 0.79,
+        "iqr": 0.42
+      },
+      "right_elbow": {
+        "n": 83,
+        "median": 0.11,
+        "p10": 0.03,
+        "p90": 0.46,
+        "iqr": 0.22
+      },
+      "left_wrist": {
+        "n": 80,
+        "median": 0.3,
+        "p10": 0.03,
+        "p90": 1.06,
+        "iqr": 0.54
+      },
+      "right_wrist": {
+        "n": 83,
+        "median": 0.1,
+        "p10": 0.01,
+        "p90": 0.58,
+        "iqr": 0.26
+      },
+      "left_hip": {
+        "n": 80,
+        "median": 0.1,
+        "p10": 0.03,
+        "p90": 0.24,
+        "iqr": 0.11
+      },
+      "right_hip": {
+        "n": 80,
+        "median": 0.12,
+        "p10": 0.03,
+        "p90": 0.32,
+        "iqr": 0.15
+      }
+    }
+  },
+  "rtmo_baseline": {
+    "observations": 112,
+    "median_torso_scale_px": 88.0,
+    "angles": {
+      "head_pitch_norm": {
+        "n": 112,
+        "median": -0.47,
+        "p10": -0.66,
+        "p90": -0.33,
+        "iqr": 0.17
+      },
+      "torso_lean_deg": {
+        "n": 112,
+        "median": 30.65,
+        "p10": 22.14,
+        "p90": 48.6,
+        "iqr": 12.25
+      },
+      "left_elbow_deg": {
+        "n": 112,
+        "median": 83.9,
+        "p10": 67.77,
+        "p90": 114.08,
+        "iqr": 25.75
+      },
+      "right_elbow_deg": {
+        "n": 112,
+        "median": 151.95,
+        "p10": 124.43,
+        "p90": 169.38,
+        "iqr": 23.32
+      }
+    },
+    "confidence": {
+      "nose": {
+        "n": 112,
+        "median": 0.89,
+        "p10": 0.69,
+        "p90": 0.95,
+        "iqr": 0.11
+      },
+      "left_shoulder": {
+        "n": 112,
+        "median": 0.99,
+        "p10": 0.99,
+        "p90": 1.0,
+        "iqr": 0.01
+      },
+      "right_shoulder": {
+        "n": 112,
+        "median": 0.97,
+        "p10": 0.95,
+        "p90": 0.99,
+        "iqr": 0.03
+      },
+      "left_elbow": {
+        "n": 112,
+        "median": 1.0,
+        "p10": 0.99,
+        "p90": 1.0,
+        "iqr": 0.0
+      },
+      "right_elbow": {
+        "n": 112,
+        "median": 1.0,
+        "p10": 0.93,
+        "p90": 1.0,
+        "iqr": 0.01
+      },
+      "left_wrist": {
+        "n": 112,
+        "median": 1.0,
+        "p10": 0.93,
+        "p90": 1.0,
+        "iqr": 0.01
+      },
+      "right_wrist": {
+        "n": 112,
+        "median": 0.99,
+        "p10": 0.81,
+        "p90": 1.0,
+        "iqr": 0.01
+      },
+      "left_hip": {
+        "n": 112,
+        "median": 0.96,
+        "p10": 0.92,
+        "p90": 0.99,
+        "iqr": 0.03
+      },
+      "right_hip": {
+        "n": 112,
+        "median": 0.96,
+        "p10": 0.9,
+        "p90": 0.99,
+        "iqr": 0.04
+      }
+    },
+    "observability": {
+      "nose": {
+        "visible": 112
+      },
+      "left_shoulder": {
+        "visible": 112
+      },
+      "right_shoulder": {
+        "visible": 112
+      },
+      "left_elbow": {
+        "visible": 112
+      },
+      "right_elbow": {
+        "visible": 112
+      },
+      "left_wrist": {
+        "visible": 112
+      },
+      "right_wrist": {
+        "visible": 112
+      },
+      "left_hip": {
+        "visible": 112
+      },
+      "right_hip": {
+        "visible": 112
+      }
+    },
+    "jitter_torso_normalised": {
+      "nose": {
+        "n": 100,
+        "median": 0.18,
+        "p10": 0.04,
+        "p90": 0.46,
+        "iqr": 0.21
+      },
+      "left_shoulder": {
+        "n": 100,
+        "median": 0.15,
+        "p10": 0.03,
+        "p90": 0.51,
+        "iqr": 0.18
+      },
+      "right_shoulder": {
+        "n": 100,
+        "median": 0.11,
+        "p10": 0.04,
+        "p90": 0.3,
+        "iqr": 0.13
+      },
+      "left_elbow": {
+        "n": 100,
+        "median": 0.21,
+        "p10": 0.04,
+        "p90": 0.78,
+        "iqr": 0.39
+      },
+      "right_elbow": {
+        "n": 100,
+        "median": 0.12,
+        "p10": 0.02,
+        "p90": 0.47,
+        "iqr": 0.25
+      },
+      "left_wrist": {
+        "n": 100,
+        "median": 0.26,
+        "p10": 0.04,
+        "p90": 0.98,
+        "iqr": 0.45
+      },
+      "right_wrist": {
+        "n": 100,
+        "median": 0.08,
+        "p10": 0.01,
+        "p90": 0.67,
+        "iqr": 0.3
+      },
+      "left_hip": {
+        "n": 100,
+        "median": 0.1,
+        "p10": 0.03,
+        "p90": 0.23,
+        "iqr": 0.11
+      },
+      "right_hip": {
+        "n": 100,
+        "median": 0.11,
+        "p10": 0.04,
+        "p90": 0.26,
+        "iqr": 0.1
+      }
+    }
+  },
+  "rtmpose_baseline": {
+    "observations": 148,
+    "median_torso_scale_px": 92.8,
+    "angles": {
+      "head_pitch_norm": {
+        "n": 143,
+        "median": -0.43,
+        "p10": -0.65,
+        "p90": -0.29,
+        "iqr": 0.19
+      },
+      "torso_lean_deg": {
+        "n": 144,
+        "median": 30.18,
+        "p10": 7.2,
+        "p90": 46.49,
+        "iqr": 13.21
+      },
+      "left_elbow_deg": {
+        "n": 125,
+        "median": 83.7,
+        "p10": 66.95,
+        "p90": 117.87,
+        "iqr": 33.22
+      },
+      "right_elbow_deg": {
+        "n": 131,
+        "median": 147.37,
+        "p10": 107.76,
+        "p90": 169.74,
+        "iqr": 32.51
+      }
+    },
+    "confidence": {
+      "nose": {
+        "n": 145,
+        "median": 0.78,
+        "p10": 0.64,
+        "p90": 0.84,
+        "iqr": 0.08
+      },
+      "left_shoulder": {
+        "n": 148,
+        "median": 0.62,
+        "p10": 0.54,
+        "p90": 0.7,
+        "iqr": 0.1
+      },
+      "right_shoulder": {
+        "n": 144,
+        "median": 0.55,
+        "p10": 0.46,
+        "p90": 0.67,
+        "iqr": 0.11
+      },
+      "left_elbow": {
+        "n": 142,
+        "median": 0.73,
+        "p10": 0.56,
+        "p90": 0.81,
+        "iqr": 0.09
+      },
+      "right_elbow": {
+        "n": 136,
+        "median": 0.59,
+        "p10": 0.44,
+        "p90": 0.72,
+        "iqr": 0.15
+      },
+      "left_wrist": {
+        "n": 125,
+        "median": 0.71,
+        "p10": 0.52,
+        "p90": 0.78,
+        "iqr": 0.09
+      },
+      "right_wrist": {
+        "n": 140,
+        "median": 0.71,
+        "p10": 0.36,
+        "p90": 0.82,
+        "iqr": 0.31
+      },
+      "left_hip": {
+        "n": 144,
+        "median": 0.47,
+        "p10": 0.38,
+        "p90": 0.57,
+        "iqr": 0.11
+      },
+      "right_hip": {
+        "n": 137,
+        "median": 0.42,
+        "p10": 0.36,
+        "p90": 0.54,
+        "iqr": 0.09
+      }
+    },
+    "observability": {
+      "nose": {
+        "occluded": 3,
+        "visible": 145
+      },
+      "left_shoulder": {
+        "visible": 148
+      },
+      "right_shoulder": {
+        "visible": 144,
+        "occluded": 4
+      },
+      "left_elbow": {
+        "visible": 142,
+        "occluded": 6
+      },
+      "right_elbow": {
+        "visible": 136,
+        "occluded": 12
+      },
+      "left_wrist": {
+        "occluded": 23,
+        "visible": 125
+      },
+      "right_wrist": {
+        "occluded": 8,
+        "visible": 140
+      },
+      "left_hip": {
+        "occluded": 4,
+        "visible": 144
+      },
+      "right_hip": {
+        "occluded": 11,
+        "visible": 137
+      }
+    },
+    "jitter_torso_normalised": {
+      "nose": {
+        "n": 106,
+        "median": 0.15,
+        "p10": 0.03,
+        "p90": 0.44,
+        "iqr": 0.19
+      },
+      "left_shoulder": {
+        "n": 105,
+        "median": 0.11,
+        "p10": 0.02,
+        "p90": 0.48,
+        "iqr": 0.17
+      },
+      "right_shoulder": {
+        "n": 106,
+        "median": 0.09,
+        "p10": 0.02,
+        "p90": 0.32,
+        "iqr": 0.13
+      },
+      "left_elbow": {
+        "n": 104,
+        "median": 0.17,
+        "p10": 0.03,
+        "p90": 0.64,
+        "iqr": 0.36
+      },
+      "right_elbow": {
+        "n": 95,
+        "median": 0.09,
+        "p10": 0.01,
+        "p90": 0.37,
+        "iqr": 0.16
+      },
+      "left_wrist": {
+        "n": 98,
+        "median": 0.25,
+        "p10": 0.04,
+        "p90": 0.97,
+        "iqr": 0.45
+      },
+      "right_wrist": {
+        "n": 103,
+        "median": 0.12,
+        "p10": 0.01,
+        "p90": 0.8,
+        "iqr": 0.3
+      },
+      "left_hip": {
+        "n": 105,
+        "median": 0.08,
+        "p10": 0.03,
+        "p90": 0.21,
+        "iqr": 0.08
+      },
+      "right_hip": {
+        "n": 102,
+        "median": 0.08,
+        "p10": 0.03,
+        "p90": 0.23,
+        "iqr": 0.08
+      }
+    }
+  }
+}

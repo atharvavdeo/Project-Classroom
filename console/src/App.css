@@ -1,0 +1,414 @@
+.app {
+  display: grid;
+  grid-template-columns: var(--rail) 1fr;
+  min-height: 100%;
+}
+
+@media (max-width: 54rem) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Rail: translucent chrome, content moving beneath it. */
+.rail {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(180%);
+  border-right: 1px solid var(--rule);
+  padding: 1rem 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+@media (max-width: 54rem) {
+  .rail {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+.rail__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.2rem 0.45rem 1rem;
+}
+
+.rail__mark {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  flex: none;
+}
+
+.rail__brand b {
+  font-family: var(--display);
+  font-size: 1.06rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.rail__ptitle {
+  margin: 0.5rem 0 0.35rem;
+  padding: 0 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--slate-2);
+}
+
+.rail__centre {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.42rem 0.5rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--fast) var(--spring);
+}
+
+.rail__centre:hover {
+  background: var(--surface-2);
+}
+
+.rail__centre b {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--slate-2);
+}
+
+.rail__videos {
+  list-style: none;
+  margin: 0.1rem 0 0.35rem;
+  padding: 0 0 0 0.55rem;
+  border-left: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.rail__videos button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.36rem 0.45rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--fast) var(--spring);
+}
+
+.rail__videos button:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.rail__videos button.is-on {
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.rail__videos button:disabled {
+  color: var(--slate-2);
+  cursor: default;
+}
+
+.rail__videos em {
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate-2);
+  flex: none;
+}
+
+.rail__new {
+  margin-top: auto;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  color: var(--slate);
+  background: transparent;
+  border: 1px dashed var(--rule-strong);
+  border-radius: 7px;
+  padding: 0.55em 0.7em;
+  cursor: not-allowed;
+}
+
+.shell {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.1rem 1.5rem 0.85rem;
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(180%);
+  border-bottom: 1px solid var(--rule);
+}
+
+.top__where span {
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.top__where h1 {
+  margin: 0.15rem 0 0;
+  font-size: 1.32rem;
+}
+
+.top__tabs {
+  display: flex;
+  gap: 0.2rem;
+  background: var(--surface-2);
+  padding: 0.2rem;
+  border-radius: 9px;
+}
+
+.top__tabs button {
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--slate);
+  font-family: var(--display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.42em 0.95em;
+  cursor: pointer;
+  transition:
+    background var(--fast) var(--spring),
+    color var(--fast) var(--spring);
+}
+
+.top__tabs button:hover:not(:disabled) {
+  color: var(--ink);
+}
+
+.top__tabs button.is-on {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--sh);
+}
+
+.top__tabs button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.main {
+  padding: 1.3rem 1.5rem 3rem;
+  max-width: 78rem;
+  width: 100%;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+.state {
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  color: var(--ink-2);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  max-width: 44rem;
+}
+
+.state--err {
+  border-left: 3px solid var(--s-review);
+  color: var(--s-review);
+}
+
+/* The empty-console and no-run states carry the upload panel, so they are a
+   container rather than a paragraph. */
+.state--empty {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  max-width: 56rem;
+}
+
+.state--empty > p {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+/* ------------------------------------------------------------------ phone */
+
+/* The hamburger only exists below the breakpoint; above it the rail is
+   permanent and a button that opens what is already open is noise. */
+.top__menu {
+  display: none;
+}
+
+.app__scrim {
+  display: none;
+}
+
+@media (max-width: 54rem) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  /* The rail was 415px of navigation stacked above the content: on an 812px
+     phone you scrolled past a full screen of menu before reaching anything.
+     It is a drawer here instead. */
+  .lib {
+    position: fixed;
+    z-index: 30;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(20rem, 84vw);
+    height: 100dvh;
+    border-right: 1px solid var(--rule);
+    border-bottom: 0;
+    transform: translateX(-101%);
+    transition: transform var(--base) var(--spring);
+    box-shadow: var(--sh-lift);
+    will-change: transform;
+  }
+
+  /* The class is on the rail itself rather than on an ancestor: a descendant
+     selector here lost to the base rule in a way that was not worth chasing,
+     and an element carrying its own state cannot lose that fight. */
+  .lib.is-open {
+    transform: translateX(0);
+  }
+
+  .app__scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 29;
+    border: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--base) var(--spring);
+  }
+
+  .app.is-nav .app__scrim,
+  .is-nav .app__scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .top__menu {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    flex: none;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .top__menu svg {
+    width: 1rem;
+    fill: currentColor;
+  }
+
+  .top {
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .top__where {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* One line each, truncated. A wrapping title pushed the tabs below the
+     fold on the narrowest phones. */
+  .top__where h1 {
+    font-size: 1.02rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .top__where span {
+    display: block;
+    font-size: 0.56rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Tabs scroll rather than wrap: four of them wrapped to two rows and cost
+     another 40px of vertical space above every screen. */
+  .top__tabs {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .top__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .top__tabs button {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    padding: 0.4em 0.8em;
+  }
+
+  .main {
+    padding: 0.9rem 0.85rem 4rem;
+  }
+}

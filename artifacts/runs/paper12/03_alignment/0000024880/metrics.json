@@ -1,0 +1,116 @@
+{
+  "pts_ms": 24880.0,
+  "reference_pts_ms": 2800.0,
+  "support_coverage": 0.78557,
+  "estimates": [
+    {
+      "method": "identity",
+      "pts_ms": 24880.0,
+      "outcome": "not_needed",
+      "transform": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ]
+      ],
+      "matched": 0,
+      "inliers": 0,
+      "inlier_ratio": 0.0,
+      "residual_px": 17.4652,
+      "correlation": null,
+      "support_coverage": 0.78557,
+      "translation_px": 0.0,
+      "confidence": 0.0542,
+      "seconds": 0.0107,
+      "reason": "baseline: no compensation applied"
+    },
+    {
+      "method": "features_ransac",
+      "pts_ms": 24880.0,
+      "outcome": "not_needed",
+      "transform": [
+        [
+          0.9999667650215572,
+          4.292140725636254e-05,
+          0.05352995756666944
+        ],
+        [
+          -4.292140725636254e-05,
+          0.9999667650215572,
+          0.01365787232293318
+        ]
+      ],
+      "matched": 1255,
+      "inliers": 1139,
+      "inlier_ratio": 0.9076,
+      "residual_px": 0.3406,
+      "correlation": null,
+      "support_coverage": 0.78557,
+      "translation_px": 0.0552,
+      "confidence": 0.677,
+      "seconds": 0.0949,
+      "reason": "measured shift 0.055 px is below 0.5 px; the camera is still and resampling would cost accuracy for nothing"
+    },
+    {
+      "method": "ecc",
+      "pts_ms": 24880.0,
+      "outcome": "camera_motion_uncertain",
+      "transform": [
+        [
+          1.0,
+          0.00020853774913121015,
+          0.05335691198706627
+        ],
+        [
+          -0.00020853774913121015,
+          1.0,
+          0.050335705280303955
+        ]
+      ],
+      "matched": 0,
+      "inliers": 0,
+      "inlier_ratio": 0.8196,
+      "residual_px": 1.8039,
+      "correlation": 0.8196,
+      "support_coverage": 0.78557,
+      "translation_px": 0.0734,
+      "confidence": 0.0,
+      "seconds": 0.1103,
+      "reason": "correlation 0.8196 below 0.9"
+    }
+  ],
+  "selected": {
+    "method": "identity",
+    "pts_ms": 24880.0,
+    "outcome": "not_needed",
+    "transform": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ]
+    ],
+    "matched": 0,
+    "inliers": 0,
+    "inlier_ratio": 0.0,
+    "residual_px": 17.4652,
+    "correlation": null,
+    "support_coverage": 0.78557,
+    "translation_px": 0.0,
+    "confidence": 0.0542,
+    "seconds": 0.0107,
+    "reason": "baseline: no compensation applied"
+  },
+  "selection_reason": "baseline: no compensation applied"
+}

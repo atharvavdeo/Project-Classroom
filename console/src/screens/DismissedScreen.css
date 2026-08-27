@@ -1,0 +1,130 @@
+.fp__empty {
+  padding: 1.1rem 1.2rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  color: var(--ink-2);
+  max-width: 42rem;
+  line-height: 1.6;
+}
+
+.fp__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.fp__top p {
+  margin: 0.3rem 0 0;
+  color: var(--slate);
+  font-size: 0.9rem;
+  max-width: 40rem;
+}
+
+.fp__export {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  color: var(--accent);
+  border: 1px solid var(--rule-strong);
+  border-radius: 7px;
+  padding: 0.5em 0.8em;
+  white-space: nowrap;
+  transition:
+    border-color var(--fast) var(--spring),
+    background var(--fast) var(--spring);
+}
+
+.fp__export:hover {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.fp__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fp__list li {
+  display: grid;
+  grid-template-columns: 9rem 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--s-dismiss);
+  border-radius: 10px;
+}
+
+@media (max-width: 44rem) {
+  .fp__list li {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fp__list img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 7px;
+  background: var(--sunk);
+  filter: grayscale(0.55);
+}
+
+.fp__what h3 {
+  margin: 0;
+}
+
+.fp__what p {
+  margin: 0.2rem 0 0.5rem;
+  color: var(--ink-2);
+  font-size: 0.92rem;
+}
+
+.fp__what dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.2rem;
+  margin: 0;
+  font-size: 0.62rem;
+}
+
+.fp__what dt {
+  color: var(--slate-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fp__what dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.fp__list > li > button {
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  border-radius: 7px;
+  padding: 0.5em 0.9em;
+  font-family: var(--display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    border-color var(--fast) var(--spring),
+    color var(--fast) var(--spring);
+}
+
+.fp__list > li > button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

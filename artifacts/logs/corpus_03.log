@@ -1,0 +1,172 @@
+
+======================================================================
+Phase 0  preflight + run manifest
+======================================================================
+experiment   product_zero  (5b6434de4643)
+residency    sequential, 2.0 GB safety margin
+python       3.13.9 on Windows 11
+gpu          NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB, driver 592.27
+torch        2.10.0+cpu, cuda NOT available
+onnxruntime  AzureExecutionProvider, CPUExecutionProvider
+free disk    69.6 GB at C:\DrishtiAI\Project-Classroom\artifacts\runs
+
+configurations
+  OK  person_detection_primary  person_detection  available             import rtmlib
+  OK  tracker_primary           tracker           available             import supervision
+  OK  seat_only_no_track        tracker           available             none required
+  OK  rtmpose_baseline          pose              available             import rtmlib
+  OK  rtmo_baseline             pose              available             import rtmlib
+  OK  rtmo_large                pose              available             import rtmlib
+  OK  alphapose_crowd_baseline  pose              available             import alphapose.models.builder
+  OK  dfine_native              object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_native            object            available             import rfdetr
+  OK  dfine_sahi                object            available             onnxruntime session created (inputs: pixel_values)
+  OK  rf_detr_sahi              object            available             import rfdetr
+  OK  gemma_marked_evidence     vlm               available             version: 0.1.1-dev (build 10472, commit 60eeeb608)
+Traceback (most recent call last):
+  File "C:\DrishtiAI\Project-Classroom\tools\preflight_rtx3090.py", line 344, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\DrishtiAI\Project-Classroom\tools\preflight_rtx3090.py", line 285, in main
+    paths = artifacts.create_run(artifact_root, run_id)
+  File "C:\DrishtiAI\Project-Classroom\pipeline\artifacts.py", line 194, in create_run
+    raise FileExistsError(
+        f"{paths.dir} already exists. Run IDs are immutable; pick a new one."
+    )
+FileExistsError: C:\DrishtiAI\Project-Classroom\artifacts\runs\corpus_03 already exists. Run IDs are immutable; pick a new one.
+
+======================================================================
+Phase 1  ingest inventory + contact sheets
+======================================================================
+
+03.CCTV Mobile Usage.mkv
+    decoded    60.0 s (900 frames)
+    decoded   120.0 s (1800 frames)
+    decoded   180.0 s (2700 frames)
+    decoded   240.0 s (3600 frames)
+  matroska,webm / mpeg4 / yuv420p  1280x720
+  declared 12.083 fps, measured 14.997 fps  (DOES NOT MATCH)
+  4227 frames, 281.85 s, 352 keyframes, VFR (cv 0.3571)
+  decodable 281.85 s of 281.85 s, no gaps
+  health: {'blur': 1}
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\corpus_03
+
+281.9 s decodable of 281.9 s (100.00%) across 1 source(s)
+
+======================================================================
+Phase 1  preprocessing A/B (identity/CLAHE/denoise/sharpen)
+======================================================================
+12 frames sampled across 03.CCTV Mobile Usage.mkv
+  identity_no_preprocessing  mean|diff|   0.000  sharpness     +0.00  blocking +0.0000    0.9s
+  clahe                      mean|diff|  13.813  sharpness    +42.14  blocking +0.0463    1.0s
+  denoise_nlmeans            mean|diff|   2.033  sharpness     -9.18  blocking -0.2414    9.7s
+  unsharp_mask               mean|diff|   2.426  sharpness   +223.88  blocking +0.2315    1.0s
+
+No transform is recommended. These figures measure how much each transform CHANGED the image, not whether it helped. PRD 6 requires any transform to be evaluated enabled and disabled on known references, and no reference manifest exists for this corpus. A transform that raises sharpness while also raising blocking_ratio is amplifying compression structure, which at a 30x20 px object scale is indistinguishable from amplifying the object.
+
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\corpus_03\01_ingest\preprocessing
+
+======================================================================
+Phases 1-3  health, motion, ROI, segmentation
+======================================================================
+calibration  cam12/e1/v1  (approved)
+
+scanning 03.CCTV Mobile Usage.mkv
+    scanned     60.3s
+    scanned    120.6s
+    scanned    180.8s
+    scanned    241.1s
+  motion vectors present (3595/frame)
+  2116 zone-windows over 282.1 s in 4.6 s (61x realtime)
+
+baselines
+  R-desk     desk_work_surface    median 0.01281  spread 0.00833  n=338
+  R-desk     upper_body           median 0.03496  spread 0.02276  n=338
+  S-61       desk_work_surface    median 0.25466  spread 0.17046  n=338
+  S-61       upper_body           median 0.69441  spread 0.35298  n=338
+
+segmentation
+  9 normal-priority events, 14 retained at low priority
+  14.76% of the recording flagged
+  close reasons: {'activity_ceased': 22, 'end_of_stream': 1}
+
+gates: {'deprioritise': 2892}
+  nothing discarded; 2892 records retained and searchable
+health observations: {'compression_noise': 25}
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\corpus_03
+
+======================================================================
+Phase 4  tracking + pose A/B (3 models)
+======================================================================
+warning: first frame is no keyframe
+46 candidate events -> 118 sample rows at 1.0 Hz
+person detection: available (217 boxes over 118 rows)
+  tracker_primary        available      56 tracks    289 seats resolved
+  tracker_challenger     available      14 tracks    239 seats resolved
+  seat_only_no_track     available       0 tracks    195 seats resolved
+
+pose manifest frozen: 217 rows, digest 1a8b6e0ebc502fc6
+load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\yolox_m_8xb8-300e_humanart-c2c7a14a.onnx with onnxruntime backend
+load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\rtmpose-m_simcc-body7_pt-body7_420e-256x192-e48f03d0_20230504.onnx with onnxruntime backend
+load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\rtmo-m_16xb16-600e_body7-640x640-39e78cc4_20231211.onnx with onnxruntime backend
+Load SE Resnet...
+  rtmpose_baseline           available              148 observations
+  rtmo_baseline              available              112 observations
+  alphapose_crowd_baseline   available              217 observations
+
+manifest equivalence: verified
+available: ['rtmpose_baseline', 'rtmo_baseline', 'alphapose_crowd_baseline']
+selection: none. PRD 5 forbids naming a configuration best until every runnable mandatory configuration has a matched report; selection happens in stage 12 against references.
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\corpus_03
+
+======================================================================
+Phase 4  pose comparison report
+======================================================================
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\corpus_03\13_reports\pose_comparison.md
+
+======================================================================
+Phase 5  crops + detector/SAHI A/B
+======================================================================
+434 pose rows, 148 observations from rtmpose_baseline
+
+crop manifest frozen: 434 crops, digest cab62e467e3a1522
+  lap_bag_context                      142
+  native_source_context_fallback        42
+  pose_hand_context                    250
+  fallback reasons: {'no_pose_observation': 138, 'wrist_confidence_below_floor': 46}
+  0 crops under the native-resolution floor (0.0%)
+  median magnification 2.96x, max 13.33x
+[2026-08-19 12:22:44] [INFO] rf-detr - File C:\Users\Hardeep singh\.roboflow\models\rf-detr-nano.pth already exists with correct MD5 hash.
+[2026-08-19 12:22:44] [WARNING] rf-detr - Using a different number of positional encodings than DINOv2, which means we're not loading DINOv2 backbone weights. This is not a problem if finetuning a pretrained RF-DETR model.
+[2026-08-19 12:22:44] [WARNING] rf-detr - Using patch size 16 instead of 14, which means we're not loading DINOv2 backbone weights. This is not a problem if finetuning a pretrained RF-DETR model.
+[2026-08-19 12:22:46] [INFO] rf-detr - File C:\Users\Hardeep singh\.roboflow\models\rf-detr-nano.pth already exists with correct MD5 hash.
+warning: first frame is no keyframe
+[2026-08-19 12:22:51] [WARNING] rf-detr - Model is not optimized for inference. Latency may be higher than expected. For full GPU throughput (e.g. ~8x on T4 via FP16 Tensor Cores), call model.inference(dtype=torch.float16).
+[2026-08-19 12:46:16] [INFO] rf-detr - File C:\Users\Hardeep singh\.roboflow\models\rf-detr-nano.pth already exists with correct MD5 hash.
+[2026-08-19 12:46:16] [WARNING] rf-detr - Using a different number of positional encodings than DINOv2, which means we're not loading DINOv2 backbone weights. This is not a problem if finetuning a pretrained RF-DETR model.
+[2026-08-19 12:46:16] [WARNING] rf-detr - Using patch size 16 instead of 14, which means we're not loading DINOv2 backbone weights. This is not a problem if finetuning a pretrained RF-DETR model.
+[2026-08-19 12:46:25] [INFO] rf-detr - File C:\Users\Hardeep singh\.roboflow\models\rf-detr-nano.pth already exists with correct MD5 hash.
+[2026-08-19 12:46:40] [WARNING] rf-detr - Model is not optimized for inference. Latency may be higher than expected. For full GPU throughput (e.g. ~8x on T4 via FP16 Tensor Cores), call model.inference(dtype=torch.float16).
+
+======================================================================
+Phase 5  detector comparison report
+======================================================================
+
+======================================================================
+Phase 6  evidence packets + ranking
+======================================================================
+
+======================================================================
+Phase 7  isolation check + evaluation
+======================================================================
+
+======================================================================
+Phase 7  configuration comparison
+======================================================================
+
+======================================================================
+Final report
+======================================================================

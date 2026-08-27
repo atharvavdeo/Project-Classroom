@@ -1,0 +1,48 @@
+{
+  "config_id": "dfine_native",
+  "pose_config": "rtmpose_baseline",
+  "instances_measured": 200,
+  "scaled_instances": 200,
+  "by_class": {
+    "secondary_paper_chit": {
+      "instances": 200,
+      "relative_extent": {
+        "n": 200,
+        "p10": 0.417,
+        "median": 0.628,
+        "p90": 0.852
+      },
+      "area_px": {
+        "n": 200,
+        "p10": 2285.0,
+        "median": 4519.0,
+        "p90": 8705.0
+      },
+      "aspect": {
+        "n": 200,
+        "p10": 0.961,
+        "median": 1.364,
+        "p90": 1.695
+      },
+      "saturation_median": {
+        "n": 200,
+        "p10": 26.0,
+        "median": 37.0,
+        "p90": 51.0
+      },
+      "paper_like_fraction": {
+        "n": 200,
+        "p10": 0.473,
+        "median": 0.599,
+        "p90": 0.784
+      },
+      "luma_over_surround": {
+        "n": 200,
+        "p10": 44.0,
+        "median": 83.8,
+        "p90": 96.5
+      }
+    }
+  },
+  "note": "relative_extent is sqrt(area_px)/torso_scale_px -- the object's linear size in shoulder widths of the person it belongs to. It is comparable between cameras and distances; area_px is not. No threshold is applied here: this is the distribution a threshold would have to be drawn on."
+}

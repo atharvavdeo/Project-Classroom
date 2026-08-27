@@ -1,0 +1,15 @@
+{"track_id": 1, "start_pts_ms": 9700.0, "end_pts_ms": 281467.0, "duration_ms": 271767.0, "boxes": 220, "detected": 220, "interpolated": 0}
+{"track_id": 2, "start_pts_ms": 9700.0, "end_pts_ms": 12200.0, "duration_ms": 2500.0, "boxes": 6, "detected": 6, "interpolated": 0}
+{"track_id": 3, "start_pts_ms": 9700.0, "end_pts_ms": 58000.0, "duration_ms": 48300.0, "boxes": 13, "detected": 13, "interpolated": 0}
+{"track_id": 4, "start_pts_ms": 12700.0, "end_pts_ms": 13700.0, "duration_ms": 1000.0, "boxes": 3, "detected": 3, "interpolated": 0}
+{"track_id": 5, "start_pts_ms": 55500.0, "end_pts_ms": 57500.0, "duration_ms": 2000.0, "boxes": 5, "detected": 5, "interpolated": 0}
+{"track_id": 6, "start_pts_ms": 103000.0, "end_pts_ms": 112100.0, "duration_ms": 9100.0, "boxes": 20, "detected": 20, "interpolated": 0}
+{"track_id": 7, "start_pts_ms": 103567.0, "end_pts_ms": 107500.0, "duration_ms": 3933.0, "boxes": 15, "detected": 15, "interpolated": 0}
+{"track_id": 8, "start_pts_ms": 104067.0, "end_pts_ms": 107500.0, "duration_ms": 3433.0, "boxes": 11, "detected": 11, "interpolated": 0}
+{"track_id": 9, "start_pts_ms": 104567.0, "end_pts_ms": 108000.0, "duration_ms": 3433.0, "boxes": 11, "detected": 11, "interpolated": 0}
+{"track_id": 10, "start_pts_ms": 124367.0, "end_pts_ms": 125367.0, "duration_ms": 1000.0, "boxes": 5, "detected": 5, "interpolated": 0}
+{"track_id": 11, "start_pts_ms": 124867.0, "end_pts_ms": 137867.0, "duration_ms": 13000.0, "boxes": 11, "detected": 11, "interpolated": 0}
+{"track_id": 12, "start_pts_ms": 125367.0, "end_pts_ms": 141367.0, "duration_ms": 16000.0, "boxes": 14, "detected": 13, "interpolated": 1}
+{"track_id": 13, "start_pts_ms": 135367.0, "end_pts_ms": 136367.0, "duration_ms": 1000.0, "boxes": 5, "detected": 5, "interpolated": 0}
+{"track_id": 14, "start_pts_ms": 188900.0, "end_pts_ms": 188900.0, "duration_ms": 0.0, "boxes": 1, "detected": 1, "interpolated": 0}
+{"track_id": 15, "start_pts_ms": 275183.0, "end_pts_ms": 281467.0, "duration_ms": 6284.0, "boxes": 13, "detected": 13, "interpolated": 0}

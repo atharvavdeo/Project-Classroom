@@ -1,0 +1,337 @@
+.lib {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(180%);
+  border-right: 1px solid var(--rule);
+  padding: 1rem 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+@media (max-width: 54rem) {
+  .lib {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+.lib__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.2rem 0.45rem 1rem;
+}
+
+.lib__mark {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  flex: none;
+}
+
+.lib__brand b {
+  font-family: var(--display);
+  font-size: 1.06rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.lib__empty,
+.lib__hint {
+  margin: 0.2rem 0.45rem 0.6rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--slate);
+}
+
+.lib__hint {
+  font-size: 0.72rem;
+  margin-bottom: 0.2rem;
+}
+
+.lib__project {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  margin-bottom: 0.5rem;
+}
+
+.lib__ptitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.35rem;
+  padding: 0 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--slate-2);
+}
+
+.lib__ptitle button {
+  border: 0;
+  background: transparent;
+  color: var(--slate-2);
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0 0.2rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--fast) var(--spring);
+}
+
+.lib__project:hover .lib__ptitle button,
+.lib__ptitle button:focus-visible {
+  opacity: 1;
+}
+
+.lib__ptitle button:hover {
+  color: var(--s-review);
+}
+
+.lib__centre {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.42rem 0.5rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--fast) var(--spring);
+}
+
+.lib__centre:hover {
+  background: var(--surface-2);
+}
+
+.lib__centre b {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--slate-2);
+}
+
+.lib__videos {
+  list-style: none;
+  margin: 0.1rem 0 0.35rem;
+  padding: 0 0 0 0.55rem;
+  border-left: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.lib__videos button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.36rem 0.45rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--fast) var(--spring);
+}
+
+.lib__videos button:hover {
+  background: var(--surface-2);
+}
+
+.lib__videos button.is-on {
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.lib__videos em {
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate-2);
+  flex: none;
+}
+
+.lib__videos em.is-count {
+  color: var(--s-confirm);
+  letter-spacing: 0;
+  font-size: 0.6rem;
+}
+
+.lib__add {
+  border: 0;
+  background: transparent;
+  color: var(--slate);
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  text-align: left;
+  padding: 0.34rem 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background var(--fast) var(--spring),
+    color var(--fast) var(--spring);
+}
+
+.lib__add:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+.lib__new {
+  margin-top: auto;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: transparent;
+  border: 1px dashed var(--rule-strong);
+  border-radius: 7px;
+  padding: 0.55em 0.7em;
+  cursor: pointer;
+  transition:
+    border-color var(--fast) var(--spring),
+    background var(--fast) var(--spring);
+}
+
+.lib__new:hover {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.lib__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0.3rem 0 0.6rem;
+  padding: 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: var(--sh);
+}
+
+.lib__form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.lib__form input,
+.lib__form select {
+  font: inherit;
+  font-family: var(--display);
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 0.35em 0.45em;
+  width: 100%;
+  min-width: 0;
+}
+
+.lib__formrow {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.lib__formrow button {
+  flex: 1;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--surface);
+  font-family: var(--display);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.42em 0.6em;
+  cursor: pointer;
+}
+
+.lib__formrow button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.lib__formrow button.is-plain {
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.lib__err {
+  margin: 0.3rem 0.45rem;
+  font-size: 0.66rem;
+  color: var(--s-review);
+}
+
+/* Pinned below the tree: this view spans every project, so it is deliberately
+   not a node inside one. */
+.lib__rl {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 0;
+  border-top: 1px solid var(--rule, #d8d3ca);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lib__rl:hover { background: rgba(127, 127, 127, 0.09); }
+
+.lib__rl.is-on { background: rgba(127, 127, 127, 0.14); }
+
+.lib__rlTag {
+  flex: none;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  padding: 0.14rem 0.34rem;
+  border-radius: 3px;
+  background: var(--accent-2, #8acfe6);
+  color: #0b1013;
+}
+
+.lib__rlText { color: var(--slate); }
+.lib__rl.is-on .lib__rlText { color: inherit; }

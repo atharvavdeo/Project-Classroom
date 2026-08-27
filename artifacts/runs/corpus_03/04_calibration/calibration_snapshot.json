@@ -1,0 +1,12 @@
+{
+  "version_id": "cam12/e1/v1",
+  "approval_state": "approved",
+  "operator": "hs",
+  "reviewer": "reviewer-a",
+  "seats": [
+    "S-61",
+    "R-desk"
+  ],
+  "frame_w": 1280,
+  "frame_h": 720
+}

@@ -1,0 +1,14 @@
+{
+  "stages_checked": [
+    "05_motion_roi",
+    "06_segmentation",
+    "07_tracking",
+    "08_pose",
+    "09_object",
+    "10_evidence",
+    "11_gemma"
+  ],
+  "violations": [],
+  "isolated": true,
+  "note": "PRD 15 makes the reference manifest readable only at stage 12. An evaluation of a pipeline that already saw the answers measures nothing."
+}

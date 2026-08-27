@@ -1,0 +1,24 @@
+{
+  "groups": 5356,
+  "by_status": {
+    "temporally_supported_object_evidence": 1522,
+    "single_frame_object_candidate": 3822,
+    "conflicting_object_evidence": 0,
+    "insufficient_visual_evidence": 12
+  },
+  "by_class": {
+    "bag": 368,
+    "insufficient_visual_evidence": 12,
+    "keyboard": 63,
+    "monitor_or_bezel": 333,
+    "mouse": 135,
+    "phone": 228,
+    "stationery": 179,
+    "unknown_object": 4038
+  },
+  "retained_singletons": 3822,
+  "deleted": 0,
+  "supported_duration_ms": 433000.0,
+  "median_support_frames": 1,
+  "note": "no group was deleted. A singleton is a status, not a reason to discard, and the count above is retained evidence (PRD 10)."
+}

@@ -1,0 +1,164 @@
+
+======================================================================
+Phase 0  preflight + run manifest
+======================================================================
+experiment   product_zero  (5b6434de4643)
+residency    sequential, 2.0 GB safety margin
+python       3.13.9 on Windows 11
+gpu          NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB, driver 592.27
+torch        2.10.0+cpu, cuda NOT available
+onnxruntime  AzureExecutionProvider, CPUExecutionProvider
+free disk    71.6 GB at C:\DrishtiAI\Project-Classroom\artifacts\runs
+
+configurations
+  OK  person_detection_primary  person_detection  available             import rtmlib
+  OK  tracker_primary           tracker           available             import supervision
+  OK  seat_only_no_track        tracker           available             none required
+  OK  rtmpose_baseline          pose              available             import rtmlib
+  OK  rtmo_baseline             pose              available             import rtmlib
+  OK  rtmo_large                pose              available             import rtmlib
+  OK  alphapose_crowd_baseline  pose              available             import alphapose.models.builder
+  OK  dfine_native              object            available             onnxruntime session created (inputs: pixel_values)
+  --  rf_detr_native            object            launch_failed         import rfdetr failed: ModuleNotFoundError: No module named 'rfdetr'
+  OK  dfine_sahi                object            available             onnxruntime session created (inputs: pixel_values)
+  --  rf_detr_sahi              object            launch_failed         import rfdetr failed: ModuleNotFoundError: No module named 'rfdetr'
+  OK  gemma_marked_evidence     vlm               available             version: 0.1.1-dev (build 10472, commit 60eeeb608)
+
+run folder   C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01
+manifest     10/12 configurations available
+  note: No reference manifest configured. Per PRD 3 the run proceeds and object evaluation is marked incomplete; no quality claim may be made. Stages 09 selection and 12 evaluation are blocked.
+  note: No approved taxonomy configured. PRD 3 blocks detector selection and evaluation until the product owner approves the class list.
+  note: Working tree has uncommitted changes; this run is not exactly reproducible from its recorded revision.
+
+2 configuration(s) unavailable. They remain in the comparison table as unavailable and are never substituted (PRD 5).
+
+======================================================================
+Phases 1-3  health, motion, ROI, segmentation
+======================================================================
+calibration  01/e1/v1  (draft)
+  NOTE: this profile is not approved, so seat attribution is blocked downstream (PRD 3). Motion and ROI still run.
+
+scanning 01.Candidate was found using a mobile phone in the examination hall..mkv
+    scanned     60.3s
+    scanned    120.6s
+  motion vectors present (3647/frame)
+  3036 zone-windows over 131.5 s in 2.6 s (50x realtime)
+
+baselines
+  01-P01     desk_work_surface    median 0.05425  spread 0.03693  n=253  typing regime
+  01-P01     upper_body           median 0.04123  spread 0.03336  n=253  typing regime
+  01-P02     desk_work_surface    median 0.02061  spread 0.00865  n=253  typing regime
+  01-P02     upper_body           median 0.01761  spread 0.00984  n=253  typing regime
+  01-P03     desk_work_surface    median 0.03089  spread 0.02256  n=253  typing regime
+  01-P03     upper_body           median 0.05230  spread 0.04537  n=253  typing regime
+  01-P04     desk_work_surface    median 0.02864  spread 0.01902  n=253  typing regime
+  01-P04     upper_body           median 0.02197  spread 0.01890  n=253  typing regime
+  01-P05     desk_work_surface    median 0.02760  spread 0.02316  n=253  typing regime
+  01-P05     upper_body           median 0.01693  spread 0.01124  n=253  typing regime
+  01-P06     desk_work_surface    median 0.01705  spread 0.00743  n=253  typing regime
+  01-P06     upper_body           median 0.03765  spread 0.02225  n=253  typing regime
+
+segmentation
+  27 normal-priority events, 19 retained at low priority
+  83.02% of the recording flagged
+  close reasons: {'activity_ceased': 46}
+
+gates: {'deprioritise': 3546}
+  nothing discarded; 3546 records retained and searchable
+health observations: {'compression_noise': 17}
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01
+
+======================================================================
+Phase 4  tracking + pose A/B (3 models)
+======================================================================
+3 candidate events -> 6 sample rows at 1.0 Hz
+person detection: available (19 boxes over 6 rows)
+  tracker_primary        available       8 tracks      0 seats resolved
+  tracker_challenger     available       3 tracks      0 seats resolved
+  seat_only_no_track     available       0 tracks      0 seats resolved
+
+pose manifest frozen: 19 rows, digest 155b5f7caacae793
+load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\yolox_m_8xb8-300e_humanart-c2c7a14a.onnx with onnxruntime backend
+load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\rtmpose-m_simcc-body7_pt-body7_420e-256x192-e48f03d0_20230504.onnx with onnxruntime backend
+load C:\Users\Hardeep singh\.cache\rtmlib\hub\checkpoints\rtmo-m_16xb16-600e_body7-640x640-39e78cc4_20231211.onnx with onnxruntime backend
+Load SE Resnet...
+  rtmpose_baseline           available               14 observations
+  rtmo_baseline              available                8 observations
+  alphapose_crowd_baseline   available               19 observations
+
+manifest equivalence: verified
+available: ['rtmpose_baseline', 'rtmo_baseline', 'alphapose_crowd_baseline']
+selection: none. PRD 5 forbids naming a configuration best until every runnable mandatory configuration has a matched report; selection happens in stage 12 against references.
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01
+
+======================================================================
+Phase 4  pose comparison report
+======================================================================
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01\13_reports\pose_comparison.md
+
+======================================================================
+Phase 5  crops + detector/SAHI A/B
+======================================================================
+19 pose rows, 14 observations from rtmpose_baseline
+
+crop manifest frozen: 19 crops, digest 49afb2fc1d7d475f
+  native_source_context_fallback        12
+  pose_hand_context                      7
+  fallback reasons: {'no_pose_observation': 5, 'wrist_confidence_below_floor': 7}
+  0 crops under the native-resolution floor (0.0%)
+  median magnification 2.76x, max 13.33x
+  rf_detr_native   resource_unavailable       0 merged     0 abstained
+  dfine_native     available                171 merged     0 abstained
+  rf_detr_sahi     resource_unavailable       0 merged     0 abstained
+  dfine_sahi       available                202 merged     0 abstained
+
+crop equivalence: verified
+available: ['dfine_native', 'dfine_sahi']
+temporal confirmation: {'temporally_supported_object_evidence': 71, 'single_frame_object_candidate': 155, 'conflicting_object_evidence': 0, 'insufficient_visual_evidence': 0}
+  155 singletons retained, 0 deleted
+selection: none. PRD 3 blocks detector selection and evaluation until the product owner approves the taxonomy, and PRD 15 places selection in stage 12 against the reference manifest.
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01
+
+======================================================================
+Phase 5  detector comparison report
+======================================================================
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01\13_reports\detector_comparison.md
+
+======================================================================
+Phase 6  evidence packets + ranking
+======================================================================
+46 packets composed: 46 valid, 0 invalid
+46 of 46 contact sheets rendered
+
+Gemma: 0 attempted (0 schema-valid, 0 invalid, 0 repaired), 46 not attempted
+  no --gemma-url was supplied, so no VLM review was performed. Every packet is recorded as needing human review rather than being treated as reviewed and clean.
+  46 of 46 need human review
+
+46 event(s) at normal priority over 131.5 s analysed; 0 retained at low priority and 0 excluded from automatic ordering. Priority is a reading order, not a probability that anything occurred.
+
+written to C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01
+
+======================================================================
+Phase 7  isolation check + evaluation
+======================================================================
+isolation verified across 7 stages
+
+no --reference supplied; evaluation marked incomplete (PRD 3)
+
+======================================================================
+Phase 7  configuration comparison
+======================================================================
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01\13_reports\configuration_comparison.md (evaluation incomplete)
+
+======================================================================
+Final report
+======================================================================
+measured result: (3)
+written C:\DrishtiAI\Project-Classroom\artifacts\runs\smoke_01\13_reports
+  final_report.md
+  model_selection_report.md
+  quality_limitations.md
+  resource_report.json
